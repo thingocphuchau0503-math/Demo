@@ -447,79 +447,36 @@
       const dashboard = document.getElementById('teacherDashboard');
 
       if (isAuth === 'true') {
-        lockScreen.classList.add('hidden');
-        dashboard.classList.remove('hidden');
+        if (lockScreen) lockScreen.classList.add('hidden');
+        if (dashboard) dashboard.classList.remove('hidden');
         initDashboardData();
       } else {
-        lockScreen.classList.remove('hidden');
-        dashboard.classList.add('hidden');
+        if (lockScreen) lockScreen.classList.remove('hidden');
+        if (dashboard) dashboard.classList.add('hidden');
       }
     }
 
-    document.getElementById('teacherLoginForm').onsubmit = (e) => {
-      e.preventDefault();
-      const pwd = document.getElementById('teacherPasswordInput').value;
-      const errEl = document.getElementById('teacherLoginError');
+    // Đảm bảo DOM đã tải xong mới gán sự kiện form
+    window.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('teacherLoginForm');
+      if (loginForm) {
+        loginForm.onsubmit = (e) => {
+          e.preventDefault();
+          const pwdInput = document.getElementById('teacherPasswordInput');
+          const errEl = document.getElementById('teacherLoginError');
+          const pwd = (pwdInput ? pwdInput.value : '').trim();
 
-      if (pwd === TEACHER_ADMIN_KEY) {
-        sessionStorage.setItem('teacher_authenticated', 'true');
-        errEl.classList.add('hidden');
-        checkTeacherAuth();
-      } else {
-        errEl.classList.remove('hidden');
+          if (pwd === TEACHER_ADMIN_KEY) {
+            sessionStorage.setItem('teacher_authenticated', 'true');
+            if (errEl) errEl.classList.add('hidden');
+            checkTeacherAuth();
+          } else {
+            if (errEl) errEl.classList.remove('hidden');
+          }
+        };
       }
-    };
-
-    window.logoutTeacher = () => {
-      sessionStorage.removeItem('teacher_authenticated');
-      window.location.href = "index.html";
-    };
-
-    let allStudents = [];
-    let currentAssignments = [];
-    let selectedTaskId = '';
-    let parsedExamData = { part1: [], part2: [], part3: [] };
-
-    function initDashboardData() {
-      const attDateEl = document.getElementById('attendanceDate');
-      if (attDateEl) attDateEl.valueAsDate = new Date();
-      loadDefaultAzotaContent();
-      loadPendingStudents();
-      loadStudents().then(() => calculateCumulativeAttendance());
-      loadLeaveRequests();
-      loadPublishedAssignments();
-    }
-
-    window.switchTeacherTab = (tabName) => {
-      const tabs = ['assignments', 'reviewStudents', 'attendance', 'grades'];
-      tabs.forEach(t => {
-        const isCurrent = t === tabName;
-        const capitalized = t.charAt(0).toUpperCase() + t.slice(1);
-        const section = document.getElementById(`tabContent${capitalized}`);
-        if (section) section.classList.toggle('hidden', !isCurrent);
-
-        const btn = document.getElementById(`tabBtn${capitalized}`);
-        if (btn) {
-          btn.className = isCurrent
-            ? "py-3 px-5 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 whitespace-nowrap"
-            : "py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap";
-        }
-      });
-    };
-
-    window.switchAssignmentSubTab = (subMode) => {
-      const isExam = subMode === 'onlineExam';
-      document.getElementById('subTabContentOnlineExam').classList.toggle('hidden', !isExam);
-      document.getElementById('subTabContentStandard').classList.toggle('hidden', isExam);
-
-      document.getElementById('subTabBtnOnlineExam').className = isExam
-        ? "py-1.5 px-3 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-sm transition"
-        : "py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition";
-
-      document.getElementById('subTabBtnStandard').className = !isExam
-        ? "py-1.5 px-3 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-sm transition"
-        : "py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition";
-    };
+      checkTeacherAuth();
+    });
 
     // ==================== CƠ CHẾ AZOTA EDITOR: PARSER & LIVE PREVIEW ====================
 
