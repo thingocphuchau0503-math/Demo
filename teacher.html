@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Không Gian Quản Trị - Thầy Hậu</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- KaTeX for rendering mathematical formulas -->
+  <!-- KaTeX for math formula rendering -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -66,26 +66,201 @@
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto p-6 space-y-6">
+    <main class="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
 
-      <!-- Điều hướng Tabs Chính (Đã bổ sung Tab Duyệt Tài Khoản) -->
+      <!-- Navigation Tabs -->
       <div class="flex border-b border-slate-200 bg-white rounded-t-xl px-4 pt-2 shadow-sm gap-2 overflow-x-auto">
-        <button id="tabBtnReviewStudents" onclick="switchTeacherTab('reviewStudents')" class="py-3 px-5 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 whitespace-nowrap">
+        <button id="tabBtnAssignments" onclick="switchTeacherTab('assignments')" class="py-3 px-5 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 whitespace-nowrap">
+          ⚡ Soạn Đề Thi Azota & Bài Giảng
+        </button>
+        <button id="tabBtnReviewStudents" onclick="switchTeacherTab('reviewStudents')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap">
           👤 Duyệt Tài Khoản (<span id="pendingCountBadge" class="text-rose-600 font-bold">0</span>)
         </button>
         <button id="tabBtnAttendance" onclick="switchTeacherTab('attendance')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap">
           📅 Điểm Danh & Chuyên Cần
-        </button>
-        <button id="tabBtnAssignments" onclick="switchTeacherTab('assignments')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap">
-          📖 Đăng Bài Giảng & Giao Bài
         </button>
         <button id="tabBtnGrades" onclick="switchTeacherTab('grades')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap">
           📝 Sổ Đánh Giá & Chấm Điểm
         </button>
       </div>
 
-      <!-- ==================== TAB 0: DUYỆT TÀI KHOẢN HỌC SINH MỚI ==================== -->
-      <section id="tabContentReviewStudents" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
+      <!-- ==================== TAB: SOẠN ĐỀ THI AZOTA EDITOR & KHO BÀI ==================== -->
+      <section id="tabContentAssignments" class="space-y-6">
+
+        <!-- Chế độ tạo đề -->
+        <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex-wrap gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">🛠️</span>
+            <span class="text-sm font-bold text-slate-700">Chế độ tạo:</span>
+            <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50">
+              <button type="button" id="subTabBtnOnlineExam" onclick="switchAssignmentSubTab('onlineExam')" class="py-1.5 px-3 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-sm transition">
+                ⚡ Trình soạn đề Azota Editor (Cấu trúc mới)
+              </button>
+              <button type="button" id="subTabBtnStandard" onclick="switchAssignmentSubTab('standard')" class="py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition">
+                📁 Đăng thường (Link / Tài liệu Drive / Nhúng Web)
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button onclick="loadPublishedAssignments()" class="text-xs font-medium text-slate-600 hover:text-indigo-600 flex items-center gap-1 transition">
+              🔄 Làm mới kho bài
+            </button>
+          </div>
+        </div>
+
+        <!-- AZOTA EDITOR GIAO DIỆN 2 CỘT -->
+        <div id="subTabContentOnlineExam" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          
+          <!-- Azota Top Toolbar -->
+          <div class="p-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3 flex-1 min-w-[280px]">
+              <input type="text" id="azotaExamTitle" placeholder="Nhập tên đề thi / bài kiểm tra tại đây..." 
+                     class="flex-1 font-bold text-slate-800 text-sm bg-white border border-slate-300 rounded-lg px-3 py-1.5 outline-none focus:border-indigo-600">
+              <div class="flex items-center gap-1.5 text-xs text-slate-600 whitespace-nowrap">
+                <span>⏱️ Thời gian:</span>
+                <input type="number" id="azotaExamDuration" value="50" min="1" max="180" class="w-16 border border-slate-300 rounded-lg p-1 text-center font-bold text-indigo-600">
+                <span>phút</span>
+              </div>
+            </div>
+
+            <!-- Toolbar buttons -->
+            <div class="flex items-center gap-2 flex-wrap text-xs">
+              <button type="button" onclick="insertAzotaTemplate('part1')" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200 transition">
+                + Mẫu Phần I (4 lựa chọn)
+              </button>
+              <button type="button" onclick="insertAzotaTemplate('part2')" class="px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-lg border border-purple-200 transition">
+                + Mẫu Phần II (Đúng/Sai)
+              </button>
+              <button type="button" onclick="insertAzotaTemplate('part3')" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg border border-emerald-200 transition">
+                + Mẫu Phần III (Trả lời ngắn)
+              </button>
+              <button type="button" onclick="publishAzotaExam()" id="btnPublishAzota" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+                <span>🚀 Xuất Bản Đề Thi</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Math Formula Palette -->
+          <div class="px-4 py-2 bg-slate-100/60 border-b border-slate-200 flex flex-wrap items-center gap-1.5 text-xs">
+            <span class="text-[11px] font-bold text-slate-500 mr-2">∑ Chèn công thức:</span>
+            <button type="button" onclick="insertMathToAzota('\\frac{a}{b}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\frac{a}{b}$</button>
+            <button type="button" onclick="insertMathToAzota('x^{2}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$x^2$</button>
+            <button type="button" onclick="insertMathToAzota('\\sqrt{x}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\sqrt{x}$</button>
+            <button type="button" onclick="insertMathToAzota('\\int f(x)dx')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\int$</button>
+            <button type="button" onclick="insertMathToAzota('\\int_{a}^{b} f(x)dx')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\int_a^b$</button>
+            <button type="button" onclick="insertMathToAzota('\\vec{u}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\vec{u}$</button>
+            <button type="button" onclick="insertMathToAzota('\\pi')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\pi$</button>
+            <button type="button" onclick="insertMathToAzota('\\infty')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\infty$</button>
+            <button type="button" onclick="insertMathToAzota('\\Delta')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\Delta$</button>
+            <button type="button" onclick="insertMathToAzota('\\in')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\in$</button>
+            <button type="button" onclick="insertMathToAzota('\\ge')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\ge$</button>
+            <button type="button" onclick="insertMathToAzota('\\le')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\le$</button>
+          </div>
+
+          <!-- Split Screen: Cột Trái Xem Trước - Cột Phải Soạn Thảo Text -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 h-[650px]">
+            
+            <!-- CỘT TRÁI: LIVE PREVIEW -->
+            <div class="flex flex-col h-full bg-slate-50/50">
+              <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  👁️ Xem trước đề thi trực tiếp (Live Preview)
+                </span>
+                <span id="previewStatsBadge" class="bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded text-[11px]">
+                  0 câu hỏi
+                </span>
+              </div>
+              <div id="azotaLivePreviewContainer" class="flex-1 overflow-y-auto p-5 space-y-6"></div>
+            </div>
+
+            <!-- CỘT PHẢI: KHUNG SOẠN THẢO TEXT -->
+            <div class="flex flex-col h-full bg-white">
+              <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  📝 Khung soạn thảo cú pháp Azota (Gõ hoặc dán từ Word)
+                </span>
+                <span class="text-[11px] text-slate-500">Tự động nhận diện A. B. C. D. và Đúng/Sai</span>
+              </div>
+              <div class="flex-1 relative flex">
+                <textarea id="azotaRawTextarea" oninput="parseAzotaText()" placeholder="Dán đề thi của Thầy vào đây..." 
+                          class="w-full h-full p-4 font-mono text-xs text-slate-800 leading-relaxed outline-none resize-none border-none focus:ring-0"></textarea>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom bar -->
+          <div class="p-2.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex flex-wrap justify-between items-center px-4">
+            <span>💡 <strong>Mẹo soạn nhanh:</strong> Đặt dấu <strong>*</strong> trước phương án đúng (VD: <code>*A.</code>, <code>*a)</code>). Với phần III ghi <code>Đáp án: [kết quả]</code>. Đặt công thức trong cặp <code>$...$</code></span>
+            <span class="font-semibold text-indigo-600">Đã kích hoạt KaTeX tự động</span>
+          </div>
+
+        </div>
+
+        <!-- FORM ĐĂNG BÀI THƯỜNG -->
+        <div id="subTabContentStandard" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4 hidden">
+          <div>
+            <h2 class="font-bold text-base text-slate-800">Đăng Bài Giảng & Giao Bài Bằng Tài Liệu Sẵn Có</h2>
+            <p class="text-xs text-slate-500">Gắn link Google Drive hoặc mã nhúng mô phỏng Geogebra / HTML</p>
+          </div>
+
+          <form id="createStandardForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Loại nhiệm vụ</label>
+                <select id="stdTaskCategory" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
+                  <option value="homework">✏️ Bài tập rèn luyện</option>
+                  <option value="lecture">📖 Bài giảng lý thuyết</option>
+                  <option value="exam">⏱️ Đề kiểm tra (File PDF/Word)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Hạn chót hoàn thành</label>
+                <input type="datetime-local" id="stdTaskDeadline" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Tiêu đề nhiệm vụ</label>
+              <input type="text" id="stdTaskTitle" required placeholder="VD: Bài đọc thêm: Ứng dụng tích phân tính thể tích" 
+                     class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Đường dẫn tài liệu (Google Drive / OneDrive / Link bài giảng)</label>
+              <input type="url" id="stdTaskFileUrl" placeholder="https://drive.google.com/..." class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 mb-1">Hoặc Nhúng Web HTML / Mô phỏng Geogebra</label>
+              <textarea id="stdTaskEmbed" rows="3" placeholder="Dán mã nhúng <iframe>...</iframe> hoặc đường link trang mô phỏng" 
+                        class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none font-mono"></textarea>
+            </div>
+
+            <button type="submit" id="btnPublishStandard" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold transition shadow-sm">
+              Công Bố Lên Google Sheet
+            </button>
+          </form>
+        </div>
+
+        <!-- KHO BÀI ĐÃ ĐĂNG -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="font-bold text-base text-slate-800">Kho Nhiệm Vụ & Đề Thi Đã Đăng</h2>
+              <p class="text-xs text-slate-500">Toàn bộ dữ liệu được lưu trữ trên tab Assignments của Google Sheet</p>
+            </div>
+          </div>
+          <div id="publishedListContainer" class="space-y-3">
+            <p class="text-center py-8 text-slate-400 text-sm">Đang tải kho bài từ Sheet...</p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB: DUYỆT TÀI KHOẢN HỌC SINH MỚI ==================== -->
+      <section id="tabContentReviewStudents" class="hidden bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
         <div class="flex justify-between items-center">
           <div>
             <h2 class="font-bold text-base text-slate-800">Danh Sách Học Sinh Chờ Duyệt Tài Khoản</h2>
@@ -115,10 +290,9 @@
         </div>
       </section>
 
-      <!-- ==================== TAB 1: ĐIỂM DANH & CHUYÊN CẦN ==================== -->
+      <!-- ==================== TAB: ĐIỂM DANH & CHUYÊN CẦN ==================== -->
       <section id="tabContentAttendance" class="hidden space-y-6">
         
-        <!-- Bảng 1: Điểm danh theo ngày -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
           <div class="flex flex-wrap justify-between items-center gap-4">
             <div>
@@ -151,7 +325,6 @@
           </div>
         </div>
 
-        <!-- Bảng 2: Thống kê chuyên cần lũy kế -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
           <div class="flex justify-between items-center">
             <div>
@@ -182,7 +355,6 @@
           </div>
         </div>
 
-        <!-- Bảng 3: Hộp Thư Đơn Xin Phép -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
           <div class="flex justify-between items-center">
             <div>
@@ -215,134 +387,7 @@
 
       </section>
 
-      <!-- ==================== TAB 2: ĐĂNG BÀI GIẢNG & GIAO BÀI ==================== -->
-      <section id="tabContentAssignments" class="hidden grid grid-cols-1 md:grid-cols-5 gap-6">
-
-        <!-- Cột Tạo bài & Soạn đề (3 Cột) -->
-        <div class="md:col-span-3 bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4 h-fit">
-          <div>
-            <h2 class="font-bold text-base text-slate-800">Tạo & Công Bố Nhiệm Vụ</h2>
-            <p class="text-xs text-slate-500">Đăng tài liệu bài học hoặc thiết kế đề thi trực tuyến lưu vào Google Sheet</p>
-          </div>
-
-          <div class="flex border-b border-slate-200 gap-2">
-            <button type="button" id="subTabBtnStandard" onclick="switchAssignmentSubTab('standard')" class="py-2 px-3 text-xs font-bold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-1.5">
-              📁 Đăng thường (File / Link / Nhúng Web)
-            </button>
-            <button type="button" id="subTabBtnOnlineExam" onclick="switchAssignmentSubTab('onlineExam')" class="py-2 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5">
-              ⚡ Soạn đề thi cấu trúc mới (12-4-6)
-            </button>
-          </div>
-
-          <div id="mathSymbolToolbar" class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5">
-            <div class="flex justify-between items-center text-[11px] font-bold text-slate-600">
-              <span>📐 Thanh ký hiệu Toán nhanh (Bấm để chèn vào vị trí con trỏ):</span>
-            </div>
-            <div class="flex flex-wrap gap-1">
-              <button type="button" onclick="insertMathFormula('\\frac{a}{b}')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\frac{a}{b}$</button>
-              <button type="button" onclick="insertMathFormula('x^{2}')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$x^n$</button>
-              <button type="button" onclick="insertMathFormula('\\sqrt{x}')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\sqrt{x}$</button>
-              <button type="button" onclick="insertMathFormula('\\int f(x)dx')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\int$</button>
-              <button type="button" onclick="insertMathFormula('\\int_{a}^{b} f(x)dx')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\int_a^b$</button>
-              <button type="button" onclick="insertMathFormula('\\vec{u}')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\vec{u}$</button>
-              <button type="button" onclick="insertMathFormula('\\pi')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\pi$</button>
-              <button type="button" onclick="insertMathFormula('\\infty')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\infty$</button>
-              <button type="button" onclick="insertMathFormula('\\in')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\in$</button>
-              <button type="button" onclick="insertMathFormula('\\Delta')" class="px-2 py-1 bg-white border border-slate-200 hover:bg-indigo-50 rounded text-xs font-mono font-bold">$\Delta$</button>
-            </div>
-          </div>
-
-          <form id="createAssignmentForm" class="space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Loại nhiệm vụ</label>
-                <select id="taskCategory" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
-                  <option value="exam">⏱️ Đề kiểm tra / Quiz</option>
-                  <option value="homework">✏️ Bài tập rèn luyện</option>
-                  <option value="lecture">📖 Bài giảng lý thuyết</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Hạn chót hoàn thành</label>
-                <input type="datetime-local" id="taskDeadline" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Tiêu đề bài học / đề thi</label>
-              <input type="text" id="taskTitle" required placeholder="VD: Khảo sát hàm số - Đề thi thử số 1" 
-                     class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
-            </div>
-
-            <div id="subTabContentStandard" class="space-y-3">
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Đường link tài liệu (Google Drive / OneDrive / Web)</label>
-                <input type="url" id="taskFileUrl" placeholder="https://drive.google.com/..." class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
-              </div>
-
-              <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Hoặc Nhúng Web HTML / Link bài giảng</label>
-                <textarea id="taskEmbed" rows="3" placeholder="Dán mã nhúng <iframe>...</iframe> hoặc liên kết web tương tác" 
-                          class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none font-mono"></textarea>
-              </div>
-            </div>
-
-            <div id="subTabContentOnlineExam" class="space-y-4 hidden">
-              <div class="flex justify-between items-center p-3 bg-purple-50/70 rounded-xl border border-purple-100">
-                <span class="text-xs font-bold text-purple-900">⏱️ Thời gian làm bài thi (phút):</span>
-                <input type="number" id="examDuration" value="50" min="1" max="180" class="w-20 border border-purple-300 rounded-lg p-1 text-xs text-center font-bold text-purple-900 bg-white">
-              </div>
-
-              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-indigo-700">PHẦN I: Trắc nghiệm 4 lựa chọn (<span id="part1Count">12</span> câu)</span>
-                  <button type="button" onclick="addPart1Question()" class="text-[11px] font-bold text-indigo-600 hover:underline">+ Thêm câu</button>
-                </div>
-                <div id="part1QuestionsContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
-              </div>
-
-              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-purple-700">PHẦN II: Trắc nghiệm Đúng / Sai (<span id="part2Count">4</span> câu)</span>
-                  <button type="button" onclick="addPart2Question()" class="text-[11px] font-bold text-purple-600 hover:underline">+ Thêm câu</button>
-                </div>
-                <div id="part2QuestionsContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
-              </div>
-
-              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                <div class="flex justify-between items-center">
-                  <span class="text-xs font-bold text-emerald-700">PHẦN III: Trả lời ngắn (<span id="part3Count">6</span> câu)</span>
-                  <button type="button" onclick="addPart3Question()" class="text-[11px] font-bold text-emerald-600 hover:underline">+ Thêm câu</button>
-                </div>
-                <div id="part3QuestionsContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1"></div>
-              </div>
-            </div>
-
-            <button type="submit" id="btnPublishTask" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold transition shadow-sm">
-              Công Bố Cho Lớp 12.1 (Lưu Vào Google Sheet)
-            </button>
-          </form>
-        </div>
-
-        <div class="md:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
-          <div class="flex justify-between items-center">
-            <div>
-              <h2 class="font-bold text-base text-slate-800">Kho Bài Đã Đăng</h2>
-              <p class="text-xs text-slate-500">Các bài học, đề kiểm tra trên Google Sheet</p>
-            </div>
-            <button onclick="loadPublishedAssignments()" class="text-xs font-medium text-indigo-600 hover:underline">
-              🔄 Tải lại
-            </button>
-          </div>
-
-          <div id="publishedListContainer" class="space-y-3">
-            <p class="text-center py-8 text-slate-400 text-sm">Chưa có bài nào được công bố.</p>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- ==================== TAB 3: SỔ ĐÁNH GIÁ & CHẤM ĐIỂM ==================== -->
+      <!-- ==================== TAB: SỔ ĐÁNH GIÁ & CHẤM ĐIỂM ==================== -->
       <section id="tabContentGrades" class="hidden space-y-6">
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
           <div class="flex flex-wrap justify-between items-center gap-4">
@@ -387,51 +432,9 @@
 
     </main>
 
-    <!-- Modal Xem Trước Bài -->
-    <div id="previewModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-      <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
-        <div class="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50">
-          <div>
-            <span id="previewTag" class="px-2.5 py-0.5 rounded text-[11px] font-semibold bg-indigo-100 text-indigo-700">Loại</span>
-            <h3 class="font-bold text-slate-800 text-base mt-1" id="previewTitle">Tiêu đề bài</h3>
-          </div>
-          <button onclick="closePreviewModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-lg font-bold transition">
-            &times;
-          </button>
-        </div>
-
-        <div class="p-6 overflow-y-auto space-y-4">
-          <p class="text-xs text-slate-500" id="previewCreatedAt">Đăng ngày: ---</p>
-          <p class="text-xs text-slate-500" id="previewDeadline">Hạn nộp: Không thời hạn</p>
-
-          <div id="previewFileSection" class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between hidden">
-            <span class="text-xs font-semibold text-slate-700">Tài liệu / Đề bài đính kèm</span>
-            <a id="previewFileLink" href="#" target="_blank" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold transition">
-              Mở xem file
-            </a>
-          </div>
-
-          <div id="previewEmbedSection" class="space-y-2 hidden">
-            <span class="text-xs font-semibold text-indigo-800 block">Nội dung liên kết / Web mô phỏng:</span>
-            <div id="previewEmbedContainer" class="w-full rounded-xl border border-slate-200 p-3 bg-slate-50 overflow-hidden"></div>
-          </div>
-
-          <div id="previewExamSection" class="space-y-3 hidden border-t border-slate-100 pt-3">
-            <span class="text-xs font-bold text-indigo-800 block">Nội dung đề thi:</span>
-            <div id="previewExamContent" class="space-y-3"></div>
-          </div>
-        </div>
-
-        <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
-          <button onclick="closePreviewModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-semibold transition">
-            Đóng
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- SCRIPT LOGIC (DUYỆT TÀI KHOẢN & GOOGLE SHEETS API) -->
+  <!-- SCRIPT LOGIC (AZOTA PARSER, BẢO MẬT & API GOOGLE SHEETS) -->
   <script type="module">
     import { getSheetData, postSheetData } from './api.js';
 
@@ -475,25 +478,20 @@
     let allStudents = [];
     let currentAssignments = [];
     let selectedTaskId = '';
-    let currentActiveInput = null;
-    let currentAssignmentMode = 'standard';
-    let examPart1 = [];
-    let examPart2 = [];
-    let examPart3 = [];
+    let parsedExamData = { part1: [], part2: [], part3: [] };
 
     function initDashboardData() {
       const attDateEl = document.getElementById('attendanceDate');
       if (attDateEl) attDateEl.valueAsDate = new Date();
-      initDefaultNewFormatQuestions();
+      loadDefaultAzotaContent();
       loadPendingStudents();
       loadStudents().then(() => calculateCumulativeAttendance());
       loadLeaveRequests();
       loadPublishedAssignments();
     }
 
-    // Chuyển Tab chính
     window.switchTeacherTab = (tabName) => {
-      const tabs = ['reviewStudents', 'attendance', 'assignments', 'grades'];
+      const tabs = ['assignments', 'reviewStudents', 'attendance', 'grades'];
       tabs.forEach(t => {
         const isCurrent = t === tabName;
         const capitalized = t.charAt(0).toUpperCase() + t.slice(1);
@@ -509,11 +507,457 @@
       });
     };
 
-    // ==================== CHỨC NĂNG DUYỆT TÀI KHOẢN HỌC SINH ====================
+    window.switchAssignmentSubTab = (subMode) => {
+      const isExam = subMode === 'onlineExam';
+      document.getElementById('subTabContentOnlineExam').classList.toggle('hidden', !isExam);
+      document.getElementById('subTabContentStandard').classList.toggle('hidden', isExam);
+
+      document.getElementById('subTabBtnOnlineExam').className = isExam
+        ? "py-1.5 px-3 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-sm transition"
+        : "py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition";
+
+      document.getElementById('subTabBtnStandard').className = !isExam
+        ? "py-1.5 px-3 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-sm transition"
+        : "py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition";
+    };
+
+    // ==================== CƠ CHẾ AZOTA EDITOR: PARSER & LIVE PREVIEW ====================
+
+    function loadDefaultAzotaContent() {
+      const defaultText = [
+        "PHẦN I",
+        "Câu 1: Cho hàm số $y = f(x)$ có bảng biến thiên như sau. Giá trị cực đại của hàm số đã cho là:",
+        "A. 1",
+        "*B. 2",
+        "C. 3",
+        "D. -1",
+        "",
+        "Câu 2: Nguyên hàm của hàm số $f(x) = 2x + \\sin x$ là:",
+        "*A. $x^2 - \\cos x + C$",
+        "B. $x^2 + \\cos x + C$",
+        "C. $2 - \\cos x + C$",
+        "D. $x^2 + \\sin x + C$",
+        "",
+        "PHẦN II",
+        "Câu 3: Cho hàm số $f(x) = x^3 - 3x^2 + 2$. Xét tính đúng sai của các khẳng định sau:",
+        "*a) Đạo hàm của hàm số là $f'(x) = 3x^2 - 6x$",
+        "*b) Hàm số đồng biến trên các khoảng $(-\\infty; 0)$ và $(2; +\\infty)$",
+        "c) Giá trị cực tiểu của hàm số bằng 0",
+        "*d) Phương trình $f(x) = 0$ có 3 nghiệm thực phân biệt",
+        "",
+        "PHẦN III",
+        "Câu 4: Tìm số điểm cực trị của hàm số $y = x^4 - 2x^2 + 3$.",
+        "Đáp án: 3",
+        "",
+        "Câu 5: Tính tích phân $I = \\int_{0}^{1} 2x dx$.",
+        "Đáp án: 1"
+      ].join("\n");
+
+      const ta = document.getElementById('azotaRawTextarea');
+      if (ta) {
+        ta.value = defaultText;
+        parseAzotaText();
+      }
+    }
+
+    window.insertAzotaTemplate = (part) => {
+      const ta = document.getElementById('azotaRawTextarea');
+      if (!ta) return;
+      let snippet = '';
+      const qNum = getQuestionIndex();
+      if (part === 'part1') {
+        snippet = "\n\nCâu " + qNum + ": Cho hàm số...\nA. Phương án 1\n*B. Phương án 2 đúng\nC. Phương án 3\nD. Phương án 4";
+      } else if (part === 'part2') {
+        snippet = "\n\nCâu " + qNum + ": Cho hàm số... Xét tính đúng sai:\n*a) Mệnh đề đúng 1\nb) Mệnh đề sai 2\n*c) Mệnh đề đúng 3\nd) Mệnh đề sai 4";
+      } else if (part === 'part3') {
+        snippet = "\n\nCâu " + qNum + ": Giá trị của biểu thức...\nĐáp án: 10";
+      }
+
+      ta.value += snippet;
+      parseAzotaText();
+      ta.scrollTop = ta.scrollHeight;
+    };
+
+    function getQuestionIndex() {
+      const total = parsedExamData.part1.length + parsedExamData.part2.length + parsedExamData.part3.length;
+      return total + 1;
+    }
+
+    window.insertMathToAzota = (formula) => {
+      const ta = document.getElementById('azotaRawTextarea');
+      if (!ta) return;
+      const start = ta.selectionStart || 0;
+      const end = ta.selectionEnd || 0;
+      const wrap = `$${formula}$`;
+      ta.value = ta.value.substring(0, start) + wrap + ta.value.substring(end);
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = start + wrap.length;
+      parseAzotaText();
+    };
+
+    window.parseAzotaText = () => {
+      const ta = document.getElementById('azotaRawTextarea');
+      if (!ta) return;
+      const text = ta.value;
+      const lines = text.split('\n');
+
+      let currentPart = 'part1';
+      parsedExamData = { part1: [], part2: [], part3: [] };
+
+      let currentQuestion = null;
+
+      for (let i = 0; i < lines.length; i++) {
+        const rawLine = lines[i].trim();
+        if (!rawLine) continue;
+
+        const upper = rawLine.toUpperCase();
+        if (upper.includes('PHẦN I') || upper.includes('PHAN I')) {
+          currentPart = 'part1';
+          currentQuestion = null;
+          continue;
+        } else if (upper.includes('PHẦN II') || upper.includes('PHAN II')) {
+          currentPart = 'part2';
+          currentQuestion = null;
+          continue;
+        } else if (upper.includes('PHẦN III') || upper.includes('PHAN III')) {
+          currentPart = 'part3';
+          currentQuestion = null;
+          continue;
+        }
+
+        const questionMatch = rawLine.match(/^(?:Câu\s*\d+[\.:]|\d+[\.:])\s*(.*)/i);
+        if (questionMatch) {
+          currentQuestion = {
+            id: Date.now() + Math.random(),
+            question: questionMatch[1] || rawLine,
+            imageUrl: '',
+            options: [],
+            correctAnswer: 'A',
+            items: [],
+            points: currentPart === 'part1' ? 0.25 : (currentPart === 'part2' ? 1.0 : 0.5)
+          };
+          parsedExamData[currentPart].push(currentQuestion);
+          continue;
+        }
+
+        if (!currentQuestion) continue;
+
+        const optMatch = rawLine.match(/^(\*?)([A-D])[\.:]\s*(.*)/i);
+        if (optMatch && currentPart === 'part1') {
+          const isCorrect = optMatch[1] === '*';
+          const letter = optMatch[2].toUpperCase();
+          const content = optMatch[3];
+          currentQuestion.options.push(content);
+          if (isCorrect) currentQuestion.correctAnswer = letter;
+          continue;
+        }
+
+        const itemMatch = rawLine.match(/^(\*?)([a-d])[\)\.]\s*(.*)/i);
+        if (itemMatch && currentPart === 'part2') {
+          const isCorrect = itemMatch[1] === '*';
+          currentQuestion.items.push({
+            letter: itemMatch[2].toLowerCase(),
+            text: itemMatch[3],
+            isCorrect: isCorrect
+          });
+          continue;
+        }
+
+        const ansMatch = rawLine.match(/^(?:Đáp án|Đáp số|ĐA|DA)[\.:]\s*(.*)/i);
+        if (ansMatch && currentPart === 'part3') {
+          currentQuestion.correctAnswer = ansMatch[1].trim();
+          continue;
+        }
+
+        if (rawLine.startsWith('http://') || rawLine.startsWith('https://')) {
+          currentQuestion.imageUrl = rawLine;
+          continue;
+        }
+
+        if (currentPart === 'part1' && currentQuestion.options.length === 0) {
+          currentQuestion.question += ' ' + rawLine;
+        } else if (currentPart === 'part2' && currentQuestion.items.length === 0) {
+          currentQuestion.question += ' ' + rawLine;
+        } else if (currentPart === 'part3' && !currentQuestion.correctAnswer) {
+          currentQuestion.question += ' ' + rawLine;
+        }
+      }
+
+      renderAzotaLivePreview();
+    };
+
+    function renderAzotaLivePreview() {
+      const container = document.getElementById('azotaLivePreviewContainer');
+      const badge = document.getElementById('previewStatsBadge');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const totalCount = parsedExamData.part1.length + parsedExamData.part2.length + parsedExamData.part3.length;
+      if (badge) {
+        badge.innerText = `${totalCount} câu hỏi (P.I: ${parsedExamData.part1.length} | P.II: ${parsedExamData.part2.length} | P.III: ${parsedExamData.part3.length})`;
+      }
+
+      if (totalCount === 0) {
+        container.innerHTML = `
+          <div class="text-center py-20 text-slate-400">
+            <span class="text-4xl block mb-2">📄</span>
+            <p class="text-xs">Đang chờ Thầy nhập đề thi vào khung bên phải...</p>
+          </div>
+        `;
+        return;
+      }
+
+      let qIndexCounter = 1;
+
+      // PHẦN I
+      if (parsedExamData.part1.length > 0) {
+        const sec = document.createElement('div');
+        sec.className = "space-y-4";
+        sec.innerHTML = `
+          <div class="p-2.5 bg-indigo-50/70 border border-indigo-100 rounded-xl">
+            <span class="font-bold text-xs text-indigo-900 block">PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</span>
+            <span class="text-[11px] text-indigo-700">Thí sinh trả lời từ câu 1 đến câu ${parsedExamData.part1.length}. Mỗi câu chọn một phương án.</span>
+          </div>
+        `;
+        parsedExamData.part1.forEach((q) => {
+          const card = document.createElement('div');
+          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5 text-xs";
+          card.innerHTML = `
+            <div class="font-bold text-slate-800 leading-relaxed">
+              <span class="text-indigo-600">Câu ${qIndexCounter++}:</span> ${q.question}
+            </div>
+            ${q.imageUrl ? `<img src="${q.imageUrl}" class="h-28 rounded border object-contain my-1">` : ''}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+              ${['A', 'B', 'C', 'D'].map((letter, optI) => {
+                const isAns = q.correctAnswer === letter;
+                return `
+                  <div class="p-2 rounded-lg border ${isAns ? 'border-emerald-300 bg-emerald-50/60 font-semibold text-emerald-800' : 'border-slate-100 bg-slate-50/50'} flex items-start gap-1.5">
+                    <span class="font-bold">${letter}.</span>
+                    <span>${q.options[optI] \vert{}\vert{} ''}</span>${isAns ? '<span class="ml-auto text-[10px] text-emerald-600 font-bold">✓ Đáp án</span>' : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+          sec.appendChild(card);
+        });
+        container.appendChild(sec);
+      }
+
+      // PHẦN II
+      if (parsedExamData.part2.length > 0) {
+        const sec = document.createElement('div');
+        sec.className = "space-y-4";
+        sec.innerHTML = `
+          <div class="p-2.5 bg-purple-50/70 border border-purple-100 rounded-xl">
+            <span class="font-bold text-xs text-purple-900 block">PHẦN II. Câu trắc nghiệm đúng sai</span>
+            <span class="text-[11px] text-purple-700">Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.</span>
+          </div>
+        `;
+        parsedExamData.part2.forEach((q) => {
+          const card = document.createElement('div');
+          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5 text-xs";
+          card.innerHTML = `
+            <div class="font-bold text-slate-800 leading-relaxed">
+              <span class="text-purple-600">Câu ${qIndexCounter++}:</span> ${q.question}
+            </div>
+            ${q.imageUrl ? `<img src="${q.imageUrl}" class="h-28 rounded border object-contain my-1">` : ''}
+            <div class="space-y-1.5 pt-1">
+              ${q.items.map((item) => `
+                <div class="flex items-center justify-between p-2 rounded-lg border border-slate-100 bg-slate-50/60">
+                  <span><strong>${item.letter})</strong>${item.text}</span>
+                  <span class="font-bold px-2 py-0.5 rounded text-[10px] ${item.isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                    ${item.isCorrect ? 'ĐÚNG' : 'SAI'}
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          sec.appendChild(card);
+        });
+        container.appendChild(sec);
+      }
+
+      // PHẦN III
+      if (parsedExamData.part3.length > 0) {
+        const sec = document.createElement('div');
+        sec.className = "space-y-4";
+        sec.innerHTML = `
+          <div class="p-2.5 bg-emerald-50/70 border border-emerald-100 rounded-xl">
+            <span class="font-bold text-xs text-emerald-900 block">PHẦN III. Câu trắc nghiệm trả lời ngắn</span>
+            <span class="text-[11px] text-emerald-700">Thí sinh nhập đáp án ngắn vào ô kết quả.</span>
+          </div>
+        `;
+        parsedExamData.part3.forEach((q) => {
+          const card = document.createElement('div');
+          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2 text-xs";
+          card.innerHTML = `
+            <div class="font-bold text-slate-800 leading-relaxed">
+              <span class="text-emerald-600">Câu ${qIndexCounter++}:</span> ${q.question}
+            </div>
+            ${q.imageUrl ? `<img src="${q.imageUrl}" class="h-28 rounded border object-contain my-1">` : ''}
+            <div class="p-2 rounded-lg bg-emerald-50/40 border border-emerald-100 flex items-center justify-between">
+              <span class="text-slate-600">Đáp án chính xác:</span>
+              <span class="font-mono font-bold text-emerald-700 bg-white px-3 py-1 rounded border border-emerald-200">${q.correctAnswer || '(Chưa nhập)'}</span>
+            </div>
+          `;
+          sec.appendChild(card);
+        });
+        container.appendChild(sec);
+      }
+
+      if (window.renderMathInElement) {
+        renderMathInElement(container, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ]
+        });
+      }
+    }
+
+    window.publishAzotaExam = async () => {
+      const title = document.getElementById('azotaExamTitle').value.trim();
+      const duration = parseInt(document.getElementById('azotaExamDuration').value) || 50;
+      const btn = document.getElementById('btnPublishAzota');
+
+      if (!title) {
+        alert("Thầy vui lòng nhập Tên đề thi ở thanh công cụ phía trên nhé!");
+        document.getElementById('azotaExamTitle').focus();
+        return;
+      }
+
+      const total = parsedExamData.part1.length + parsedExamData.part2.length + parsedExamData.part3.length;
+      if (total === 0) {
+        alert("Đề thi chưa có câu hỏi nào!");
+        return;
+      }
+
+      try {
+        btn.innerText = "Đang lưu vào Sheet...";
+        btn.disabled = true;
+
+        await postSheetData('createAssignment', {
+          category: 'exam',
+          title: title,
+          deadline: null,
+          assignmentType: 'new_format',
+          duration: duration,
+          examData: parsedExamData
+        });
+
+        alert(`Đã xuất bản đề thi "${title}" thành công lên Google Sheet!`);
+        document.getElementById('azotaExamTitle').value = '';
+        loadPublishedAssignments();
+      } catch (err) {
+        alert("Lỗi xuất bản: " + err.message);
+      } finally {
+        btn.innerText = "🚀 Xuất Bản Đề Thi";
+        btn.disabled = false;
+      }
+    };
+
+    const stdForm = document.getElementById('createStandardForm');
+    if (stdForm) {
+      stdForm.onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnPublishStandard');
+        const category = document.getElementById('stdTaskCategory').value;
+        const title = document.getElementById('stdTaskTitle').value.trim();
+        const deadline = document.getElementById('stdTaskDeadline').value;
+        const fileUrl = document.getElementById('stdTaskFileUrl').value.trim();
+        const embedHtml = document.getElementById('stdTaskEmbed').value.trim();
+
+        try {
+          btn.innerText = 'Đang lưu...';
+          btn.disabled = true;
+
+          await postSheetData('createAssignment', {
+            category, title, deadline: deadline || null,
+            assignmentType: 'standard',
+            fileUrl, embedHtml
+          });
+
+          alert("Công bố thành công vào Google Sheet!");
+          document.getElementById('createStandardForm').reset();
+          loadPublishedAssignments();
+        } catch (err) {
+          alert("Lỗi: " + err.message);
+        } finally {
+          btn.innerText = 'Công Bố Lên Google Sheet';
+          btn.disabled = false;
+        }
+      };
+    }
+
+    window.loadPublishedAssignments = async () => {
+      const container = document.getElementById('publishedListContainer');
+      const select = document.getElementById('gradeTaskSelect');
+      if (!container) return;
+      container.innerHTML = '<p class="text-center py-6 text-slate-400 text-sm">Đang tải...</p>';
+
+      try {
+        currentAssignments = await getSheetData('getAssignments');
+        container.innerHTML = '';
+        if (select) select.innerHTML = '<option value="">-- Chọn bài rèn luyện / đề kiểm tra --</option>';
+
+        if (!currentAssignments || currentAssignments.length === 0) {
+          container.innerHTML = '<p class="text-center py-6 text-slate-400 text-sm">Chưa có bài nào được công bố.</p>';
+          return;
+        }
+
+        currentAssignments.slice().reverse().forEach(item => {
+          if (select && (item.category === 'homework' || item.category === 'exam')) {
+            const opt = document.createElement('option');
+            opt.value = item.id;
+            opt.innerText = `[${item.category === 'exam' ? 'Kiểm tra' : 'Rèn luyện'}] ${item.title}`;
+            select.appendChild(opt);
+          }
+
+          const div = document.createElement('div');
+          div.className = "border border-slate-200 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 hover:border-indigo-300 transition bg-slate-50/50";
+          
+          let tagColor = item.category === 'exam' ? 'bg-rose-100 text-rose-700' : (item.category === 'homework' ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-700');
+          let tagLabel = item.category === 'exam' ? 'Kiểm tra' : (item.category === 'homework' ? 'Rèn luyện' : 'Bài giảng');
+
+          div.innerHTML = `
+            <div class="flex-1 min-w-[200px]">
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded ${tagColor}">${tagLabel}</span>
+                ${item.assignmentType === 'new_format' ? '<span class="text-[10px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded">⚡ Đề thi Azota</span>' : ''}
+                <h4 class="font-bold text-slate-800 text-sm">${item.title}</h4>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Đăng ngày: ${item.createdAt || 'Mới'}</p>
+            </div>
+            <div>
+              <button onclick="deletePublishedAssignment('${item.id}', '${item.title.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs rounded-lg shadow-sm">
+                🗑️ Xóa bài
+              </button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        container.innerHTML = '<p class="text-center py-6 text-rose-500 text-sm">Lỗi: ' + err.message + '</p>';
+      }
+    };
+
+    window.deletePublishedAssignment = async (taskId, taskTitle) => {
+      if (!confirm(`Thầy có chắc chắn muốn xóa bài "${taskTitle}" khỏi Google Sheet?`)) return;
+      try {
+        await postSheetData('deleteAssignment', { taskId });
+        alert(`Đã xóa bài "${taskTitle}" thành công!`);
+        loadPublishedAssignments();
+      } catch (err) {
+        alert("Lỗi: " + err.message);
+      }
+    };
+
     window.loadPendingStudents = async () => {
       const tbody = document.getElementById('pendingStudentsTableBody');
       const badge = document.getElementById('pendingCountBadge');
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400">Đang tải danh sách chờ duyệt từ Google Sheet...</td></tr>';
+      if (!tbody) return;
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400">Đang tải danh sách chờ duyệt...</td></tr>';
 
       try {
         const students = await getSheetData('getStudents');
@@ -521,7 +965,7 @@
         if (badge) badge.innerText = pending.length;
 
         if (pending.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400">Hiện tại không có tài khoản học sinh nào đang chờ duyệt.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400">Hiện tại không có học sinh nào chờ duyệt.</td></tr>';
           return;
         }
 
@@ -531,25 +975,13 @@
           tr.className = "hover:bg-slate-50 border-b border-slate-100 transition";
           tr.innerHTML = `
             <td class="py-3 px-4 font-bold text-slate-800">${s.fullName}</td>
-            <td class="py-3 px-4 text-xs text-slate-600">
-              <span class="font-semibold text-indigo-700">Lớp ${s.className || '12'}</span> • ${s.school || 'Trường'}
-            </td>
-            <td class="py-3 px-4 text-xs text-slate-600">
-              ${s.gender || '---'} • <span class="font-mono">${s.phone || '---'}</span>
-            </td>
+            <td class="py-3 px-4 text-xs text-slate-600">Lớp ${s.className || '12'} • ${s.school || 'Trường'}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">${s.gender || '---'} • ${s.phone || '---'}</td>
             <td class="py-3 px-4 text-xs font-mono text-slate-700">${s.email}</td>
-            <td class="py-3 px-4 text-center">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
-                Chờ duyệt
-              </span>
-            </td>
+            <td class="py-3 px-4 text-center"><span class="px-2 py-0.5 rounded text-[10px] bg-amber-100 text-amber-700 font-bold">Chờ duyệt</span></td>
             <td class="py-3 px-4 text-right space-x-1.5 whitespace-nowrap">
-              <button onclick="reviewStudentAccount('${s.id}', '${s.fullName}', 'active')" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-sm">
-                ✓ Duyệt
-              </button>
-              <button onclick="reviewStudentAccount('${s.id}', '${s.fullName}', 'rejected')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-lg text-xs font-semibold transition">
-                ✕ Từ chối
-              </button>
+              <button onclick="reviewStudentAccount('${s.id}', '${s.fullName}', 'active')" class="px-3 py-1 bg-emerald-600 text-white rounded-lg text-xs font-bold">✓ Duyệt</button>
+              <button onclick="reviewStudentAccount('${s.id}', '${s.fullName}', 'rejected')" class="px-2.5 py-1 bg-rose-50 text-rose-600 border border-rose-200 rounded-lg text-xs">✕ Từ chối</button>
             </td>
           `;
           tbody.appendChild(tr);
@@ -560,172 +992,18 @@
     };
 
     window.reviewStudentAccount = async (studentId, studentName, decision) => {
-      const confirmAction = confirm(decision === 'active' 
-        ? `Xác nhận phê duyệt tài khoản cho em "${studentName}"?` 
-        : `Từ chối cấp tài khoản cho em "${studentName}"?`);
-      if (!confirmAction) return;
-
+      if (!confirm(decision === 'active' ? `Duyệt cho em "${studentName}"?` : `Từ chối em "${studentName}"?`)) return;
       try {
-        await postSheetData('reviewStudent', {
-          studentId: studentId,
-          status: decision
-        });
-
-        alert(decision === 'active' ? `Đã duyệt tài khoản cho em ${studentName} thành công!` : `Đã từ chối tài khoản của em ${studentName}.`);
+        await postSheetData('reviewStudent', { studentId, status: decision });
+        alert(decision === 'active' ? `Đã duyệt thành công cho em ${studentName}!` : `Đã từ chối em ${studentName}.`);
         loadPendingStudents();
         loadStudents().then(() => calculateCumulativeAttendance());
-      } catch (err) {
-        alert("Lỗi cập nhật: " + err.message);
-      }
+      } catch (err) { alert("Lỗi: " + err.message); }
     };
 
-    // Sub-tab đăng bài
-    window.switchAssignmentSubTab = (subMode) => {
-      currentAssignmentMode = subMode;
-      const isStd = subMode === 'standard';
-      document.getElementById('subTabContentStandard').classList.toggle('hidden', !isStd);
-      document.getElementById('subTabContentOnlineExam').classList.toggle('hidden', isStd);
-
-      document.getElementById('subTabBtnStandard').className = isStd
-        ? "py-2 px-3 text-xs font-bold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-1.5"
-        : "py-2 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5";
-
-      document.getElementById('subTabBtnOnlineExam').className = !isStd
-        ? "py-2 px-3 text-xs font-bold border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-1.5"
-        : "py-2 px-3 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition flex items-center gap-1.5";
-    };
-
-    window.trackActiveInput = (el) => { currentActiveInput = el; };
-
-    window.insertMathFormula = (formula) => {
-      if (!currentActiveInput) {
-        alert("Thầy vui lòng bấm chuột vào ô nội dung câu hỏi trước khi chọn ký hiệu Toán nhé!");
-        return;
-      }
-      const el = currentActiveInput;
-      const start = el.selectionStart || 0;
-      const end = el.selectionEnd || 0;
-      const wrapped = `$${formula}$`;
-      el.value = el.value.substring(0, start) + wrapped + el.value.substring(end);
-      el.focus();
-      el.selectionStart = el.selectionEnd = start + wrapped.length;
-      el.dispatchEvent(new Event('change'));
-    };
-
-    function initDefaultNewFormatQuestions() {
-      examPart1 = Array.from({ length: 12 }, (_, i) => ({
-        id: Date.now() + i, question: `Câu ${i + 1}: Cho hàm số...`, imageUrl: '', options: ['', '', '', ''], correctAnswer: 'A', points: 0.25
-      }));
-      examPart2 = Array.from({ length: 4 }, (_, i) => ({
-        id: Date.now() + 20 + i, question: `Câu ${i + 1}: Cho hàm số f(x)... Xét tính đúng sai:`, imageUrl: '',
-        items: [{ text: 'a) Mệnh đề 1', isCorrect: true }, { text: 'b) Mệnh đề 2', isCorrect: false }, { text: 'c) Mệnh đề 3', isCorrect: true }, { text: 'd) Mệnh đề 4', isCorrect: false }],
-        points: 1.0
-      }));
-      examPart3 = Array.from({ length: 6 }, (_, i) => ({
-        id: Date.now() + 40 + i, question: `Câu ${i + 1}: Tính giá trị...`, imageUrl: '', correctAnswer: '', points: 0.5
-      }));
-      renderAllExamParts();
-    }
-
-    function renderPart1() {
-      const container = document.getElementById('part1QuestionsContainer');
-      document.getElementById('part1Count').innerText = examPart1.length;
-      container.innerHTML = '';
-      examPart1.forEach((q, idx) => {
-        const div = document.createElement('div');
-        div.className = "p-3 bg-white border border-slate-200 rounded-xl space-y-2 text-xs shadow-sm";
-        div.innerHTML = `
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-indigo-700">Câu ${idx + 1}:</span>
-            <div class="flex items-center gap-2">
-              <span class="text-slate-500">Điểm:</span>
-              <input type="number" step="0.05" value="${q.points}" class="w-14 border rounded px-1 text-center font-bold text-indigo-600" onchange="examPart1[${idx}].points = parseFloat(this.value) || 0">
-              <button type="button" onclick="removePart1Question(${idx})" class="text-rose-500 font-bold hover:underline">✕ Xóa</button>
-            </div>
-          </div>
-          <textarea rows="2" class="w-full border rounded-lg p-2 text-xs outline-none" onfocus="trackActiveInput(this)" onchange="examPart1[${idx}].question = this.value">${q.question}</textarea>
-          <div class="grid grid-cols-2 gap-2">
-            ${['A', 'B', 'C', 'D'].map((letter, optI) => `
-              <div class="flex items-center gap-1.5 border rounded p-1 bg-slate-50">
-                <input type="radio" name="p1_ans_${q.id}" value="${letter}" ${q.correctAnswer === letter ? 'checked' : ''} onchange="examPart1[${idx}].correctAnswer = '${letter}'">
-                <span class="font-bold text-slate-600">${letter}.</span>
-                <input type="text" value="${q.options[optI] || ''}" class="w-full bg-transparent text-xs outline-none" onfocus="trackActiveInput(this)" onchange="examPart1[${idx}].options[${optI}] = this.value">
-              </div>
-            `).join('')}
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function renderPart2() {
-      const container = document.getElementById('part2QuestionsContainer');
-      document.getElementById('part2Count').innerText = examPart2.length;
-      container.innerHTML = '';
-      examPart2.forEach((q, idx) => {
-        const div = document.createElement('div');
-        div.className = "p-3 bg-white border border-slate-200 rounded-xl space-y-2 text-xs shadow-sm";
-        div.innerHTML = `
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-purple-700">Câu ${idx + 1} (Đúng/Sai):</span>
-            <div class="flex items-center gap-2">
-              <span class="text-slate-500">Điểm:</span>
-              <input type="number" step="0.1" value="${q.points}" class="w-14 border rounded px-1 text-center font-bold text-purple-600" onchange="examPart2[${idx}].points = parseFloat(this.value) || 0">
-              <button type="button" onclick="removePart2Question(${idx})" class="text-rose-500 font-bold hover:underline">✕ Xóa</button>
-            </div>
-          </div>
-          <textarea rows="2" class="w-full border rounded-lg p-2 text-xs outline-none" onfocus="trackActiveInput(this)" onchange="examPart2[${idx}].question = this.value">${q.question}</textarea>
-          <div class="space-y-1 pt-1">
-            ${q.items.map((item, itemI) => `
-              <div class="flex items-center gap-2 border rounded p-1.5 bg-slate-50">
-                <input type="text" value="${item.text}" class="flex-1 bg-transparent text-xs outline-none" onfocus="trackActiveInput(this)" onchange="examPart2[${idx}].items[${itemI}].text = this.value">
-                <label class="flex items-center gap-1 font-semibold text-emerald-700 cursor-pointer"><input type="radio" name="p2_${q.id}_${itemI}" value="true" ${item.isCorrect ? 'checked' : ''} onchange="examPart2[${idx}].items[${itemI}].isCorrect = true"> Đ</label>
-                <label class="flex items-center gap-1 font-semibold text-rose-600 cursor-pointer"><input type="radio" name="p2_${q.id}_${itemI}" value="false" ${!item.isCorrect ? 'checked' : ''} onchange="examPart2[${idx}].items[${itemI}].isCorrect = false"> S</label>
-              </div>
-            `).join('')}
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function renderPart3() {
-      const container = document.getElementById('part3QuestionsContainer');
-      document.getElementById('part3Count').innerText = examPart3.length;
-      container.innerHTML = '';
-      examPart3.forEach((q, idx) => {
-        const div = document.createElement('div');
-        div.className = "p-3 bg-white border border-slate-200 rounded-xl space-y-2 text-xs shadow-sm";
-        div.innerHTML = `
-          <div class="flex justify-between items-center gap-2">
-            <span class="font-bold text-emerald-700">Câu ${idx + 1} (Trả lời ngắn):</span>
-            <div class="flex items-center gap-2">
-              <span class="text-slate-500">Điểm:</span>
-              <input type="number" step="0.1" value="${q.points}" class="w-14 border rounded px-1 text-center font-bold text-emerald-600" onchange="examPart3[${idx}].points = parseFloat(this.value) || 0">
-              <button type="button" onclick="removePart3Question(${idx})" class="text-rose-500 font-bold hover:underline">✕ Xóa</button>
-            </div>
-          </div>
-          <textarea rows="2" class="w-full border rounded-lg p-2 text-xs outline-none" onfocus="trackActiveInput(this)" onchange="examPart3[${idx}].question = this.value">${q.question}</textarea>
-          <div class="flex items-center gap-2">
-            <span class="font-semibold text-slate-600">Đáp án:</span>
-            <input type="text" value="${q.correctAnswer}" placeholder="VD: 12" class="border rounded px-2 py-1 text-xs font-mono font-bold text-emerald-700 outline-none w-32" onfocus="trackActiveInput(this)" onchange="examPart3[${idx}].correctAnswer = this.value.trim()">
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function renderAllExamParts() { renderPart1(); renderPart2(); renderPart3(); }
-    window.addPart1Question = () => { examPart1.push({ id: Date.now(), question: `Câu ${examPart1.length + 1}:`, imageUrl: '', options: ['', '', '', ''], correctAnswer: 'A', points: 0.25 }); renderPart1(); };
-    window.removePart1Question = (i) => { examPart1.splice(i, 1); renderPart1(); };
-    window.addPart2Question = () => { examPart2.push({ id: Date.now(), question: `Câu ${examPart2.length + 1}:`, imageUrl: '', items: [{ text: 'a) Mệnh đề 1', isCorrect: true }, { text: 'b) Mệnh đề 2', isCorrect: false }, { text: 'c) Mệnh đề 3', isCorrect: true }, { text: 'd) Mệnh đề 4', isCorrect: false }], points: 1.0 }); renderPart2(); };
-    window.removePart2Question = (i) => { examPart2.splice(i, 1); renderPart2(); };
-    window.addPart3Question = () => { examPart3.push({ id: Date.now(), question: `Câu ${examPart3.length + 1}:`, imageUrl: '', correctAnswer: '', points: 0.5 }); renderPart3(); };
-    window.removePart3Question = (i) => { examPart3.splice(i, 1); renderPart3(); };
-
-    // Tải học sinh (Chỉ hiển thị các em đã active lên sổ điểm danh)
     async function loadStudents() {
       const tbody = document.getElementById('attendanceTableBody');
+      if (!tbody) return;
       try {
         const raw = await getSheetData('getStudents');
         allStudents = raw.filter(s => s.status === 'active' || !s.status);
@@ -733,7 +1011,7 @@
 
         tbody.innerHTML = '';
         if (allStudents.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="3" class="text-center py-6 text-slate-400">Chưa có học sinh nào được duyệt. Thầy hãy qua tab "Duyệt Tài Khoản" để duyệt nhé!</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="3" class="text-center py-6 text-slate-400">Chưa có học sinh nào được duyệt.</td></tr>';
           return;
         }
 
@@ -764,7 +1042,7 @@
         const dateVal = document.getElementById('attendanceDate').value;
         if (!dateVal) { alert("Vui lòng chọn ngày điểm danh!"); return; }
 
-        btnSaveAtt.innerText = "Đang lưu vào Sheet...";
+        btnSaveAtt.innerText = "Đang lưu...";
         btnSaveAtt.disabled = true;
 
         const records = {};
@@ -775,10 +1053,10 @@
 
         try {
           await postSheetData('saveAttendance', { date: dateVal, records: records });
-          alert("Đã lưu điểm danh ngày " + dateVal + " thành công!");
+          alert("Đã lưu điểm danh thành công!");
           calculateCumulativeAttendance();
         } catch (err) {
-          alert("Lỗi lưu điểm danh: " + err.message);
+          alert("Lỗi: " + err.message);
         } finally {
           btnSaveAtt.innerText = "Lưu Điểm Danh Vào Google Sheet";
           btnSaveAtt.disabled = false;
@@ -788,6 +1066,7 @@
 
     window.calculateCumulativeAttendance = async () => {
       const tbody = document.getElementById('cumulativeTableBody');
+      if (!tbody) return;
       try {
         const attendanceList = await getSheetData('getAttendance');
         const stats = {};
@@ -826,16 +1105,15 @@
 
     window.loadLeaveRequests = async () => {
       const tbody = document.getElementById('leaveRequestsTableBody');
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400">Đang tải đơn từ Sheet...</td></tr>';
-
+      if (!tbody) return;
       try {
         const requests = await getSheetData('getLeaveRequests');
+        tbody.innerHTML = '';
         if (!requests || requests.length === 0) {
           tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-400">Chưa có đơn xin phép nào.</td></tr>';
           return;
         }
 
-        tbody.innerHTML = '';
         requests.reverse().forEach(req => {
           const tr = document.createElement('tr');
           tr.className = "hover:bg-slate-50 border-b border-slate-100 transition";
@@ -871,113 +1149,15 @@
           `;
           tbody.appendChild(tr);
         });
-      } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-rose-500">Lỗi: ' + err.message + '</td></tr>';
-      }
+      } catch (err) { tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-rose-500">Lỗi: ' + err.message + '</td></tr>'; }
     };
 
     window.handleLeaveDecision = async (requestId, studentId, leaveDate, leaveType, decision) => {
       try {
         await postSheetData('reviewLeaveRequest', { requestId, studentId, date: leaveDate, leaveType, status: decision });
-        alert(decision === 'approved' ? "Đã duyệt đơn và tự động đồng bộ vào bảng chuyên cần!" : "Đã từ chối đơn.");
+        alert(decision === 'approved' ? "Đã duyệt đơn và đồng bộ vào chuyên cần!" : "Đã từ chối đơn.");
         loadLeaveRequests();
         calculateCumulativeAttendance();
-      } catch (err) { alert("Lỗi xử lý đơn: " + err.message); }
-    };
-
-    const formCreate = document.getElementById('createAssignmentForm');
-    if (formCreate) {
-      formCreate.onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('btnPublishTask');
-        const category = document.getElementById('taskCategory').value;
-        const title = document.getElementById('taskTitle').value;
-        const deadline = document.getElementById('taskDeadline').value;
-
-        try {
-          btn.innerText = 'Đang lưu vào Sheet...';
-          btn.disabled = true;
-
-          const assignmentData = {
-            category, title, deadline: deadline || null,
-            assignmentType: currentAssignmentMode === 'onlineExam' ? 'new_format' : 'standard'
-          };
-
-          if (currentAssignmentMode === 'onlineExam') {
-            assignmentData.duration = parseInt(document.getElementById('examDuration').value) || 50;
-            assignmentData.examData = { part1: examPart1, part2: examPart2, part3: examPart3 };
-          } else {
-            assignmentData.fileUrl = document.getElementById('taskFileUrl').value.trim();
-            assignmentData.embedHtml = document.getElementById('taskEmbed').value.trim();
-          }
-
-          await postSheetData('createAssignment', assignmentData);
-          alert("Công bố bài thành công vào Google Sheet!");
-          formCreate.reset();
-          initDefaultNewFormatQuestions();
-          switchAssignmentSubTab('standard');
-          loadPublishedAssignments();
-        } catch (err) { alert("Lỗi đăng bài: " + err.message); }
-        finally { btn.innerText = 'Công Bố Cho Lớp 12.1 (Lưu Vào Google Sheet)'; btn.disabled = false; }
-      };
-    }
-
-    window.loadPublishedAssignments = async () => {
-      const container = document.getElementById('publishedListContainer');
-      const select = document.getElementById('gradeTaskSelect');
-      if (!container) return;
-      container.innerHTML = '<p class="text-center py-6 text-slate-400 text-sm">Đang tải...</p>';
-
-      try {
-        currentAssignments = await getSheetData('getAssignments');
-        container.innerHTML = '';
-        if (select) select.innerHTML = '<option value="">-- Chọn bài rèn luyện / đề kiểm tra --</option>';
-
-        if (!currentAssignments || currentAssignments.length === 0) {
-          container.innerHTML = '<p class="text-center py-6 text-slate-400 text-sm">Chưa có bài nào được công bố.</p>';
-          return;
-        }
-
-        currentAssignments.slice().reverse().forEach(item => {
-          if (select && (item.category === 'homework' || item.category === 'exam')) {
-            const opt = document.createElement('option');
-            opt.value = item.id;
-            opt.innerText = `[${item.category === 'exam' ? 'Kiểm tra' : 'Rèn luyện'}] ${item.title}`;
-            select.appendChild(opt);
-          }
-
-          const div = document.createElement('div');
-          div.className = "border border-slate-200 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3 hover:border-indigo-300 transition bg-slate-50/50";
-          
-          let tagColor = item.category === 'exam' ? 'bg-rose-100 text-rose-700' : (item.category === 'homework' ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-700');
-          let tagLabel = item.category === 'exam' ? 'Kiểm tra' : (item.category === 'homework' ? 'Rèn luyện' : 'Bài giảng');
-
-          div.innerHTML = `
-            <div class="cursor-pointer flex-1 min-w-[200px]" onclick="openPreviewModal('${item.id}')">
-              <div class="flex items-center gap-2">
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded ${tagColor}">${tagLabel}</span>
-                <h4 class="font-bold text-slate-800 text-sm hover:text-indigo-600 transition">${item.title}</h4>
-              </div>
-              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-400 mt-1.5">
-                <span>📅 Đăng: ${item.createdAt || 'Mới'}</span> • <span>⏰ Hạn: ${item.deadline ? new Date(item.deadline).toLocaleString('vi-VN') : 'Không'}</span>
-              </div>
-            </div>
-            <div class="flex items-center gap-2">
-              <button onclick="openPreviewModal('${item.id}')" class="px-3 py-1.5 bg-white hover:bg-indigo-50 border border-indigo-200 text-indigo-600 font-semibold text-xs rounded-lg">👁️ Xem</button>
-              <button onclick="deletePublishedAssignment('${item.id}', '${item.title.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs rounded-lg">🗑️ Xóa</button>
-            </div>
-          `;
-          container.appendChild(div);
-        });
-      } catch (err) { container.innerHTML = '<p class="text-center py-6 text-rose-500 text-sm">Lỗi: ' + err.message + '</p>'; }
-    };
-
-    window.deletePublishedAssignment = async (taskId, taskTitle) => {
-      if (!confirm(`Xóa bài "${taskTitle}" khỏi Google Sheet?`)) return;
-      try {
-        await postSheetData('deleteAssignment', { taskId });
-        alert(`Đã xóa bài "${taskTitle}"!`);
-        loadPublishedAssignments();
       } catch (err) { alert("Lỗi: " + err.message); }
     };
 
@@ -987,12 +1167,12 @@
       const statsBadge = document.getElementById('submissionStatsBadge');
 
       if (!taskId) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Vui lòng chọn bài kiểm tra hoặc bài tập để xem tiến độ.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Vui lòng chọn bài kiểm tra hoặc bài tập.</td></tr>';
         if (statsBadge) statsBadge.classList.add('hidden');
         return;
       }
 
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Đang tải tiến độ bài làm từ Sheet...</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Đang tải tiến độ...</td></tr>';
 
       try {
         const submissions = await getSheetData('getSubmissions', { assignmentId: taskId });
@@ -1009,68 +1189,59 @@
           statsBadge.classList.remove('hidden');
         }
 
-        tbody.innerHTML = '';
-        allStudents.forEach((s, idx) => {
-          const sub = subMap[s.id] || null;
-          const tr = document.createElement('tr');
-          tr.className = "hover:bg-slate-50 border-b border-slate-100 transition";
+        if (tbody) {
+          tbody.innerHTML = '';
+          allStudents.forEach((s, idx) => {
+            const sub = subMap[s.id] || null;
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50 border-b border-slate-100 transition";
 
-          let progressBadge = '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-50 text-rose-600 border border-rose-100">Chưa nộp</span>';
-          if (sub && sub.completionStatus === 'completed') progressBadge = '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">✅ Đã hoàn thành</span>';
+            let progressBadge = '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-50 text-rose-600 border border-rose-100">Chưa nộp</span>';
+            if (sub && sub.completionStatus === 'completed') progressBadge = '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">✅ Đã hoàn thành</span>';
 
-          const scoreVal = (sub && sub.score !== undefined && sub.score !== null) ? sub.score : '';
-          const feedbackVal = (sub && sub.feedback) ? sub.feedback : '';
-          let fileCol = `<span class="text-xs text-slate-400 italic">Chưa có bài</span>`;
-          if (sub && sub.submissionType === 'online') fileCol = `<span class="text-xs text-purple-700 font-bold bg-purple-50 px-2 py-0.5 rounded border border-purple-100">⚡ Thi trực tuyến</span>`;
-          else if (sub && sub.fileUrl) fileCol = `<a href="${sub.fileUrl}" target="_blank" class="text-xs text-indigo-600 font-semibold hover:underline">📄 Xem bài làm</a>`;
+            const scoreVal = (sub && sub.score !== undefined && sub.score !== null) ? sub.score : '';
+            const feedbackVal = (sub && sub.feedback) ? sub.feedback : '';
+            let fileCol = `<span class="text-xs text-slate-400 italic">Chưa có bài</span>`;
+            if (sub && sub.submissionType === 'online') fileCol = `<span class="text-xs text-purple-700 font-bold bg-purple-50 px-2 py-0.5 rounded border border-purple-100">⚡ Thi trực tuyến</span>`;
+            else if (sub && sub.fileUrl) fileCol = `<a href="${sub.fileUrl}" target="_blank" class="text-xs text-indigo-600 font-semibold hover:underline">📄 Xem bài</a>`;
 
-          tr.innerHTML = `
-            <td class="py-3 px-4 font-mono text-slate-400">${s.rollNumber || (idx + 1)}</td>
-            <td class="py-3 px-4 font-semibold text-slate-800">${s.fullName}</td>
-            <td class="py-3 px-4 text-center">${progressBadge}</td>
-            <td class="py-3 px-4 text-center">
-              <input type="number" step="0.1" min="0" max="10" id="grade_score_${s.id}" value="${scoreVal}" placeholder="---" 
-                     class="w-16 border rounded-lg p-1 text-center text-xs font-bold text-indigo-600 outline-none">
-            </td>
-            <td class="py-3 px-4">${fileCol}</td>
-            <td class="py-3 px-4">
-              <input type="text" id="grade_fb_${s.id}" value="${feedbackVal}" placeholder="Nhận xét của thầy..." class="w-full border rounded-lg px-2.5 py-1 text-xs outline-none">
-            </td>
-            <td class="py-3 px-4 text-center">
-              <button onclick="saveStudentGrade('${s.id}', '${s.fullName}')" class="px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200">
-                Lưu
-              </button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (err) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-rose-500">Lỗi: ' + err.message + '</td></tr>'; }
+            tr.innerHTML = `
+              <td class="py-3 px-4 font-mono text-slate-400">${s.rollNumber || (idx + 1)}</td>
+              <td class="py-3 px-4 font-semibold text-slate-800">${s.fullName}</td>
+              <td class="py-3 px-4 text-center">${progressBadge}</td>
+              <td class="py-3 px-4 text-center">
+                <input type="number" step="0.1" min="0" max="10" id="grade_score_${s.id}" value="${scoreVal}" placeholder="---" 
+                       class="w-16 border rounded-lg p-1 text-center text-xs font-bold text-indigo-600 outline-none">
+              </td>
+              <td class="py-3 px-4">${fileCol}</td>
+              <td class="py-3 px-4">
+                <input type="text" id="grade_fb_${s.id}" value="${feedbackVal}" placeholder="Nhận xét của thầy..." class="w-full border rounded-lg px-2.5 py-1 text-xs outline-none">
+              </td>
+              <td class="py-3 px-4 text-center">
+                <button onclick="saveStudentGrade('${s.id}', '${s.fullName}')" class="px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200">
+                  Lưu
+                </button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      } catch (err) { 
+        if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-rose-500">Lỗi: ' + err.message + '</td></tr>'; 
+      }
     };
 
     window.saveStudentGrade = async (studentId, studentName) => {
       if (!selectedTaskId) return;
-      const scoreInput = document.getElementById(`grade_score_${studentId}`);
-      const fbInput = document.getElementById(`grade_fb_${studentId}`);
-      const score = scoreInput.value !== '' ? parseFloat(scoreInput.value) : '';
-      const feedback = fbInput.value.trim();
+      const score = document.getElementById(`grade_score_${studentId}`).value;
+      const feedback = document.getElementById(`grade_fb_${studentId}`).value.trim();
 
       try {
-        await postSheetData('gradeStudent', { taskId: selectedTaskId, studentId, score, feedback });
-        alert(`Đã lưu đánh giá cho học sinh ${studentName}!`);
+        await postSheetData('gradeStudent', { taskId: selectedTaskId, studentId, score: score !== '' ? parseFloat(score) : '', feedback });
+        alert(`Đã lưu điểm cho học sinh ${studentName}!`);
         loadTaskSubmissions(selectedTaskId);
       } catch (err) { alert("Lỗi: " + err.message); }
     };
-
-    window.openPreviewModal = (taskId) => {
-      const task = currentAssignments.find(t => t.id === taskId);
-      if (!task) return;
-      document.getElementById('previewTitle').innerText = task.title;
-      document.getElementById('previewCreatedAt').innerText = `📅 Đăng ngày: ${task.createdAt || 'Mới'}`;
-      document.getElementById('previewDeadline').innerText = `⏰ Hạn nộp: ${task.deadline ? new Date(task.deadline).toLocaleString('vi-VN') : 'Không thời hạn'}`;
-      document.getElementById('previewModal').classList.remove('hidden');
-    };
-
-    window.closePreviewModal = () => document.getElementById('previewModal').classList.add('hidden');
 
     checkTeacherAuth();
   </script>
