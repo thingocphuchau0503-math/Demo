@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trả Bài Nguyên Hàm Toán 12 - Kết Nối Tri Thức</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- KaTeX for rendering mathematical formulas (Synchronous script loading to ensure ready on start) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Canvas Confetti for celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .katex-display {
+      margin: 0.25em 0 !important;
+    }
+    .katex {
+      font-size: 1.1em;
+      line-height: 1.2;
+    }
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .transition-transform-600 {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans selection:bg-blue-100 selection:text-blue-700">
+
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm backdrop-blur-md bg-white/95">
+    <div class="max-w-6xl mx-auto px-4 py-3 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+            <i class="fa-solid fa-square-root-variable text-lg"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-base sm:text-lg text-slate-900 leading-tight">Trả Bài Nguyên Hàm 12</h1>
+            <p class="text-xs text-slate-500 font-medium">Toán 12 • Bộ Sách Kết Nối Tri Thức</p>
+          </div>
+        </div>
+
+        <span class="sm:hidden text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full border border-blue-200">
+          KNTT
+        </span>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200/80 w-full sm:w-auto overflow-x-auto text-xs sm:text-sm font-semibold">
+        <button onclick="switchTab('quiz')" id="tab-quiz" class="flex-1 sm:flex-initial px-3.5 py-2 rounded-lg transition-all flex items-center justify-center space-x-1.5 bg-white text-blue-600 shadow-sm">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Trắc nghiệm</span>
+        </button>
+        <button onclick="switchTab('flashcard')" id="tab-flashcard" class="flex-1 sm:flex-initial px-3.5 py-2 rounded-lg transition-all flex items-center justify-center space-x-1.5 text-slate-600 hover:text-slate-900">
+          <i class="fa-solid fa-layer-group"></i>
+          <span>Lật thẻ</span>
+        </button>
+        <button onclick="switchTab('speed')" id="tab-speed" class="flex-1 sm:flex-initial px-3.5 py-2 rounded-lg transition-all flex items-center justify-center space-x-1.5 text-slate-600 hover:text-slate-900">
+          <i class="fa-solid fa-stopwatch"></i>
+          <span>Tính giờ 5p</span>
+        </button>
+        <button onclick="switchTab('lookup')" id="tab-lookup" class="flex-1 sm:flex-initial px-3.5 py-2 rounded-lg transition-all flex items-center justify-center space-x-1.5 text-slate-600 hover:text-slate-900">
+          <i class="fa-solid fa-book-bookmark"></i>
+          <span>Bảng công thức</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6">
+
+    <!-- Global Category Filter (Active for Quiz and Flashcards) -->
+    <div id="filter-wrapper" class="mb-6 bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-2 text-xs font-semibold text-slate-500 uppercase tracking-wider w-full sm:w-auto">
+        <i class="fa-solid fa-filter text-blue-500"></i>
+        <span>Phạm vi công thức:</span>
+      </div>
+      <div class="flex flex-wrap gap-1.5 w-full sm:w-auto">
+        <button onclick="setCategory('all')" class="category-btn active px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-600 text-white transition-colors" data-cat="all">Tất cả</button>
+        <button onclick="setCategory('basic')" class="category-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors" data-cat="basic">Tính chất & Lũy thừa</button>
+        <button onclick="setCategory('trig')" class="category-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors" data-cat="trig">Lượng giác</button>
+        <button onclick="setCategory('exp')" class="category-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors" data-cat="exp">Mũ & Logarit</button>
+        <button onclick="setCategory('extended')" class="category-btn px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors" data-cat="extended">Mở rộng ax + b</button>
+      </div>
+    </div>
+
+    <!-- ===================== VIEW 1: TRẮC NGHIỆM ===================== -->
+    <section id="view-quiz" class="space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+        <!-- Status Bar -->
+        <div class="flex items-center justify-between pb-5 border-b border-slate-100">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 bg-blue-50 text-blue-600 rounded-md">Câu <span id="quiz-index">1</span></span>
+            <span id="quiz-category-tag" class="text-xs bg-slate-100 text-slate-600 font-medium px-2 py-0.5 rounded">Hàm lũy thừa</span>
+          </div>
+          <div class="flex items-center space-x-4 text-sm font-semibold">
+            <span class="text-emerald-600 flex items-center space-x-1"><i class="fa-solid fa-circle-check"></i><span id="quiz-correct-count">0</span> Đúng</span>
+            <span class="text-rose-500 flex items-center space-x-1"><i class="fa-solid fa-circle-xmark"></i><span id="quiz-wrong-count">0</span> Sai</span>
+          </div>
+        </div>
+
+        <!-- Formula Question Display -->
+        <div class="py-8 text-center">
+          <p class="text-sm font-medium text-slate-500 mb-2">Tìm họ nguyên hàm của biểu thức sau:</p>
+          <div id="quiz-question-latex" class="text-2xl sm:text-3xl text-slate-900 py-3.5 px-6 rounded-2xl bg-slate-50 inline-flex items-center justify-center border border-slate-100 min-w-[260px] min-h-[70px]">
+          </div>
+        </div>
+
+        <!-- Multiple Choice Options -->
+        <div id="quiz-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-2">
+          <!-- Filled dynamically with rendered KaTeX formulas -->
+        </div>
+
+        <!-- Feedback & Next Button -->
+        <div id="quiz-feedback-box" class="hidden mt-6 p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center space-x-3 text-sm font-medium">
+            <div id="quiz-feedback-icon" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0"></div>
+            <div>
+              <p id="quiz-feedback-title" class="font-bold"></p>
+              <div id="quiz-feedback-desc" class="text-xs text-slate-600 mt-0.5"></div>
+            </div>
+          </div>
+          <button onclick="nextQuizQuestion()" class="w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-all shadow-md shadow-blue-500/20 flex items-center justify-center space-x-1.5 shrink-0">
+            <span>Câu tiếp theo</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VIEW 2: LẬT THẺ FLASHCARD ===================== -->
+    <section id="view-flashcard" class="hidden space-y-6">
+      <div class="flex flex-col items-center">
+        <!-- Flashcard Flip Container -->
+        <div class="w-full max-w-xl perspective-1000 min-h-[320px] sm:min-h-[340px] cursor-pointer" onclick="flipFlashcard()">
+          <div id="flashcard-inner" class="relative w-full h-full min-h-[320px] sm:min-h-[340px] rounded-3xl shadow-md border border-slate-200 transition-transform-600 transform-style-3d bg-white">
+            
+            <!-- Front Face: Question -->
+            <div class="absolute inset-0 w-full h-full p-6 sm:p-8 flex flex-col justify-between items-center text-center backface-hidden rounded-3xl bg-white">
+              <div class="w-full flex justify-between items-center text-xs font-semibold text-slate-400">
+                <span id="fc-category-label" class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">Nguyên hàm lượng giác</span>
+                <span>Thẻ <span id="fc-current-idx">1</span>/<span id="fc-total-count">20</span></span>
+              </div>
+              
+              <div class="my-auto py-6">
+                <p class="text-xs uppercase tracking-widest text-slate-400 font-bold mb-3">Mặt trước: Đề bài</p>
+                <div id="fc-question-math" class="text-2xl sm:text-3xl text-slate-900 flex justify-center items-center min-h-[60px]">
+                </div>
+              </div>
+
+              <div class="text-xs text-blue-500 font-medium flex items-center space-x-1.5 bg-blue-50 px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-rotate"></i>
+                <span>Chạm hoặc bấm vào thẻ để xem đáp án</span>
+              </div>
+            </div>
+
+            <!-- Back Face: Answer -->
+            <div class="absolute inset-0 w-full h-full p-6 sm:p-8 flex flex-col justify-between items-center text-center backface-hidden rotate-y-180 rounded-3xl bg-gradient-to-b from-blue-50/70 to-indigo-50/50 border-2 border-blue-200">
+              <div class="w-full flex justify-between items-center text-xs font-semibold text-blue-600">
+                <span class="bg-blue-100/70 px-2.5 py-1 rounded-full">Đáp án chi tiết</span>
+                <span class="text-slate-400">Toán 12 SGK Kết nối tri thức</span>
+              </div>
+
+              <div class="my-auto py-6 w-full px-2">
+                <p class="text-xs uppercase tracking-widest text-blue-500 font-bold mb-3">Kết quả nguyên hàm</p>
+                <div id="fc-answer-math" class="text-2xl sm:text-3xl text-blue-700 font-bold flex justify-center items-center min-h-[60px]">
+                </div>
+                <div id="fc-condition" class="text-xs text-slate-600 mt-3 font-medium"></div>
+              </div>
+
+              <div class="text-xs text-slate-500 font-medium">
+                Tự đánh giá mức độ ghi nhớ công thức bên dưới
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Flashcard Action Buttons -->
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-3 w-full max-w-xl">
+          <button onclick="handleFlashcardResult(false)" class="flex-1 min-w-[140px] px-5 py-3 rounded-2xl bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-sm shadow-sm transition-all flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Chưa thuộc (Học lại)</span>
+          </button>
+          <button onclick="handleFlashcardResult(true)" class="flex-1 min-w-[140px] px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-500/20 transition-all flex items-center justify-center space-x-2">
+            <i class="fa-solid fa-check-double"></i>
+            <span>Đã thuộc</span>
+          </button>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="mt-4 flex items-center space-x-6 text-sm text-slate-500">
+          <button onclick="prevFlashcard()" class="hover:text-blue-600 font-medium flex items-center space-x-1">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+            <span>Thẻ trước</span>
+          </button>
+          <button onclick="shuffleFlashcards()" class="hover:text-blue-600 font-medium flex items-center space-x-1">
+            <i class="fa-solid fa-shuffle text-xs"></i>
+            <span>Xáo ngẫu nhiên</span>
+          </button>
+          <button onclick="nextFlashcard()" class="hover:text-blue-600 font-medium flex items-center space-x-1">
+            <span>Thẻ sau</span>
+            <i class="fa-solid fa-chevron-right text-xs"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VIEW 3: THỬ THÁCH TÍNH GIỜ (5 PHÚT) ===================== -->
+    <section id="view-speed" class="hidden space-y-6">
+      <!-- Challenge Start Card -->
+      <div id="speed-intro-box" class="bg-white rounded-3xl p-8 border border-slate-200 text-center max-w-xl mx-auto shadow-sm">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl shadow-inner">
+          <i class="fa-solid fa-stopwatch"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-800">Kiểm Tra Trả Bài Đầu Giờ (5 Phút)</h2>
+        <p class="text-sm text-slate-600 mt-2">
+          Mô phỏng 5 phút kiểm tra miệng của giáo viên: Bộ đề gồm 10 câu hỏi ngẫu nhiên phủ khắp toàn bộ các công thức nguyên hàm trong SGK Toán 12 Kết Nối Tri Thức.
+        </p>
+
+        <div class="grid grid-cols-3 gap-3 my-6 py-4 px-3 bg-slate-50 rounded-2xl border border-slate-100 text-left">
+          <div class="text-center">
+            <span class="text-xs text-slate-400 block font-medium">Số lượng</span>
+            <span class="text-lg font-bold text-slate-800">10 câu</span>
+          </div>
+          <div class="text-center border-x border-slate-200">
+            <span class="text-xs text-slate-400 block font-medium">Thời gian</span>
+            <span class="text-lg font-bold text-slate-800">05:00</span>
+          </div>
+          <div class="text-center">
+            <span class="text-xs text-slate-400 block font-medium">Mục tiêu</span>
+            <span class="text-lg font-bold text-emerald-600">&ge; 8/10</span>
+          </div>
+        </div>
+
+        <button onclick="startSpeedChallenge()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-bold text-base shadow-lg shadow-blue-500/25 transition-all">
+          <i class="fa-solid fa-play mr-2"></i>Bắt đầu tính giờ ngay
+        </button>
+      </div>
+
+      <!-- In-Challenge Active View -->
+      <div id="speed-game-box" class="hidden bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div>
+            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Tiến trình</span>
+            <div class="text-sm font-bold text-slate-800">Câu <span id="speed-current-num">1</span> / 10</div>
+          </div>
+          <div class="flex items-center space-x-2 bg-amber-50 border border-amber-200 px-4 py-2 rounded-xl text-amber-700 font-mono font-bold text-lg">
+            <i class="fa-regular fa-clock animate-pulse"></i>
+            <span id="speed-timer">05:00</span>
+          </div>
+        </div>
+
+        <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mt-3">
+          <div id="speed-progress-bar" class="bg-blue-600 h-full w-[10%] transition-all duration-300"></div>
+        </div>
+
+        <div class="py-8 text-center">
+          <p class="text-sm font-medium text-slate-500 mb-2">Chọn đáp án đúng nhất:</p>
+          <div id="speed-question-latex" class="text-2xl sm:text-3xl text-slate-900 py-3.5 px-6 rounded-2xl bg-slate-50 inline-flex items-center justify-center border border-slate-100 min-w-[260px] min-h-[70px]">
+          </div>
+        </div>
+
+        <div id="speed-options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <!-- Populated by JavaScript with KaTeX -->
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div id="speed-result-box" class="hidden bg-white rounded-3xl p-8 border border-slate-200 text-center max-w-xl mx-auto shadow-sm">
+        <div id="speed-badge-icon" class="w-20 h-20 mx-auto mb-4 rounded-3xl flex items-center justify-center text-3xl shadow-lg"></div>
+        <h3 id="speed-result-title" class="text-2xl font-bold text-slate-900">Hoàn thành bài kiểm tra!</h3>
+        <p class="text-slate-500 text-sm mt-1">Kết quả kiểm tra công thức nguyên hàm Toán 12</p>
+
+        <div class="grid grid-cols-3 gap-3 my-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+          <div>
+            <span class="text-xs text-slate-400 font-medium block">Điểm số</span>
+            <span id="speed-final-score" class="text-2xl font-extrabold text-blue-600">10/10</span>
+          </div>
+          <div class="border-x border-slate-200">
+            <span class="text-xs text-slate-400 font-medium block">Thời gian</span>
+            <span id="speed-final-time" class="text-2xl font-extrabold text-slate-800">01:45</span>
+          </div>
+          <div>
+            <span class="text-xs text-slate-400 font-medium block">Đánh giá</span>
+            <span id="speed-final-rank" class="text-sm font-bold text-emerald-600 mt-1 block">Xuất sắc</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button onclick="startSpeedChallenge()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm transition-all shadow-md shadow-blue-500/20">
+            <i class="fa-solid fa-arrow-rotate-right mr-1.5"></i>Làm lại bài khác
+          </button>
+          <button onclick="switchTab('lookup')" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-all">
+            <i class="fa-solid fa-book-open mr-1.5"></i>Tra cứu công thức
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== VIEW 4: BẢNG TRA CỨU CÔNG THỨC ===================== -->
+    <section id="view-lookup" class="hidden space-y-6">
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input type="text" id="lookup-search" oninput="filterLookupTable()" placeholder="Tìm nhanh công thức (ví dụ: sin, cos, e^x, 1/x, ax+b, alpha...)..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm">
+      </div>
+
+      <!-- Formula groups populated with KaTeX -->
+      <div class="space-y-6" id="lookup-groups-container">
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>Ứng dụng ôn luyện Toán 12 • Bộ Sách <b>Kết nối tri thức với cuộc sống</b></p>
+      <p class="font-mono text-slate-400 flex items-center justify-center space-x-1">
+        <span>KaTeX Rendering Engine</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Notification Banner -->
+  <div id="notice-toast" class="fixed bottom-6 right-6 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-2"></div>
+
+  <script>
+    /* Complete Database of Indefinite Integrals for Grade 12 (Ket Noi Tri Thuc) */
+    const FORMULA_DATA = [
+      // 1. Tính chất cơ bản
+      {
+        id: "prop_0",
+        category: "basic",
+        categoryName: "Tính chất cơ bản",
+        integral: "\\int 0 \\, dx",
+        result: "C",
+        latexFull: "\\int 0 \\, dx = C",
+        condition: "$C$ là hằng số tùy ý",
+        distractors: ["0 + C", "x + C", "1 + C"]
+      },
+      {
+        id: "prop_k",
+        category: "basic",
+        categoryName: "Tính chất cơ bản",
+        integral: "\\int k \\, dx",
+        result: "kx + C",
+        latexFull: "\\int k \\, dx = kx + C",
+        condition: "$k$ là hằng số bất kỳ",
+        distractors: ["k + C", "\\frac{k^2}{2} + C", "x + C"]
+      },
+      {
+        id: "prop_const_mult",
+        category: "basic",
+        categoryName: "Tính chất cơ bản",
+        integral: "\\int k f(x) \\, dx",
+        result: "k \\int f(x) \\, dx",
+        latexFull: "\\int k f(x) \\, dx = k \\int f(x) \\, dx",
+        condition: "Hằng số $k \\neq 0$",
+        distractors: ["\\frac{1}{k} \\int f(x) \\, dx", "kx \\int f(x) \\, dx", "\\int f(kx) \\, dx"]
+      },
+      {
+        id: "prop_sum_diff",
+        category: "basic",
+        categoryName: "Tính chất cơ bản",
+        integral: "\\int [f(x) \\pm g(x)] \\, dx",
+        result: "\\int f(x) \\, dx \\pm \\int g(x) \\, dx",
+        latexFull: "\\int [f(x) \\pm g(x)] \\, dx = \\int f(x) \\, dx \\pm \\int g(x) \\, dx",
+        condition: "$f(x), g(x)$ liên tục trên khoảng $K$",
+        distractors: [
+          "\\int f(x) \\, dx \\cdot \\int g(x) \\, dx",
+          "\\frac{\\int f(x) \\, dx}{\\int g(x) \\, dx}",
+          "f(x) \\pm g(x) + C"
+        ]
+      },
+
+      // 2. Hàm số lũy thừa
+      {
+        id: "pow_alpha",
+        category: "basic",
+        categoryName: "Hàm số lũy thừa",
+        integral: "\\int x^\\alpha \\, dx",
+        result: "\\frac{x^{\\alpha + 1}}{\\alpha + 1} + C",
+        latexFull: "\\int x^\\alpha \\, dx = \\frac{x^{\\alpha + 1}}{\\alpha + 1} + C",
+        condition: "Điều kiện: $\\alpha \\neq -1$",
+        distractors: [
+          "\\alpha x^{\\alpha - 1} + C",
+          "\\frac{x^{\\alpha}}{\\alpha} + C",
+          "\\frac{x^{\\alpha - 1}}{\\alpha - 1} + C"
+        ]
+      },
+      {
+        id: "pow_reciprocal",
+        category: "basic",
+        categoryName: "Hàm số lũy thừa",
+        integral: "\\int \\frac{1}{x} \\, dx",
+        result: "\\ln |x| + C",
+        latexFull: "\\int \\frac{1}{x} \\, dx = \\ln |x| + C",
+        condition: "$x \\neq 0$ (Lưu ý có dấu giá trị tuyệt đối $|x|$)",
+        distractors: [
+          "\\ln x + C",
+          "-\\frac{1}{x^2} + C",
+          "\\frac{1}{x^2} + C"
+        ]
+      },
+      {
+        id: "pow_inv_square",
+        category: "basic",
+        categoryName: "Hàm số lũy thừa",
+        integral: "\\int \\frac{1}{x^2} \\, dx",
+        result: "-\\frac{1}{x} + C",
+        latexFull: "\\int \\frac{1}{x^2} \\, dx = -\\frac{1}{x} + C",
+        condition: "Điều kiện: $x \\neq 0$",
+        distractors: [
+          "\\frac{1}{x} + C",
+          "-\\frac{2}{x^3} + C",
+          "\\ln|x^2| + C"
+        ]
+      },
+      {
+        id: "pow_sqrt",
+        category: "basic",
+        categoryName: "Hàm số lũy thừa",
+        integral: "\\int \\frac{1}{\\sqrt{x}} \\, dx",
+        result: "2\\sqrt{x} + C",
+        latexFull: "\\int \\frac{1}{\\sqrt{x}} \\, dx = 2\\sqrt{x} + C",
+        condition: "Điều kiện: $x > 0$",
+        distractors: [
+          "\\frac{1}{2\\sqrt{x}} + C",
+          "\\sqrt{x} + C",
+          "\\frac{2}{3}x\\sqrt{x} + C"
+        ]
+      },
+
+      // 3. Hàm số lượng giác
+      {
+        id: "trig_sin",
+        category: "trig",
+        categoryName: "Hàm lượng giác",
+        integral: "\\int \\sin x \\, dx",
+        result: "-\\cos x + C",
+        latexFull: "\\int \\sin x \\, dx = -\\cos x + C",
+        condition: "Đạo hàm của $(-\\cos x)$ bằng $\\sin x$",
+        distractors: ["\\cos x + C", "-\\sin x + C", "\\tan x + C"]
+      },
+      {
+        id: "trig_cos",
+        category: "trig",
+        categoryName: "Hàm lượng giác",
+        integral: "\\int \\cos x \\, dx",
+        result: "\\sin x + C",
+        latexFull: "\\int \\cos x \\, dx = \\sin x + C",
+        condition: "Đạo hàm của $(\\sin x)$ bằng $\\cos x$",
+        distractors: ["-\\sin x + C", "-\\cos x + C", "\\frac{1}{\\sin x} + C"]
+      },
+      {
+        id: "trig_tan_sq",
+        category: "trig",
+        categoryName: "Hàm lượng giác",
+        integral: "\\int \\frac{1}{\\cos^2 x} \\, dx",
+        result: "\\tan x + C",
+        latexFull: "\\int \\frac{1}{\\cos^2 x} \\, dx = \\int (1 + \\tan^2 x) \\, dx = \\tan x + C",
+        condition: "$x \\neq \\frac{\\pi}{2} + k\\pi \\quad (k \\in \\mathbb{Z})$",
+        distractors: ["-\\tan x + C", "\\cot x + C", "-\\frac{1}{\\cos x} + C"]
+      },
+      {
+        id: "trig_cot_sq",
+        category: "trig",
+        categoryName: "Hàm lượng giác",
+        integral: "\\int \\frac{1}{\\sin^2 x} \\, dx",
+        result: "-\\cot x + C",
+        latexFull: "\\int \\frac{1}{\\sin^2 x} \\, dx = \\int (1 + \\cot^2 x) \\, dx = -\\cot x + C",
+        condition: "$x \\neq k\\pi \\quad (k \\in \\mathbb{Z})$",
+        distractors: ["\\cot x + C", "-\\tan x + C", "\\frac{1}{\\sin x} + C"]
+      },
+
+      // 4. Hàm số mũ
+      {
+        id: "exp_e",
+        category: "exp",
+        categoryName: "Hàm số mũ",
+        integral: "\\int e^x \\, dx",
+        result: "e^x + C",
+        latexFull: "\\int e^x \\, dx = e^x + C",
+        condition: "Hàm số $e^x$ có nguyên hàm là chính nó",
+        distractors: ["x e^x + C", "\\frac{e^{x+1}}{x+1} + C", "e^{-x} + C"]
+      },
+      {
+        id: "exp_a",
+        category: "exp",
+        categoryName: "Hàm số mũ",
+        integral: "\\int a^x \\, dx",
+        result: "\\frac{a^x}{\\ln a} + C",
+        latexFull: "\\int a^x \\, dx = \\frac{a^x}{\\ln a} + C",
+        condition: "Điều kiện cơ số: $0 < a \\neq 1$",
+        distractors: ["a^x \\ln a + C", "\\frac{a^{x+1}}{x+1} + C", "a^x + C"]
+      },
+
+      // 5. Bảng mở rộng hàm hợp bậc nhất f(ax + b)
+      {
+        id: "ext_linear_pow",
+        category: "extended",
+        categoryName: "Hàm hợp tuyến tính",
+        integral: "\\int (ax + b)^\\alpha \\, dx",
+        result: "\\frac{1}{a} \\cdot \\frac{(ax+b)^{\\alpha + 1}}{\\alpha + 1} + C",
+        latexFull: "\\int (ax + b)^\\alpha \\, dx = \\frac{1}{a} \\cdot \\frac{(ax+b)^{\\alpha + 1}}{\\alpha + 1} + C",
+        condition: "Điều kiện: $a \\neq 0, \\alpha \\neq -1$",
+        distractors: [
+          "\\frac{(ax+b)^{\\alpha+1}}{\\alpha+1} + C",
+          "a \\cdot \\frac{(ax+b)^{\\alpha+1}}{\\alpha+1} + C",
+          "\\frac{1}{a}(ax+b)^{\\alpha-1} + C"
+        ]
+      },
+      {
+        id: "ext_reciprocal",
+        category: "extended",
+        categoryName: "Hàm hợp tuyến tính",
+        integral: "\\int \\frac{1}{ax + b} \\, dx",
+        result: "\\frac{1}{a} \\ln |ax + b| + C",
+        latexFull: "\\int \\frac{1}{ax + b} \\, dx = \\frac{1}{a} \\ln |ax + b| + C",
+        condition: "Điều kiện: $a \\neq 0, ax + b \\neq 0$",
+        distractors: [
+          "\\ln |ax + b| + C",
+          "a \\ln |ax + b| + C",
+          "-\\frac{1}{a(ax+b)^2} + C"
+        ]
+      },
+      {
+        id: "ext_sin",
+        category: "extended",
+        categoryName: "Hàm hợp tuyến tính",
+        integral: "\\int \\sin(ax + b) \\, dx",
+        result: "-\\frac{1}{a} \\cos(ax + b) + C",
+        latexFull: "\\int \\sin(ax + b) \\, dx = -\\frac{1}{a} \\cos(ax + b) + C",
+        condition: "Hệ số $a \\neq 0$ (Đừng quên nhân tử $-\\frac{1}{a}$)",
+        distractors: [
+          "\\frac{1}{a} \\cos(ax + b) + C",
+          "-\\cos(ax + b) + C",
+          "-a \\cos(ax + b) + C"
+        ]
+      },
+      {
+        id: "ext_cos",
+        category: "extended",
+        categoryName: "Hàm hợp tuyến tính",
+        integral: "\\int \\cos(ax + b) \\, dx",
+        result: "\\frac{1}{a} \\sin(ax + b) + C",
+        latexFull: "\\int \\cos(ax + b) \\, dx = \\frac{1}{a} \\sin(ax + b) + C",
+        condition: "Hệ số $a \\neq 0$ (Nhân tử $\\frac{1}{a}$)",
+        distractors: [
+          "-\\frac{1}{a} \\sin(ax + b) + C",
+          "\\sin(ax + b) + C",
+          "a \\sin(ax + b) + C"
+        ]
+      },
+      {
+        id: "ext_exp_e",
+        category: "extended",
+        categoryName: "Hàm hợp tuyến tính",
+        integral: "\\int e^{ax + b} \\, dx",
+        result: "\\frac{1}{a} e^{ax + b} + C",
+        latexFull: "\\int e^{ax + b} \\, dx = \\frac{1}{a} e^{ax + b} + C",
+        condition: "Hệ số $a \\neq 0$",
+        distractors: [
+          "e^{ax + b} + C",
+          "a e^{ax + b} + C",
+          "\\frac{1}{a} e^x + C"
+        ]
+      },
+      {
+        id: "ext_exp_a",
+        category: "extended",
+        categoryName: "Hàm hợp tuyến tính",
+        integral: "\\int a^{kx} \\, dx",
+        result: "\\frac{1}{k} \\cdot \\frac{a^{kx}}{\\ln a} + C",
+        latexFull: "\\int a^{kx} \\, dx = \\frac{1}{k} \\cdot \\frac{a^{kx}}{\\ln a} + C",
+        condition: "Hệ số $k \\neq 0$, cơ số $0 < a \\neq 1$",
+        distractors: [
+          "\\frac{a^{kx}}{\\ln a} + C",
+          "k \\cdot \\frac{a^{kx}}{\\ln a} + C",
+          "\\frac{a^{kx}}{k \\cdot a} + C"
+        ]
+      }
+    ];
+
+    /**
+     * Safely converts a raw LaTeX expression into HTML string using KaTeX
+     */
+    function renderLatexToString(mathStr, displayMode = false) {
+      if (!mathStr) return "";
+      let clean = String(mathStr).trim();
+      // Remove enclosing $ or $$ if provided directly
+      if (clean.startsWith('$$') && clean.endsWith('$$')) {
+        clean = clean.substring(2, clean.length - 2).trim();
+        displayMode = true;
+      } else if (clean.startsWith('$') && clean.endsWith('$')) {
+        clean = clean.substring(1, clean.length - 1).trim();
+      }
+
+      if (window.katex) {
+        try {
+          return katex.renderToString(clean, {
+            displayMode: displayMode,
+            throwOnError: false
+          });
+        } catch (e) {
+          console.error("KaTeX formatting error:", e);
+          return `<span class="font-mono text-slate-800">${clean}</span>`;
+        }
+      }
+      return clean;
+    }
+
+    /**
+     * Replaces inline math `$formula$` and display math `$$formula$$` in mixed Vietnamese text strings
+     */
+    function renderMixedTextWithLatex(text) {
+      if (!text) return "";
+      // Match display math $$...$$
+      let result = text.replace(/\$\$(.+?)\$\$/g, (match, expr) => {
+        return renderLatexToString(expr, true);
+      });
+      // Match inline math $...$
+      result = result.replace(/\$(.+?)\$/g, (match, expr) => {
+        return renderLatexToString(expr, false);
+      });
+      return result;
+    }
+
+    /**
+     * Set rendered math to a DOM container element
+     */
+    function setElementMath(elemId, mathStr, displayMode = false) {
+      const el = document.getElementById(elemId);
+      if (!el) return;
+      el.innerHTML = renderLatexToString(mathStr, displayMode);
+    }
+
+    /**
+     * Set mixed text with LaTeX expressions to a DOM container
+     */
+    function setElementMixedText(elemId, mixedText) {
+      const el = document.getElementById(elemId);
+      if (!el) return;
+      el.innerHTML = renderMixedTextWithLatex(mixedText);
+    }
+
+    let currentCategory = 'all';
+    let currentActiveTab = 'quiz';
+
+    // Quiz State
+    let quizPool = [];
+    let currentQuizItem = null;
+    let quizCorrect = 0;
+    let quizWrong = 0;
+    let quizTotalAnswered = 0;
+    let hasAnsweredCurrentQuiz = false;
+
+    // Flashcard State
+    let flashcardPool = [];
+    let flashcardIndex = 0;
+    let isFlipped = false;
+
+    // Speed Challenge State
+    let speedQuestions = [];
+    let speedCurrentIdx = 0;
+    let speedScore = 0;
+    let speedTimerInterval = null;
+    let speedSecondsLeft = 300; // 5 min
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function getFilteredData() {
+      if (currentCategory === 'all') return [...FORMULA_DATA];
+      return FORMULA_DATA.filter(item => item.category === currentCategory);
+    }
+
+    // App Initialization
+    document.addEventListener("DOMContentLoaded", () => {
+      renderLookupTable();
+      prepareQuizPool();
+      loadNextQuiz();
+      prepareFlashcards();
+    });
+
+    function switchTab(tab) {
+      currentActiveTab = tab;
+      const tabs = ['quiz', 'flashcard', 'speed', 'lookup'];
+      
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        const view = document.getElementById(`view-${t}`);
+        
+        if (t === tab) {
+          btn.className = "flex-1 sm:flex-initial px-3.5 py-2 rounded-lg transition-all flex items-center justify-center space-x-1.5 bg-white text-blue-600 shadow-sm font-bold";
+          view.classList.remove('hidden');
+        } else {
+          btn.className = "flex-1 sm:flex-initial px-3.5 py-2 rounded-lg transition-all flex items-center justify-center space-x-1.5 text-slate-600 hover:text-slate-900 font-semibold";
+          view.classList.add('hidden');
+        }
+      });
+
+      const filterWrapper = document.getElementById('filter-wrapper');
+      if (tab === 'quiz' || tab === 'flashcard') {
+        filterWrapper.classList.remove('hidden');
+      } else {
+        filterWrapper.classList.add('hidden');
+      }
+
+      if (tab === 'flashcard') {
+        renderCurrentFlashcard();
+      }
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        if (btn.getAttribute('data-cat') === cat) {
+          btn.className = "category-btn active px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 text-white transition-colors";
+        } else {
+          btn.className = "category-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors";
+        }
+      });
+
+      if (currentActiveTab === 'quiz') {
+        prepareQuizPool();
+        loadNextQuiz();
+      } else if (currentActiveTab === 'flashcard') {
+        prepareFlashcards();
+      }
+    }
+
+    function prepareQuizPool() {
+      quizPool = shuffleArray(getFilteredData());
+    }
+
+    function loadNextQuiz() {
+      hasAnsweredCurrentQuiz = false;
+      document.getElementById('quiz-feedback-box').classList.add('hidden');
+
+      if (quizPool.length === 0) {
+        prepareQuizPool();
+      }
+
+      currentQuizItem = quizPool.pop();
+      quizTotalAnswered++;
+
+      document.getElementById('quiz-index').textContent = quizTotalAnswered;
+      document.getElementById('quiz-category-tag').textContent = currentQuizItem.categoryName;
+
+      // Render question formula
+      setElementMath('quiz-question-latex', currentQuizItem.integral, true);
+
+      // Build 4 options
+      const options = [
+        { text: currentQuizItem.result, correct: true }
+      ];
+      currentQuizItem.distractors.forEach(dist => {
+        options.push({ text: dist, correct: false });
+      });
+
+      const shuffledOptions = shuffleArray(options);
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+
+      shuffledOptions.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `opt-btn-${idx}`;
+        btn.className = "w-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-blue-400 hover:bg-blue-50/40 text-slate-800 font-medium text-base text-center transition-all shadow-sm flex items-center justify-center min-h-[68px] focus:outline-none";
+        
+        btn.onclick = () => selectQuizAnswer(opt.correct, btn, shuffledOptions);
+        btn.innerHTML = renderLatexToString(opt.text, false);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectQuizAnswer(isCorrect, clickedBtn, options) {
+      if (hasAnsweredCurrentQuiz) return;
+      hasAnsweredCurrentQuiz = true;
+
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      const feedbackIcon = document.getElementById('quiz-feedback-icon');
+      const feedbackTitle = document.getElementById('quiz-feedback-title');
+      const feedbackDesc = document.getElementById('quiz-feedback-desc');
+
+      const container = document.getElementById('quiz-options-container');
+      const buttons = container.querySelectorAll('button');
+
+      buttons.forEach((btn, index) => {
+        btn.disabled = true;
+        if (options[index].correct) {
+          btn.className = "w-full p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 text-emerald-800 font-semibold text-center shadow-sm flex items-center justify-center min-h-[68px]";
+        } else if (btn === clickedBtn && !isCorrect) {
+          btn.className = "w-full p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 text-rose-800 font-semibold text-center shadow-sm flex items-center justify-center min-h-[68px]";
+        } else {
+          btn.className = "w-full p-4 rounded-2xl border border-slate-200 bg-slate-50 text-slate-400 text-center flex items-center justify-center min-h-[68px] opacity-60";
+        }
+      });
+
+      if (isCorrect) {
+        quizCorrect++;
+        document.getElementById('quiz-correct-count').textContent = quizCorrect;
+
+        feedbackBox.className = "mt-6 p-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 flex flex-col sm:flex-row items-center justify-between gap-3";
+        feedbackIcon.className = "w-9 h-9 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg shrink-0";
+        feedbackIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+        feedbackTitle.className = "font-bold text-emerald-800 text-sm";
+        feedbackTitle.textContent = "Chính xác! Công thức hoàn toàn chuẩn mực.";
+        
+        const cond = currentQuizItem.condition ? renderMixedTextWithLatex(currentQuizItem.condition) : "Ghi nhớ chính xác dạng nguyên hàm này.";
+        feedbackDesc.innerHTML = `<span>Ghi chú: ${cond}</span>`;
+      } else {
+        quizWrong++;
+        document.getElementById('quiz-wrong-count').textContent = quizWrong;
+
+        feedbackBox.className = "mt-6 p-4 rounded-2xl border border-rose-200 bg-rose-50/70 flex flex-col sm:flex-row items-center justify-between gap-3";
+        feedbackIcon.className = "w-9 h-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-lg shrink-0";
+        feedbackIcon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        feedbackTitle.className = "font-bold text-rose-800 text-sm";
+        feedbackTitle.textContent = "Chưa chính xác!";
+
+        const correctLatexHtml = renderLatexToString(currentQuizItem.result, false);
+        const cond = currentQuizItem.condition ? ` (${renderMixedTextWithLatex(currentQuizItem.condition)})` : '';
+        feedbackDesc.innerHTML = `<span class="flex items-center flex-wrap gap-1">Công thức đúng là: <span class="text-blue-700 font-bold mx-1">${correctLatexHtml}</span> ${cond}</span>`;
+      }
+
+      feedbackBox.classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      loadNextQuiz();
+    }
+
+    function prepareFlashcards() {
+      flashcardPool = shuffleArray(getFilteredData());
+      flashcardIndex = 0;
+      isFlipped = false;
+      renderCurrentFlashcard();
+    }
+
+    function renderCurrentFlashcard() {
+      if (flashcardPool.length === 0) return;
+      
+      const item = flashcardPool[flashcardIndex];
+      const cardInner = document.getElementById('flashcard-inner');
+      
+      // Reset flip transition
+      isFlipped = false;
+      cardInner.classList.remove('rotate-y-180');
+
+      document.getElementById('fc-category-label').textContent = item.categoryName;
+      document.getElementById('fc-current-idx').textContent = flashcardIndex + 1;
+      document.getElementById('fc-total-count').textContent = flashcardPool.length;
+
+      // Front side
+      setElementMath('fc-question-math', item.integral, true);
+
+      // Back side: full formula "= result"
+      setElementMath('fc-answer-math', `= ${item.result}`, true);
+      
+      // Condition notes
+      const condEl = document.getElementById('fc-condition');
+      if (item.condition) {
+        condEl.innerHTML = `<i class="fa-solid fa-circle-info text-blue-500 mr-1"></i>${renderMixedTextWithLatex(item.condition)}`;
+      } else {
+        condEl.innerHTML = "";
+      }
+    }
+
+    function flipFlashcard() {
+      isFlipped = !isFlipped;
+      const cardInner = document.getElementById('flashcard-inner');
+      if (isFlipped) {
+        cardInner.classList.add('rotate-y-180');
+      } else {
+        cardInner.classList.remove('rotate-y-180');
+      }
+    }
+
+    function handleFlashcardResult(mastered) {
+      if (mastered) {
+        showFloatingToast("Đã thuộc công thức!", "emerald");
+      } else {
+        showFloatingToast("Đã lưu để ôn lại!", "rose");
+      }
+      nextFlashcard();
+    }
+
+    function nextFlashcard() {
+      if (flashcardIndex < flashcardPool.length - 1) {
+        flashcardIndex++;
+      } else {
+        flashcardIndex = 0;
+      }
+      renderCurrentFlashcard();
+    }
+
+    function prevFlashcard() {
+      if (flashcardIndex > 0) {
+        flashcardIndex--;
+      } else {
+        flashcardIndex = flashcardPool.length - 1;
+      }
+      renderCurrentFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      flashcardPool = shuffleArray(flashcardPool);
+      flashcardIndex = 0;
+      renderCurrentFlashcard();
+      showFloatingToast("Đã xáo trộn thứ tự thẻ!", "blue");
+    }
+
+    function showFloatingToast(text, color) {
+      const toast = document.getElementById('notice-toast');
+      toast.className = `fixed bottom-6 right-6 z-50 bg-${color}-600 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-lg transition-all duration-300 opacity-100 translate-y-0`;
+      toast.textContent = text;
+      setTimeout(() => {
+        toast.className = `fixed bottom-6 right-6 z-50 bg-${color}-600 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow-lg transition-all duration-300 opacity-0 translate-y-2 pointer-events-none`;
+      }, 1300);
+    }
+
+    function startSpeedChallenge() {
+      document.getElementById('speed-intro-box').classList.add('hidden');
+      document.getElementById('speed-result-box').classList.add('hidden');
+      document.getElementById('speed-game-box').classList.remove('hidden');
+
+      speedQuestions = shuffleArray([...FORMULA_DATA]).slice(0, 10);
+      speedCurrentIdx = 0;
+      speedScore = 0;
+      speedSecondsLeft = 300; // 5 mins
+
+      updateSpeedTimerDisplay();
+      if (speedTimerInterval) clearInterval(speedTimerInterval);
+      
+      speedTimerInterval = setInterval(() => {
+        speedSecondsLeft--;
+        updateSpeedTimerDisplay();
+        if (speedSecondsLeft <= 0) {
+          endSpeedChallenge();
+        }
+      }, 1000);
+
+      loadSpeedQuestion();
+    }
+
+    function updateSpeedTimerDisplay() {
+      const min = Math.floor(speedSecondsLeft / 60);
+      const sec = speedSecondsLeft % 60;
+      const str = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+      document.getElementById('speed-timer').textContent = str;
+    }
+
+    function loadSpeedQuestion() {
+      if (speedCurrentIdx >= speedQuestions.length) {
+        endSpeedChallenge();
+        return;
+      }
+
+      document.getElementById('speed-current-num').textContent = speedCurrentIdx + 1;
+      const progressPercent = ((speedCurrentIdx + 1) / 10) * 100;
+      document.getElementById('speed-progress-bar').style.width = `${progressPercent}%`;
+
+      const item = speedQuestions[speedCurrentIdx];
+      setElementMath('speed-question-latex', item.integral, true);
+
+      const options = [
+        { text: item.result, correct: true }
+      ];
+      item.distractors.forEach(d => options.push({ text: d, correct: false }));
+      const shuffled = shuffleArray(options);
+
+      const container = document.getElementById('speed-options-container');
+      container.innerHTML = '';
+
+      shuffled.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = "w-full p-4 rounded-2xl border-2 border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/30 text-slate-800 font-medium text-base text-center transition-all shadow-sm flex items-center justify-center min-h-[68px]";
+        btn.onclick = () => onSelectSpeedOption(opt.correct);
+        btn.innerHTML = renderLatexToString(opt.text, false);
+        container.appendChild(btn);
+      });
+    }
+
+    function onSelectSpeedOption(isCorrect) {
+      if (isCorrect) {
+        speedScore++;
+      }
+      speedCurrentIdx++;
+      loadSpeedQuestion();
+    }
+
+    function endSpeedChallenge() {
+      if (speedTimerInterval) clearInterval(speedTimerInterval);
+
+      document.getElementById('speed-game-box').classList.add('hidden');
+      const resultBox = document.getElementById('speed-result-box');
+      resultBox.classList.remove('hidden');
+
+      const elapsed = 300 - speedSecondsLeft;
+      const min = Math.floor(elapsed / 60);
+      const sec = elapsed % 60;
+      const timeStr = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+
+      document.getElementById('speed-final-score').textContent = `${speedScore}/10`;
+      document.getElementById('speed-final-time').textContent = timeStr;
+      // Gửi điểm số về trang web của Thầy Hậu
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'QUIZ_SUBMISSION',
+            score: speedScore,
+            status: 'completed',
+            feedback: `Hoàn thành bài kiểm tra: ${speedScore}/10 câu (${timeStr})`
+          }, '*');
+        }
+      } catch (err) {
+        console.warn("Lỗi gửi điểm:", err);
+      }
+
+      const badge = document.getElementById('speed-badge-icon');
+      const title = document.getElementById('speed-result-title');
+      const rank = document.getElementById('speed-final-rank');
+
+      if (speedScore >= 9) {
+        badge.className = "w-20 h-20 mx-auto mb-4 rounded-3xl flex items-center justify-center text-3xl shadow-lg bg-emerald-100 text-emerald-600";
+        badge.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+        title.textContent = "Xuất sắc! Thuộc bài 100%";
+        rank.textContent = "Đạt điểm 10";
+        rank.className = "text-sm font-bold text-emerald-600 mt-1 block";
+
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+      } else if (speedScore >= 7) {
+        badge.className = "w-20 h-20 mx-auto mb-4 rounded-3xl flex items-center justify-center text-3xl shadow-lg bg-blue-100 text-blue-600";
+        badge.innerHTML = '<i class="fa-solid fa-star"></i>';
+        title.textContent = "Khá tốt! Chú ý thêm các điều kiện";
+        rank.textContent = "Đạt điểm 7 - 8";
+        rank.className = "text-sm font-bold text-blue-600 mt-1 block";
+      } else {
+        badge.className = "w-20 h-20 mx-auto mb-4 rounded-3xl flex items-center justify-center text-3xl shadow-lg bg-rose-100 text-rose-600";
+        badge.innerHTML = '<i class="fa-solid fa-book"></i>';
+        title.textContent = "Cần tiếp tục ôn luyện thêm!";
+        rank.textContent = "Chưa đạt yêu cầu";
+        rank.className = "text-sm font-bold text-rose-600 mt-1 block";
+      }
+    }
+
+    function renderLookupTable(filterQuery = "") {
+      const container = document.getElementById('lookup-groups-container');
+      container.innerHTML = "";
+
+      const query = filterQuery.toLowerCase().trim();
+      const groups = [
+        { key: "basic", title: "1. Bảng Tính Chất Cơ Bản & Hàm Lũy Thừa" },
+        { key: "trig", title: "2. Bảng Nguyên Hàm Lượng Giác" },
+        { key: "exp", title: "3. Bảng Nguyên Hàm Mũ & Logarit" },
+        { key: "extended", title: "4. Bảng Mở Rộng Tuyến Tính f(ax + b)" }
+      ];
+
+      groups.forEach(grp => {
+        let items = FORMULA_DATA.filter(item => item.category === grp.key);
+        if (query) {
+          items = items.filter(item => 
+            item.integral.toLowerCase().includes(query) ||
+            item.result.toLowerCase().includes(query) ||
+            item.categoryName.toLowerCase().includes(query) ||
+            (item.condition && item.condition.toLowerCase().includes(query))
+          );
+        }
+
+        if (items.length === 0) return;
+
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm";
+
+        const cardHeader = `
+          <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+            <h3 class="font-bold text-slate-800 text-sm sm:text-base">${grp.title}</h3>
+            <span class="text-xs bg-slate-200/80 text-slate-600 font-semibold px-2 py-0.5 rounded-full">${items.length} công thức</span>
+          </div>
+        `;
+
+        let rowsHtml = items.map((item, idx) => {
+          const formulaLatex = renderLatexToString(item.latexFull, false);
+          const conditionHtml = item.condition ? renderMixedTextWithLatex(item.condition) : '';
+
+          return `
+            <div class="p-4 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} border-b border-slate-100 last:border-0 flex flex-col md:flex-row md:items-center justify-between gap-3 hover:bg-blue-50/30 transition-colors">
+              <div class="flex-1 overflow-x-auto py-1">
+                <div class="text-slate-900 text-base sm:text-lg font-medium inline-block">${formulaLatex}</div>
+              </div>
+              ${conditionHtml ? `
+                <div class="text-xs text-slate-600 bg-slate-100/90 px-3 py-1.5 rounded-lg shrink-0 flex items-center space-x-1.5 self-start md:self-auto">
+                  <i class="fa-solid fa-circle-info text-blue-500"></i>
+                  <span>${conditionHtml}</span>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join('');
+
+        card.innerHTML = cardHeader + `<div>${rowsHtml}</div>`;
+        container.appendChild(card);
+      });
+    }
+
+    function filterLookupTable() {
+      const val = document.getElementById('lookup-search').value;
+      renderLookupTable(val);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn Tập Chuyên Đề: Nguyên Hàm & Tích Phân Cơ Bản - Toán 12</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            accent: {
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+  <style>
+    /* Strict left alignment for math formulas & questions */
+    .math-left, .katex-display {
+      text-align: left !important;
+      margin-left: 0 !important;
+      padding-left: 0.15rem !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+    .katex {
+      font-size: 1.05em;
+    }
+    /* Prevent text stretching or unnatural justification inside examples */
+    .math-text-flow {
+      text-align: left !important;
+      display: block !important;
+      line-height: 1.75 !important;
+      word-spacing: normal !important;
+      letter-spacing: normal !important;
+    }
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .tab-active {
+      border-bottom: 3px solid #0d9488;
+      color: #0f766e;
+      font-weight: 700;
+      background-color: #f0fdfa;
+    }
+    .subtab-active {
+      background-color: #0d9488 !important;
+      color: #ffffff !important;
+      font-weight: 600;
+      box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.25);
+    }
+    .glass-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-teal-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
+            <span class="text-xl sm:text-2xl font-black">∫</span>
+          </div>
+          <div>
+            <h1 class="text-base sm:text-xl font-bold text-slate-900 leading-tight">
+              Nguyên Hàm & Tích Phân Cơ Bản
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-500 font-medium">
+              Toán 12 • Bộ sách Kết Nối Tri Thức Với Cuộc Sống
+            </p>
+          </div>
+        </div>
+        
+        <div class="hidden sm:flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+          <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+          Định dạng thi GDPT Mới
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="flex space-x-2 sm:space-x-4 border-t border-slate-100 overflow-x-auto text-sm sm:text-base">
+        <button id="nav-tab-1" onclick="switchMainTab(1)" class="tab-active py-3 px-4 text-center whitespace-nowrap transition-all duration-200 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          Tab 1: Lý Thuyết & Công Thức
+        </button>
+        <button id="nav-tab-2" onclick="switchMainTab(2)" class="py-3 px-4 text-slate-600 hover:text-slate-900 text-center whitespace-nowrap transition-all duration-200 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+          Tab 2: Luyện Tập Phân Dạng (5 Dạng)
+        </button>
+        <button id="nav-tab-3" onclick="switchMainTab(3)" class="py-3 px-4 text-slate-600 hover:text-slate-900 text-center whitespace-nowrap transition-all duration-200 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Tab 3: Đề Kiểm Tra Năng Lực (Thang 10đ)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- Notification Modal (strictly avoids alert()) -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all text-left">
+        <div class="flex items-center space-x-3 mb-4">
+          <div id="modal-icon-container" class="w-10 h-10 rounded-full flex items-center justify-center bg-teal-100 text-teal-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3 id="modal-title" class="text-lg font-bold text-slate-800">Thông báo</h3>
+        </div>
+        <p id="modal-message" class="text-sm text-slate-600 mb-6 leading-relaxed text-left"></p>
+        <div class="flex justify-end">
+          <button onclick="closeModal()" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-xl text-sm transition-all shadow-sm">
+            Đã hiểu
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 1: LÝ THUYẾT & CÔNG THỨC TOÀN DIỆN (SGK KẾT NỐI TRI THỨC) -->
+    <!-- ============================================================== -->
+    <section id="tab-content-1" class="space-y-8 block">
+      
+      <div class="rounded-2xl bg-gradient-to-r from-teal-700 via-teal-800 to-indigo-900 text-white p-6 sm:p-8 shadow-xl text-left">
+        <div class="max-w-3xl">
+          <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md text-teal-100 text-xs font-semibold rounded-full uppercase tracking-wider mb-3">
+            Hệ Thống Trọng Tâm Kiến Thức
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">
+            Nguyên Hàm, Tích Phân & Ứng Dụng Hình Học
+          </h2>
+          <p class="text-slate-200 text-sm sm:text-base leading-relaxed">
+            Hệ thống hóa toàn bộ định nghĩa, tính chất, bảng nguyên hàm cơ bản - mở rộng, cùng các phương pháp tính chuẩn mực theo SGK Toán 12 Kết Nối Tri Thức Với Cuộc Sống. Kèm ví dụ mẫu giải chi tiết và đồ họa hình học chuẩn xác.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Navigation within Tab 1 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+        <a href="#bai-11" class="glass-card p-4 rounded-xl hover:border-teal-400 transition-all flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center font-bold">11</div>
+          <div>
+            <div class="text-sm font-bold text-slate-800">Bài 11: Nguyên hàm</div>
+            <div class="text-xs text-slate-500">Định nghĩa, họ nguyên hàm & bảng công thức</div>
+          </div>
+        </a>
+        <a href="#bai-12" class="glass-card p-4 rounded-xl hover:border-teal-400 transition-all flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">12</div>
+          <div>
+            <div class="text-sm font-bold text-slate-800">Bài 12: Tích phân</div>
+            <div class="text-xs text-slate-500">Newton–Leibniz, tính chất & phương pháp tính</div>
+          </div>
+        </a>
+        <a href="#bai-13" class="glass-card p-4 rounded-xl hover:border-teal-400 transition-all flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center font-bold">13</div>
+          <div>
+            <div class="text-sm font-bold text-slate-800">Bài 13: Ứng dụng hình học</div>
+            <div class="text-xs text-slate-500">Diện tích phẳng & Khối tròn xoay SVG 3D</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- BÀI 11: NGUYÊN HÀM -->
+      <article id="bai-11" class="glass-card rounded-2xl p-6 sm:p-8 space-y-6 text-left">
+        <div class="border-b border-slate-200 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-600 bg-teal-50 px-2.5 py-1 rounded-md">Bài 11</span>
+          <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-2">Nguyên Hàm & Các Tính Chất Cơ Bản</h3>
+        </div>
+
+        <!-- 1. Định nghĩa & Tồn tại -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+            1. Khái niệm và Điều kiện tồn tại nguyên hàm
+          </h4>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm leading-relaxed space-y-2">
+            <p><strong>• Định nghĩa:</strong> Cho hàm số $f(x)$ xác định trên một khoảng $K$ (hoặc đoạn, nửa khoảng). Hàm số $F(x)$ được gọi là <em>nguyên hàm</em> của $f(x)$ trên $K$ nếu:
+            $$F'(x) = f(x), \quad \forall x \in K.$$</p>
+            <p><strong>• Định lí về họ nguyên hàm:</strong> Nếu $F(x)$ là một nguyên hàm của $f(x)$ trên $K$ thì họ tất cả các nguyên hàm của $f(x)$ trên $K$ là:
+            $$\int f(x)\,dx = F(x) + C \quad (C \in \mathbb{R}).$$</p>
+            <p><strong>• Định lí tồn tại (Tính liên tục):</strong> Mọi hàm số $f(x)$ liên tục trên $K$ đều có nguyên hàm trên $K$.</p>
+          </div>
+        </div>
+
+        <!-- 2. Tính chất -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+            2. Các tính chất cơ bản của nguyên hàm
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div class="p-3 bg-teal-50/60 rounded-xl border border-teal-200">
+              <span class="font-semibold text-teal-800">Tính chất 1:</span>
+              $$\int f'(x)\,dx = f(x) + C$$
+            </div>
+            <div class="p-3 bg-teal-50/60 rounded-xl border border-teal-200">
+              <span class="font-semibold text-teal-800">Tính chất 2 ($k \ne 0$):</span>
+              $$\int k f(x)\,dx = k \int f(x)\,dx$$
+            </div>
+            <div class="p-3 bg-teal-50/60 rounded-xl border border-teal-200">
+              <span class="font-semibold text-teal-800">Tính chất 3:</span>
+              $$\int [f(x) \pm g(x)]\,dx = \int f(x)\,dx \pm \int g(x)\,dx$$
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Bảng nguyên hàm -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+            3. Bảng nguyên hàm các hàm số sơ cấp thường gặp & dạng mở rộng $u = ax+b$ ($a \ne 0$)
+          </h4>
+          <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-sm text-left border-collapse bg-white">
+              <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-3 border-r border-slate-200 w-1/2">Nguyên hàm cơ bản</th>
+                  <th class="p-3 w-1/2">Nguyên hàm mở rộng bậc nhất ($u = ax+b$, $a \ne 0$)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 text-slate-700">
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int 0\,dx = C$</td>
+                  <td class="p-3">$\int k\,dx = kx + C$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int x^\alpha\,dx = \dfrac{x^{\alpha+1}}{\alpha+1} + C \quad (\alpha \ne -1)$</td>
+                  <td class="p-3">$\int (ax+b)^\alpha\,dx = \dfrac{1}{a}\cdot\dfrac{(ax+b)^{\alpha+1}}{\alpha+1} + C \quad (\alpha \ne -1)$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int \dfrac{1}{x}\,dx = \ln|x| + C \quad (x \ne 0)$</td>
+                  <td class="p-3">$\int \dfrac{1}{ax+b}\,dx = \dfrac{1}{a}\ln|ax+b| + C$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int e^x\,dx = e^x + C$</td>
+                  <td class="p-3">$\int e^{ax+b}\,dx = \dfrac{1}{a}e^{ax+b} + C$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int a^x\,dx = \dfrac{a^x}{\ln a} + C \quad (0 < a \ne 1)$</td>
+                  <td class="p-3">$\int a^{kx}\,dx = \dfrac{1}{k}\cdot\dfrac{a^{kx}}{\ln a} + C$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int \cos x\,dx = \sin x + C$</td>
+                  <td class="p-3">$\int \cos(ax+b)\,dx = \dfrac{1}{a}\sin(ax+b) + C$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int \sin x\,dx = -\cos x + C$</td>
+                  <td class="p-3">$\int \sin(ax+b)\,dx = -\dfrac{1}{a}\cos(ax+b) + C$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int \dfrac{1}{\cos^2 x}\,dx = \tan x + C$</td>
+                  <td class="p-3">$\int \dfrac{1}{\cos^2(ax+b)}\,dx = \dfrac{1}{a}\tan(ax+b) + C$</td>
+                </tr>
+                <tr>
+                  <td class="p-3 border-r border-slate-200">$\int \dfrac{1}{\sin^2 x}\,dx = -\cot x + C$</td>
+                  <td class="p-3">$\int \dfrac{1}{\sin^2(ax+b)}\,dx = -\dfrac{1}{a}\cot(ax+b) + C$</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Ví dụ mẫu Bài 11 (Căn lề trái mượt mà) -->
+        <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 sm:p-5 space-y-3 text-left">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 bg-amber-200 text-amber-900 text-xs font-bold rounded-md">VÍ DỤ MẪU 1</span>
+            <span class="text-xs font-semibold text-amber-800">Tính họ nguyên hàm hàm số hỗn hợp</span>
+          </div>
+          <div class="text-slate-800 text-sm sm:text-base font-semibold leading-relaxed math-text-flow">
+            Tính nguyên hàm $I = \int \left( 3x^2 - 4\cos 2x + \dfrac{2}{2x+1} \right)\,dx$.
+          </div>
+          <div class="text-slate-700 text-sm leading-relaxed pt-2 border-t border-amber-200/80 space-y-1">
+            <p><strong>Lời giải chi tiết từng bước:</strong></p>
+            <p>Áp dụng tính chất tuyến tính của nguyên hàm:</p>
+            $$I = 3\int x^2\,dx - 4\int \cos 2x\,dx + 2\int \dfrac{1}{2x+1}\,dx$$
+            <p>• Áp dụng công thức lũy thừa: $3\int x^2\,dx = 3 \cdot \dfrac{x^3}{3} = x^3$.</p>
+            <p>• Áp dụng công thức mở rộng hàm lượng giác: $-4\int \cos 2x\,dx = -4 \cdot \dfrac{1}{2}\sin 2x = -2\sin 2x$.</p>
+            <p>• Áp dụng công thức mở rộng phân thức: $2\int \dfrac{1}{2x+1}\,dx = 2 \cdot \dfrac{1}{2}\ln|2x+1| = \ln|2x+1|$.</p>
+            <p class="text-teal-700 font-semibold">Vậy họ nguyên hàm cần tìm là: $I = x^3 - 2\sin 2x + \ln|2x+1| + C$.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- BÀI 12: TÍCH PHÂN -->
+      <article id="bai-12" class="glass-card rounded-2xl p-6 sm:p-8 space-y-6 text-left">
+        <div class="border-b border-slate-200 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Bài 12</span>
+          <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-2">Tích Phân & Các Phương Pháp Tính</h3>
+        </div>
+
+        <!-- 1. Định nghĩa Newton - Leibniz -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+            1. Định nghĩa (Công thức Newton – Leibniz)
+          </h4>
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm leading-relaxed space-y-2">
+            <p>Cho hàm số $f(x)$ liên tục trên đoạn $[a; b]$. Nếu $F(x)$ là một nguyên hàm của $f(x)$ trên $[a; b]$ thì hiệu số $F(b) - F(a)$ được gọi là <strong>tích phân</strong> từ $a$ đến $b$ của $f(x)$:
+            $$\int_a^b f(x)\,dx = \left. F(x) \right|_a^b = F(b) - F(a).$$</p>
+            <p class="text-slate-600"><em>Chú ý:</em> Tích phân chỉ phụ thuộc vào hàm $f$ và các cận $a, b$, hoàn toàn không phụ thuộc vào tên ký hiệu biến số:
+            $$\int_a^b f(x)\,dx = \int_a^b f(t)\,dt = \int_a^b f(u)\,du.$$</p>
+          </div>
+        </div>
+
+        <!-- 2. Tính chất của tích phân -->
+        <div class="space-y-3">
+          <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+            2. Các tính chất quan trọng của tích phân
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs sm:text-sm">
+            <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-200">
+              <span class="font-bold text-indigo-800">Quy ước cận:</span>
+              $$\int_a^a f(x)\,dx = 0$$
+              $$\int_a^b f(x)\,dx = -\int_b^a f(x)\,dx$$
+            </div>
+            <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-200">
+              <span class="font-bold text-indigo-800">Nhân hằng số $k$:</span>
+              $$\int_a^b k f(x)\,dx = k \int_a^b f(x)\,dx$$
+            </div>
+            <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-200">
+              <span class="font-bold text-indigo-800">Cộng trừ tích phân:</span>
+              $$\int_a^b [f \pm g]dx = \int_a^b f dx \pm \int_a^b g dx$$
+            </div>
+            <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-200">
+              <span class="font-bold text-indigo-800">Chèn cận (với mọi $c$):</span>
+              $$\int_a^b f(x)\,dx = \int_a^c f(x)\,dx + \int_c^b f(x)\,dx$$
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Phương pháp tính tích phân -->
+        <div class="space-y-4">
+          <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+            3. Hai phương pháp tính tích phân cơ bản
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            
+            <!-- Đổi biến số -->
+            <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm space-y-2">
+              <span class="font-bold text-indigo-700 flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                Phương pháp đổi biến số
+              </span>
+              <p class="text-slate-600">Nếu tích phân có dạng $\int_a^b f(u(x))\cdot u'(x)\,dx$, ta đặt $t = u(x) \implies dt = u'(x)\,dx$.</p>
+              <div class="bg-indigo-50/70 p-2.5 rounded-lg border border-indigo-100 text-xs">
+                <strong>Quy trình bắt buộc:</strong><br>
+                1. Đặt $t = u(x)$ và vi phân hai vế $dt = u'(x)dx$.<br>
+                2. <em>Đổi cận:</em> $x = a \implies t = u(a)$; $x = b \implies t = u(b)$.<br>
+                3. Đưa về: $\int_a^b f(u(x))u'(x)dx = \int_{u(a)}^{u(b)} f(t)dt$.
+              </div>
+            </div>
+
+            <!-- Từng phần -->
+            <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm space-y-2">
+              <span class="font-bold text-indigo-700 flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                Phương pháp tích phân từng phần
+              </span>
+              <p class="text-slate-600">Cho hai hàm số $u(x)$ và $v(x)$ có đạo hàm liên tục trên $[a; b]$. Ta có công thức:</p>
+              $$\int_a^b u\,dv = \left. (u \cdot v) \right|_a^b - \int_a^b v\,du$$
+              <div class="bg-indigo-50/70 p-2.5 rounded-lg border border-indigo-100 text-xs">
+                <strong>Quy tắc ưu tiên đặt $u$:</strong><br>
+                <em>"Nhất lô, nhì đa, tam lượng, tứ mũ"</em><br>
+                $\ln \to \text{Đa thức } P(x) \to \text{Lượng giác } (\sin, \cos) \to \text{Hàm mũ } e^x, a^x$.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Ví dụ mẫu Bài 12 -->
+        <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 sm:p-5 space-y-3 text-left">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 bg-amber-200 text-amber-900 text-xs font-bold rounded-md">VÍ DỤ MẪU 2</span>
+            <span class="text-xs font-semibold text-amber-800">Tính tích phân bằng phương pháp từng phần</span>
+          </div>
+          <div class="text-slate-800 text-sm sm:text-base font-semibold leading-relaxed math-text-flow">
+            Tính tích phân $J = \int_0^1 (2x+1)e^x\,dx$.
+          </div>
+          <div class="text-slate-700 text-sm leading-relaxed pt-2 border-t border-amber-200/80 space-y-1">
+            <p><strong>Lời giải chi tiết từng bước:</strong></p>
+            <p>Đặt $\begin{cases} u = 2x+1 \\ dv = e^x dx \end{cases} \implies \begin{cases} du = 2dx \\ v = e^x \end{cases}$.</p>
+            <p>Áp dụng công thức tích phân từng phần:</p>
+            $$J = \left. (2x+1)e^x \right|_0^1 - \int_0^1 e^x \cdot 2\,dx$$
+            $$J = \left( (2\cdot 1 + 1)e^1 - (2\cdot 0 + 1)e^0 \right) - 2\left. e^x \right|_0^1$$
+            $$J = (3e - 1) - 2(e - 1) = 3e - 1 - 2e + 2 = e + 1.$$
+            <p class="text-teal-700 font-semibold">Vậy giá trị của tích phân là $J = e + 1$.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- BÀI 13: ỨNG DỤNG HÌNH HỌC -->
+      <article id="bai-13" class="glass-card rounded-2xl p-6 sm:p-8 space-y-6 text-left">
+        <div class="border-b border-slate-200 pb-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-violet-600 bg-violet-50 px-2.5 py-1 rounded-md">Bài 13</span>
+          <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mt-2">Ứng Dụng Hình Học Của Tích Phân</h3>
+        </div>
+
+        <!-- 1. Tính diện tích hình phẳng + SVG -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div class="lg:col-span-7 space-y-3">
+            <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+              1. Diện tích hình phẳng
+            </h4>
+            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm space-y-2">
+              <p><strong>Trường hợp 1 (Giới hạn bởi 1 đường và trục $Ox$):</strong> Hình phẳng giới hạn bởi đồ thị hàm số liên tục $y = f(x)$, trục hoành $y = 0$ và hai đường thẳng $x = a, x = b$ ($a < b$) có diện tích là:
+              $$S = \int_a^b |f(x)|\,dx$$</p>
+              <p>Nếu $f(x) \ge 0$ trên $[a; b]$ thì $S = \int_a^b f(x)\,dx$.</p>
+              <p><strong>Trường hợp 2 (Giới hạn bởi 2 đường):</strong> Hình phẳng giới hạn bởi hai đồ thị $y = f(x)$, $y = g(x)$ và hai đường thẳng $x = a, x = b$:
+              $$S = \int_a^b |f(x) - g(x)|\,dx$$</p>
+            </div>
+          </div>
+
+          <!-- SVG Minh họa Diện tích Hình phẳng -->
+          <div class="lg:col-span-5 bg-white p-3 rounded-2xl border border-slate-200 shadow-inner flex flex-col items-center">
+            <span class="text-xs font-semibold text-slate-500 mb-2">Minh họa trực quan: Diện tích hình phẳng</span>
+            <svg viewBox="0 0 360 220" class="w-full h-auto max-w-sm">
+              <defs>
+                <pattern id="areaHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="0" x2="0" y2="8" stroke="#0d9488" stroke-width="1.8" opacity="0.6" />
+                </pattern>
+                <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.05"/>
+                </linearGradient>
+              </defs>
+              
+              <!-- Axes -->
+              <line x1="40" y1="180" x2="340" y2="180" stroke="#334155" stroke-width="2" />
+              <line x1="60" y1="200" x2="60" y2="30" stroke="#334155" stroke-width="2" />
+              <!-- Arrow on axes -->
+              <polygon points="340,180 332,176 332,184" fill="#334155" />
+              <polygon points="60,30 56,38 64,38" fill="#334155" />
+              <text x="342" y="184" font-size="12" fill="#334155" font-weight="bold">x</text>
+              <text x="50" y="28" font-size="12" fill="#334155" font-weight="bold">y</text>
+              <text x="48" y="195" font-size="11" fill="#64748b">O</text>
+
+              <!-- Integral Shaded Area -->
+              <path d="M 100 180 L 100 105 C 140 55 210 65 260 115 L 260 180 Z" fill="url(#areaGradient)" />
+              <path d="M 100 180 L 100 105 C 140 55 210 65 260 115 L 260 180 Z" fill="url(#areaHatch)" />
+
+              <!-- Curve y = f(x) -->
+              <path d="M 70 145 C 90 120 120 60 180 60 C 230 60 270 125 310 145" fill="none" stroke="#0f766e" stroke-width="2.5" />
+              <text x="275" y="85" font-size="12" fill="#0f766e" font-weight="bold">y = f(x)</text>
+
+              <!-- Bounds -->
+              <line x1="100" y1="180" x2="100" y2="105" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3" />
+              <circle cx="100" cy="180" r="3" fill="#0284c7" />
+              <text x="96" y="195" font-size="11" fill="#0284c7" font-weight="bold">a</text>
+
+              <line x1="260" y1="180" x2="260" y2="115" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3" />
+              <circle cx="260" cy="180" r="3" fill="#0284c7" />
+              <text x="257" y="195" font-size="11" fill="#0284c7" font-weight="bold">b</text>
+
+              <!-- Area Badge -->
+              <rect x="160" y="115" width="45" height="24" rx="6" fill="#0f766e" />
+              <text x="182" y="131" font-size="11" fill="#ffffff" font-weight="bold" text-anchor="middle">S</text>
+            </svg>
+            <span class="text-[11px] text-slate-500 italic mt-1">Hình 1: Vùng diện tích hình phẳng tính bởi $S = \int_a^b f(x)\,dx$ ($f(x) \ge 0$).</span>
+          </div>
+        </div>
+
+        <!-- 2. Thể tích khối tròn xoay + SVG 3D HOÀN CHỈNH, RÕ RÀNG -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-6 border-t border-slate-200">
+          <div class="lg:col-span-6 space-y-3">
+            <h4 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-violet-500"></span>
+              2. Thể tích khối tròn xoay quanh trục $Ox$
+            </h4>
+            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-sm space-y-2">
+              <p>Cho hình phẳng giới hạn bởi đồ thị hàm số $y = f(x)$ liên tục trên $[a; b]$, trục hoành $Ox$ và hai đường thẳng $x = a, x = b$. Khi quay hình phẳng này xung quanh trục hoành $Ox$, ta được một khối tròn xoay.</p>
+              <p>Thể tích $V$ của khối tròn xoay được tính theo công thức:</p>
+              $$V = \pi \int_a^b [f(x)]^2\,dx$$
+              <p class="text-xs text-slate-600 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+                <strong>Lưu ý:</strong> Luôn có hằng số $\pi$ trước dấu tích phân và hàm số dưới dấu tích phân phải được bình phương $[f(x)]^2$.
+              </p>
+            </div>
+          </div>
+
+          <!-- SVG 3D Khối tròn xoay - ĐÃ SỬA TRIỆT ĐỂ LỖI ĐÈ NHAU -->
+          <div class="lg:col-span-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-inner flex flex-col items-center">
+            <span class="text-xs font-semibold text-slate-600 mb-2">Minh họa không gian 3D: Khối tròn xoay quanh trục $Ox$</span>
+            
+            <svg viewBox="0 0 540 230" class="w-full h-auto max-w-lg select-none">
+              <defs>
+                <linearGradient id="solidGradClean" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.32"/>
+                  <stop offset="50%" stop-color="#818cf8" stop-opacity="0.10"/>
+                  <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.32"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Trục tung Oy -->
+              <line x1="50" y1="205" x2="50" y2="25" stroke="#475569" stroke-width="1.8" />
+              <polygon points="50,22 46,31 54,31" fill="#475569" />
+              <text x="38" y="25" font-size="12" fill="#334155" font-weight="bold">y</text>
+              <text x="38" y="132" font-size="11" fill="#64748b">O</text>
+
+              <!-- Thân khối tròn xoay 3D (x từ 110 đến 350) -->
+              <!-- Top curve: (110, 80) to (350, 52) -->
+              <!-- Bottom curve: (110, 160) to (350, 188) -->
+              <path d="M 110 80 C 180 66, 270 52, 350 52 L 350 188 C 270 188, 180 174, 110 160 Z" fill="url(#solidGradClean)" />
+
+              <!-- Trục hoành Ox xuyên tâm (vẽ trước các đường sinh để tạo độ nổi khối) -->
+              <line x1="25" y1="120" x2="480" y2="120" stroke="#334155" stroke-width="1.8" />
+              <polygon points="485,120 475,116 475,124" fill="#334155" />
+              <!-- Nhãn x cách xa đầu mút, hoàn toàn không bị đè -->
+              <text x="495" y="124" font-size="13" fill="#1e293b" font-weight="bold">x</text>
+
+              <!-- Đường sinh trên y = f(x) -->
+              <path d="M 110 80 C 180 66, 270 52, 350 52" fill="none" stroke="#4338ca" stroke-width="2.6" />
+              <text x="230" y="46" font-size="12" fill="#4338ca" font-weight="bold" text-anchor="middle">y = f(x)</text>
+
+              <!-- Đường sinh đối xứng dưới y = -f(x) nét đứt -->
+              <path d="M 110 160 C 180 174, 270 188, 350 188" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-dasharray="4,4" />
+              <text x="230" y="206" font-size="11" fill="#6366f1" font-weight="medium" text-anchor="middle">y = -f(x)</text>
+
+              <!-- Mặt cắt elip tại cận a (x = a = 110) -->
+              <!-- Nửa elip sau (khuất): nét đứt -->
+              <path d="M 110 80 A 12 40 0 0 1 110 160" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="3,3" />
+              <!-- Nửa elip trước (thấy): nét liền -->
+              <path d="M 110 80 A 12 40 0 0 0 110 160" fill="none" stroke="#4f46e5" stroke-width="2" />
+              <!-- Tọa độ a trên Ox -->
+              <circle cx="110" cy="120" r="2.5" fill="#4338ca" />
+              <line x1="110" y1="120" x2="110" y2="160" stroke="#4338ca" stroke-width="1" stroke-dasharray="2,2" />
+              <text x="110" y="178" font-size="11" fill="#4338ca" font-weight="bold" text-anchor="middle">x = a</text>
+
+              <!-- Mặt cắt elip tại cận b (x = b = 350) - Thấy toàn bộ, đổ bóng nhẹ -->
+              <ellipse cx="350" cy="120" rx="18" ry="68" fill="#c7d2fe" fill-opacity="0.4" stroke="#4338ca" stroke-width="2.2" />
+              <!-- Tọa độ b trên Ox -->
+              <circle cx="350" cy="120" r="2.5" fill="#4338ca" />
+              <text x="350" y="206" font-size="11" fill="#4338ca" font-weight="bold" text-anchor="middle">x = b</text>
+
+              <!-- Tiết diện elip ở giữa x với bán kính R = f(x) (x = 230) -->
+              <path d="M 230 60 A 15 60 0 0 1 230 180" fill="none" stroke="#0d9488" stroke-width="1.3" stroke-dasharray="3,3" />
+              <path d="M 230 60 A 15 60 0 0 0 230 180" fill="none" stroke="#0d9488" stroke-width="1.8" />
+              <!-- Bán kính R từ tâm lên đường sinh -->
+              <line x1="230" y1="120" x2="230" y2="60" stroke="#0d9488" stroke-width="2" />
+              <circle cx="230" cy="120" r="3" fill="#0d9488" />
+              <circle cx="230" cy="60" r="2.5" fill="#0d9488" />
+              <text x="240" y="94" font-size="11" fill="#0d9488" font-weight="bold">R = f(x)</text>
+
+              <!-- MŨI TÊN XOAY BIỂU DIỄN PHÉP QUAY QUANH Ox (Đặt riêng biệt bên phải, x=420) -->
+              <!-- Cung elip uốn cong quanh Ox -->
+              <path d="M 412 95 C 435 98, 435 142, 412 145" fill="none" stroke="#dc2626" stroke-width="2.4" />
+              <!-- Đầu mũi tên chỉ chiều quay -->
+              <polygon points="410,149 420,142 411,138" fill="#dc2626" />
+              <!-- Badge chú thích quay quanh Ox đặt riêng, không đè bất cứ đường nét nào -->
+              <rect x="382" y="66" width="94" height="22" rx="6" fill="#fef2f2" stroke="#fecaca" stroke-width="1" />
+              <text x="429" y="81" font-size="10" fill="#b91c1c" font-weight="bold" text-anchor="middle">quay quanh Ox</text>
+            </svg>
+
+            <span class="text-[11px] text-slate-500 italic mt-1">Hình 2: Khối tròn xoay tạo thành khi quay đồ thị hàm số quanh trục $Ox$.</span>
+          </div>
+        </div>
+
+        <!-- VÍ DỤ MẪU 3: ĐÃ FIX LỖI VĂN BẢN KHÔNG NGAY HÀNG THẲNG LỐI -->
+        <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 sm:p-6 space-y-3 text-left">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 bg-amber-200 text-amber-900 text-xs font-bold rounded-md">VÍ DỤ MẪU 3</span>
+            <span class="text-xs font-bold text-amber-800 uppercase tracking-wide">Ứng dụng tính thể tích khối tròn xoay</span>
+          </div>
+
+          <!-- Đoạn văn bản đề bài hiển thị dạng block văn bản liên tục, canh lề trái hoàn hảo -->
+          <div class="text-slate-800 text-sm sm:text-base font-semibold leading-relaxed math-text-flow text-left">
+            Tính thể tích khối tròn xoay tạo thành khi quay quanh trục $Ox$ hình phẳng giới hạn bởi đường cong $y = \dfrac{1}{\sqrt{2x+1}}$, trục hoành và hai đường thẳng $x = 0,\ x = 3$.
+          </div>
+
+          <div class="text-slate-700 text-sm leading-relaxed pt-2 border-t border-amber-200/80 space-y-2 text-left">
+            <p><strong>Lời giải chi tiết từng bước:</strong></p>
+            <p>Áp dụng công thức tính thể tích khối tròn xoay khi quay hình phẳng quanh trục hoành $Ox$:</p>
+            $$V = \pi \int_a^b [f(x)]^2\,dx = \pi \int_0^3 \left(\dfrac{1}{\sqrt{2x+1}}\right)^2\,dx$$
+            $$V = \pi \int_0^3 \dfrac{1}{2x+1}\,dx$$
+            <p>Sử dụng công thức nguyên hàm mở rộng phân thức bậc nhất $\int \dfrac{1}{ax+b}\,dx = \dfrac{1}{a}\ln|ax+b| + C$ với $a = 2$:</p>
+            $$V = \pi \left. \left( \dfrac{1}{2}\ln|2x+1| \right) \right|_0^3 = \dfrac{\pi}{2} \left[ \ln|2\cdot 3 + 1| - \ln|2\cdot 0 + 1| \right]$$
+            $$V = \dfrac{\pi}{2} (\ln 7 - \ln 1) = \dfrac{\pi \ln 7}{2}.$$
+            <p class="text-teal-700 font-semibold">Vậy thể tích khối tròn xoay cần tìm là: $V = \dfrac{\pi \ln 7}{2}$.</p>
+          </div>
+        </div>
+
+      </article>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: BÀI TẬP LUYỆN TẬP PHÂN DẠNG (5 SUB-TABS & RANDOM ĐỀ)      -->
+    <!-- ============================================================== -->
+    <section id="tab-content-2" class="space-y-6 hidden">
+      
+      <!-- Sub-tabs Navigation Bar -->
+      <div class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider px-2 mb-2 text-left">
+          Chọn dạng bài tập luyện tập chuyên sâu:
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+          <button id="subtab-btn-1" onclick="switchPracticeSubTab(1)" class="subtab-active text-xs sm:text-sm py-2.5 px-3 rounded-xl transition-all text-center">
+            Dạng 1: Đa thức, Phân thức & Căn
+          </button>
+          <button id="subtab-btn-2" onclick="switchPracticeSubTab(2)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm py-2.5 px-3 rounded-xl transition-all text-center">
+            Dạng 2: Lượng Giác
+          </button>
+          <button id="subtab-btn-3" onclick="switchPracticeSubTab(3)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm py-2.5 px-3 rounded-xl transition-all text-center">
+            Dạng 3: Mũ & Lôgarit
+          </button>
+          <button id="subtab-btn-4" onclick="switchPracticeSubTab(4)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm py-2.5 px-3 rounded-xl transition-all text-center">
+            Dạng 4: Đổi Biến & Từng Phần
+          </button>
+          <button id="subtab-btn-5" onclick="switchPracticeSubTab(5)" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm py-2.5 px-3 rounded-xl transition-all text-center">
+            Dạng 5: Ứng Dụng Hình Học
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Control Bar for Tab 2 -->
+      <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4 text-left">
+        <div>
+          <h3 id="current-form-title" class="text-lg font-bold text-slate-800">
+            Dạng 1: Nguyên hàm & Tích phân Đa thức, Phân thức & Căn thức
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-500">
+            Cấu trúc chuẩn: 12 câu trắc nghiệm 4 lựa chọn + 4 câu Đúng/Sai + 6 câu Trả lời ngắn.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="randomizeCurrentSubTab()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all border border-slate-300 shadow-sm">
+            <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            🔄 Tạo Đề Random Dạng Này
+          </button>
+          <button onclick="gradeCurrentSubTab()" class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            ✓ Kiểm Tra & Xem Lời Giải Dạng Này
+          </button>
+        </div>
+      </div>
+
+      <!-- Score Banner for Current Form -->
+      <div id="practice-score-banner" class="hidden p-4 rounded-2xl bg-teal-50 border border-teal-200 text-left transition-all">
+        <div class="flex items-center justify-between">
+          <div class="space-y-1">
+            <span class="text-xs font-bold uppercase tracking-wider text-teal-700">Kết quả luyện tập</span>
+            <h4 id="practice-score-text" class="text-lg sm:text-xl font-extrabold text-teal-900"></h4>
+          </div>
+          <button onclick="document.getElementById('practice-score-banner').classList.add('hidden')" class="text-xs text-teal-700 hover:underline">
+            Đóng
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Question Container for Tab 2 -->
+      <div id="practice-questions-container" class="space-y-8 text-left">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: ĐỀ KIỂM TRA ĐÁNH GIÁ NĂNG LỰC (THANG ĐIỂM 10)           -->
+    <!-- ============================================================== -->
+    <section id="tab-content-3" class="space-y-8 hidden text-left">
+      
+      <!-- GATE FORM: BẮT BUỘC NHẬP HỌ TÊN -->
+      <div id="test-gate-card" class="max-w-xl mx-auto glass-card rounded-3xl p-6 sm:p-10 text-center space-y-6 shadow-xl border-slate-200">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-teal-500 to-indigo-600 flex items-center justify-center text-white mx-auto shadow-lg">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
+        </div>
+        <div>
+          <h3 class="text-2xl font-black text-slate-900">Đề Kiểm Tra Đánh Giá Năng Lực</h3>
+          <p class="text-sm text-slate-500 mt-1">Chuyên đề: Nguyên hàm & Tích phân cơ bản (Toán 12)</p>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm text-slate-600 text-left space-y-2">
+          <p class="font-semibold text-slate-800">📋 Quy cách & Cấu trúc thang điểm 10.0:</p>
+          <p>• <strong>Phần I (3.0 điểm):</strong> 12 câu Trắc nghiệm 4 lựa chọn (0.25 điểm/câu).</p>
+          <p>• <strong>Phần II (4.0 điểm):</strong> 4 câu Trắc nghiệm Đúng/Sai (Mỗi câu gồm 4 ý: đúng 1 ý = 0.1đ; đúng 2 ý = 0.25đ; đúng 3 ý = 0.5đ; đúng 4 ý = 1.0đ).</p>
+          <p>• <strong>Phần III (3.0 điểm):</strong> 6 câu Trả lời ngắn (0.5 điểm/câu, cận tích phân đa dạng phong phú).</p>
+          <p class="text-teal-700 font-medium">• Hệ thống không tính giờ (không đếm ngược). Vui lòng làm bài cẩn thận!</p>
+        </div>
+
+        <div class="space-y-4 text-left">
+          <label for="student-name-input" class="block text-sm font-bold text-slate-700">
+            Họ và tên học sinh <span class="text-red-500">*</span>
+          </label>
+          <input type="text" id="student-name-input" placeholder="Ví dụ: Nguyễn Văn An" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm font-medium">
+          <button onclick="startOfficialTest()" class="w-full py-3.5 bg-gradient-to-r from-teal-600 to-indigo-600 hover:from-teal-700 hover:to-indigo-700 text-white font-bold rounded-xl text-base shadow-lg hover:shadow-xl transition-all">
+            Bắt Đầu Làm Bài Kiểm Tra
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN TEST CONTENT (Initially hidden until identity entered) -->
+      <div id="test-main-content" class="hidden space-y-8">
+        
+        <!-- Header status for student -->
+        <div class="glass-card rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4 border-l-4 border-l-teal-600 text-left">
+          <div>
+            <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">Thí sinh đang làm bài</span>
+            <h3 id="display-student-name" class="text-xl font-black text-slate-900"></h3>
+            <p class="text-xs text-slate-500">Đề bài cố định chuẩn năng lực GDPT mới • Thang điểm 10.0</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="submitOfficialTest()" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Nộp Bài Kiểm Tra
+            </button>
+          </div>
+        </div>
+
+        <!-- ASSESSMENT RESULT CARD (Rendered after submission) -->
+        <div id="test-result-card" class="hidden glass-card rounded-3xl p-6 sm:p-8 space-y-6 border-2 border-teal-500 bg-gradient-to-b from-teal-50/50 to-white shadow-xl text-left">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- TEST QUESTIONS CONTAINER -->
+        <div id="official-test-questions" class="space-y-8">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Sticky submit button at bottom -->
+        <div class="text-center pt-6 pb-12">
+          <button onclick="submitOfficialTest()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-base shadow-xl transition-all">
+            Hoàn Thành & Nộp Bài Kiểm Tra
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4">
+      Ứng dụng Ôn tập Chuyên đề Nguyên hàm & Tích phân cơ bản • Toán 12 Kết Nối Tri Thức Với Cuộc Sống
+    </div>
+  </footer>
+
+  <script>
+    /* Global Application State */
+    let currentMainTab = 1;
+    let currentPracticeSubTab = 1;
+    let candidateName = "";
+    let testSubmitted = false;
+
+    /* KaTeX Safe Render Helper */
+    function renderMath() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false,
+          errorColor: '#cc0000'
+        });
+      }
+    }
+
+    /* Custom Modal Helper */
+    function showModal(title, message, isError = false) {
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal-message').innerText = message;
+      const iconCont = document.getElementById('modal-icon-container');
+      if (isError) {
+        iconCont.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-rose-100 text-rose-600';
+      } else {
+        iconCont.className = 'w-10 h-10 rounded-full flex items-center justify-center bg-teal-100 text-teal-600';
+      }
+      document.getElementById('custom-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('custom-modal').classList.add('hidden');
+    }
+
+    /* Main Tab Switcher */
+    function switchMainTab(tabIndex) {
+      currentMainTab = tabIndex;
+      for (let i = 1; i <= 3; i++) {
+        const tabBtn = document.getElementById(`nav-tab-${i}`);
+        const tabContent = document.getElementById(`tab-content-${i}`);
+        if (i === tabIndex) {
+          tabBtn.className = 'tab-active py-3 px-4 text-center whitespace-nowrap transition-all duration-200 flex items-center gap-2';
+          tabContent.classList.remove('hidden');
+        } else {
+          tabBtn.className = 'py-3 px-4 text-slate-600 hover:text-slate-900 text-center whitespace-nowrap transition-all duration-200 flex items-center gap-2';
+          tabContent.classList.add('hidden');
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(renderMath, 60);
+    }
+
+    /* Helper deep clone */
+    function deepClone(obj) {
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    const practiceData = {
+      // DẠNG 1: ĐA THỨC, PHÂN THỨC & CĂN THỨC
+      1: {
+        title: "Dạng 1: Nguyên hàm & Tích phân Đa thức, Phân thức & Căn thức",
+        mcq: [
+          { q: "Nguyên hàm của hàm số $f(x) = 3x^2 - 4x + 1$ là:", options: ["$F(x) = x^3 - 2x^2 + x + C$", "$F(x) = 6x - 4 + C$", "$F(x) = 3x^3 - 4x^2 + x + C$", "$F(x) = x^3 - 4x^2 + x + C$"], correct: 0, sol: "Áp dụng công thức nguyên hàm đa thức: $\\int (3x^2 - 4x + 1)dx = 3\\cdot\\frac{x^3}{3} - 4\\cdot\\frac{x^2}{2} + x + C = x^3 - 2x^2 + x + C$." },
+          { q: "Cho $\\int (4x^3 - 2x)dx = F(x) + C$ với $F(1) = 2$. Giá trị hằng số $C$ tương ứng của nguyên hàm $F(x) = x^4 - x^2 + C$ là:", options: ["$C = 2$", "$C = 0$", "$C = 1$", "$C = -2$"], correct: 0, sol: "$F(x) = x^4 - x^2 + C$. Vì $F(1) = 1^4 - 1^2 + C = 2 \\implies C = 2$." },
+          { q: "Nguyên hàm $\\int \\frac{1}{2x+3}\\,dx$ bằng:", options: ["$\\frac{1}{2}\\ln|2x+3| + C$", "$\\ln|2x+3| + C$", "$-\\frac{1}{2}\\ln|2x+3| + C$", "$\\frac{1}{(2x+3)^2} + C$"], correct: 0, sol: "Công thức mở rộng $\\int \\frac{1}{ax+b}dx = \\frac{1}{a}\\ln|ax+b| + C$ với $a = 2$." },
+          { q: "Tính tích phân $I = \\int_0^2 (3x^2 - 2x + 1)\\,dx$:", options: ["$6$", "$8$", "$4$", "$10$"], correct: 0, sol: "$I = [x^3 - x^2 + x]_0^2 = (2^3 - 2^2 + 2) - 0 = 8 - 4 + 2 = 6$." },
+          { q: "Tính tích phân $I = \\int_1^3 \\frac{1}{x}\\,dx$:", options: ["$\\ln 3$", "$-\\ln 3$", "$\\ln 2$", "$2$"], correct: 0, sol: "$I = [\\ln|x|]_1^3 = \\ln 3 - \\ln 1 = \\ln 3$." },
+          { q: "Cho $\\int_1^2 \\frac{2x+1}{x^2}\\,dx = a + b\\ln 2$ với $a, b \\in \\mathbb{Q}$. Tổng $a + b$ là:", options: ["$\\frac{5}{2}$", "$\\frac{3}{2}$", "$2$", "$3$"], correct: 0, sol: "$\\frac{2x+1}{x^2} = \\frac{2}{x} + x^{-2}$. Tích phân $= [2\\ln x - \\frac{1}{x}]_1^2 = (2\\ln 2 - \\frac{1}{2}) - (0 - 1) = \\frac{1}{2} + 2\\ln 2$. Do đó $a = \\frac{1}{2}, b = 2 \\implies a+b = \\frac{5}{2}$." },
+          { q: "Nguyên hàm $\\int \\sqrt{x}\\,dx$ trên khoảng $(0; +\\infty)$ là:", options: ["$\\frac{2}{3}x\\sqrt{x} + C$", "$\\frac{3}{2}x\\sqrt{x} + C$", "$\\frac{1}{2\\sqrt{x}} + C$", "$\\frac{2}{3}\\sqrt{x} + C$"], correct: 0, sol: "$\\int x^{1/2}dx = \\frac{x^{3/2}}{3/2} + C = \\frac{2}{3}x\\sqrt{x} + C$." },
+          { q: "Tính tích phân $I = \\int_0^4 \\sqrt{2x+1}\\,dx$:", options: ["$\\frac{26}{3}$", "$\\frac{13}{3}$", "$9$", "$\\frac{28}{3}$"], correct: 0, sol: "$\\int_0^4 (2x+1)^{1/2}dx = [\\frac{1}{2}\\cdot \\frac{2}{3}(2x+1)^{3/2}]_0^4 = [\\frac{1}{3}(2x+1)\\sqrt{2x+1}]_0^4 = \\frac{1}{3}(27 - 1) = \\frac{26}{3}$." },
+          { q: "Tính tích phân $I = \\int_1^2 \\frac{1}{(x+1)^2}\\,dx$:", options: ["$\\frac{1}{6}$", "$\\frac{1}{3}$", "$-\\frac{1}{6}$", "$\\frac{1}{2}$"], correct: 0, sol: "$I = [-\\frac{1}{x+1}]_1^2 = -\\frac{1}{3} - (-\\frac{1}{2}) = \\frac{1}{2} - \\frac{1}{3} = \\frac{1}{6}$." },
+          { q: "Biết $\\int_2^4 (ax + 1)\\,dx = 14$. Giá trị của tham số $a$ là:", options: ["$2$", "$1$", "$3$", "$4$"], correct: 0, sol: "$[\\frac{a x^2}{2} + x]_2^4 = (8a + 4) - (2a + 2) = 6a + 2 = 14 \\implies 6a = 12 \\implies a = 2$." },
+          { q: "Cho $\\int_0^1 f(x)dx = 3$ và $\\int_0^1 g(x)dx = -2$. Khi đó $\\int_0^1 [2f(x) - 3g(x)]dx$ bằng:", options: ["$12$", "$0$", "$6$", "$5$"], correct: 0, sol: "$2(3) - 3(-2) = 6 + 6 = 12$." },
+          { q: "Nguyên hàm của hàm số $f(x) = (2x-1)^3$ là:", options: ["$\\frac{1}{8}(2x-1)^4 + C$", "$\\frac{1}{4}(2x-1)^4 + C$", "$3(2x-1)^2 + C$", "$\\frac{1}{2}(2x-1)^4 + C$"], correct: 0, sol: "Theo công thức mở rộng: $\\int (ax+b)^n dx = \\frac{1}{a(n+1)}(ax+b)^{n+1} + C = \\frac{1}{2\\cdot 4}(2x-1)^4 + C = \\frac{1}{8}(2x-1)^4 + C$." }
+        ],
+        tf: [
+          {
+            stem: "Cho hàm số $f(x) = 3x^2 - \\frac{2}{x}$ xác định trên $(0; +\\infty)$. Xét tính Đúng / Sai của các khẳng định sau:",
+            items: [
+              { label: "a) Một nguyên hàm của hàm số $f(x)$ là $F(x) = x^3 - 2\\ln x$.", ans: true, exp: "$F'(x) = 3x^2 - \\frac{2}{x} = f(x)$ đúng trên $(0; +\\infty)$." },
+              { label: "b) Họ nguyên hàm của $f(x)$ là $\\int f(x)dx = x^3 + 2\\ln x + C$.", ans: false, exp: "Dấu phải là trừ: $x^3 - 2\\ln x + C$." },
+              { label: "c) Tích phân $\\int_1^2 f(x)dx = 7 - 2\\ln 2$.", ans: true, exp: "$[x^3 - 2\\ln x]_1^2 = (8 - 2\\ln 2) - (1 - 0) = 7 - 2\\ln 2$." },
+              { label: "d) Tích phân $\\int_1^e f(x)dx = e^3 - 3$.", ans: true, exp: "$[x^3 - 2\\ln x]_1^e = (e^3 - 2\\ln e) - (1 - 0) = e^3 - 2 - 1 = e^3 - 3$." }
+            ]
+          },
+          {
+            stem: "Xét hàm số phân thức $g(x) = \\frac{1}{x(x+1)}$ trên khoảng $(0; +\\infty)$:",
+            items: [
+              { label: "a) Phân tích $g(x) = \\frac{1}{x} - \\frac{1}{x+1}$.", ans: true, exp: "Đồng mẫu: $\\frac{x+1 - x}{x(x+1)} = \\frac{1}{x(x+1)}$ đúng." },
+              { label: "b) Nguyên hàm $\\int g(x)dx = \\ln\\left(\\frac{x+1}{x}\\right) + C$.", ans: false, exp: "Nguyên hàm là $\\ln|x| - \\ln|x+1| + C = \\ln\\left(\\frac{x}{x+1}\\right) + C$." },
+              { label: "c) Giá trị tích phân $\\int_1^2 g(x)dx = \\ln\\frac{4}{3}$.", ans: true, exp: "$[\\ln\\frac{x}{x+1}]_1^2 = \\ln(2/3) - \\ln(1/2) = \\ln\\frac{2/3}{1/2} = \\ln\\frac{4}{3}$." },
+              { label: "d) Giá trị tích phân $\\int_2^3 g(x)dx = \\ln\\frac{9}{8}$.", ans: true, exp: "$[\\ln\\frac{x}{x+1}]_2^3 = \\ln(3/4) - \\ln(2/3) = \\ln\\frac{9}{8}$." }
+            ]
+          },
+          {
+            stem: "Cho hàm số chứa căn $h(x) = \\frac{1}{\\sqrt{2x+1}}$ xác định trên $[0; +\\infty)$:",
+            items: [
+              { label: "a) Đạo hàm của $\\sqrt{2x+1}$ chính là $h(x)$.", ans: true, exp: "$(\\sqrt{2x+1})' = \\frac{2}{2\\sqrt{2x+1}} = \\frac{1}{\\sqrt{2x+1}}$." },
+              { label: "b) $\\int h(x)dx = 2\\sqrt{2x+1} + C$.", ans: false, exp: "Nguyên hàm là $\\sqrt{2x+1} + C$ chứ không có hệ số 2." },
+              { label: "c) $\\int_0^4 h(x)dx = 2$.", ans: true, exp: "$[\\sqrt{2x+1}]_0^4 = \\sqrt{9} - \\sqrt{1} = 3 - 1 = 2$." },
+              { label: "d) $\\int_4^{12} h(x)dx = 2$.", ans: true, exp: "$[\\sqrt{2x+1}]_4^{12} = \\sqrt{25} - \\sqrt{9} = 5 - 3 = 2$." }
+            ]
+          },
+          {
+            stem: "Cho hai tích phân $I = \\int_1^3 (2x - 1)dx$ và $J = \\int_1^3 (x^2 + 1)dx$:",
+            items: [
+              { label: "a) Giá trị của $I$ bằng $6$.", ans: true, exp: "$I = [x^2 - x]_1^3 = (9 - 3) - (1 - 1) = 6$." },
+              { label: "b) Giá trị của $J$ bằng $\\frac{32}{3}$.", ans: true, exp: "$J = [\\frac{x^3}{3} + x]_1^3 = (9+3) - (1/3 + 1) = 12 - 4/3 = 32/3$." },
+              { label: "c) $I + J = \\int_1^3 (x^2 + 2x)dx$.", ans: true, exp: "$(2x-1) + (x^2+1) = x^2+2x$, theo tính chất tuyến tính." },
+              { label: "d) Giá trị của $I + J$ là một số nguyên.", ans: false, exp: "$6 + 32/3 = 50/3$, không phải số nguyên." }
+            ]
+          }
+        ],
+        sa: [
+          { q: "Tính giá trị tích phân $I = \\int_0^3 (2x - 1)\\,dx$.", ans: "6", exp: "$I = [x^2 - x]_0^3 = (9 - 3) - 0 = 6$." },
+          { q: "Tính giá trị tích phân $I = \\int_1^2 (3x^2 - 4x + 2)\\,dx$.", ans: "3", exp: "$I = [x^3 - 2x^2 + 2x]_1^2 = (8 - 8 + 4) - (1 - 2 + 2) = 4 - 1 = 3$." },
+          { q: "Cho $\\int_2^4 \\frac{1}{x-1}\\,dx = \\ln k$. Tìm số nguyên dương $k$.", ans: "3", exp: "$[\\ln|x-1|]_2^4 = \\ln 3 - \\ln 1 = \\ln 3 \\implies k = 3$." },
+          { q: "Tính giá trị tích phân $I = \\int_{-1}^1 (4x^3 + 3x^2 - 2x)\\,dx$.", ans: "2", exp: "$I = [x^4 + x^3 - x^2]_{-1}^1 = (1 + 1 - 1) - (1 - 1 - 1) = 1 - (-1) = 2$." },
+          { q: "Tính giá trị tích phân $I = \\int_1^4 \\frac{1}{2\\sqrt{x}}\\,dx$.", ans: "1", exp: "$I = [\\sqrt{x}]_1^4 = \\sqrt{4} - \\sqrt{1} = 2 - 1 = 1$." },
+          { q: "Biết $\\int_0^2 (ax + 3)dx = 10$. Tìm giá trị của hằng số $a$.", ans: "2", exp: "$[\\frac{a x^2}{2} + 3x]_0^2 = 2a + 6 = 10 \\implies 2a = 4 \\implies a = 2$." }
+        ]
+      },
+
+      // DẠNG 2: LƯỢNG GIÁC
+      2: {
+        title: "Dạng 2: Nguyên hàm & Tích phân Hàm Lượng Giác",
+        mcq: [
+          { q: "Nguyên hàm $\\int \\cos 3x\\,dx$ bằng:", options: ["$\\frac{1}{3}\\sin 3x + C$", "$-\\frac{1}{3}\\sin 3x + C$", "$3\\sin 3x + C$", "$\\sin 3x + C$"], correct: 0, sol: "Công thức mở rộng $\\int \\cos(ax+b)dx = \\frac{1}{a}\\sin(ax+b) + C$ với $a = 3$." },
+          { q: "Nguyên hàm $\\int \\sin(2x - \\frac{\\pi}{4})\\,dx$ là:", options: ["$-\\frac{1}{2}\\cos(2x - \\frac{\\pi}{4}) + C$", "$\\frac{1}{2}\\cos(2x - \\frac{\\pi}{4}) + C$", "$-2\\cos(2x - \\frac{\\pi}{4}) + C$", "$\\cos(2x - \\frac{\\pi}{4}) + C$"], correct: 0, sol: "$\\int \\sin(ax+b)dx = -\\frac{1}{a}\\cos(ax+b) + C$." },
+          { q: "Tính tích phân $I = \\int_0^{\\pi/2} \\sin x\\,dx$:", options: ["$1$", "$0$", "$-1$", "$2$"], correct: 0, sol: "$I = [-\\cos x]_0^{\\pi/2} = -\\cos(\\pi/2) - (-\\cos 0) = 0 + 1 = 1$." },
+          { q: "Tính tích phân $I = \\int_0^{\\pi/4} \\cos 2x\\,dx$:", options: ["$\\frac{1}{2}$", "$1$", "$\\frac{\\sqrt{2}}{2}$", "$0$"], correct: 0, sol: "$I = [\\frac{1}{2}\\sin 2x]_0^{\\pi/4} = \\frac{1}{2}\\sin(\\pi/2) - 0 = \\frac{1}{2}$." },
+          { q: "Nguyên hàm $\\int \\frac{1}{\\cos^2 2x}\\,dx$ bằng:", options: ["$\\frac{1}{2}\\tan 2x + C$", "$\\tan 2x + C$", "$-\\frac{1}{2}\\tan 2x + C$", "$\\frac{1}{2\\cos 2x} + C$"], correct: 0, sol: "$\\int \\frac{1}{\\cos^2(ax+b)}dx = \\frac{1}{a}\\tan(ax+b) + C$." },
+          { q: "Tính tích phân $I = \\int_0^{\\pi/4} \\frac{1}{\\cos^2 x}\\,dx$:", options: ["$1$", "$0$", "$\\sqrt{3}$", "$\\frac{1}{2}$"], correct: 0, sol: "$I = [\\tan x]_0^{\\pi/4} = \\tan(\\pi/4) - \\tan 0 = 1 - 0 = 1$." },
+          { q: "Họ nguyên hàm của hàm số $f(x) = \\cos^2 x$ là:", options: ["$\\frac{x}{2} + \\frac{\\sin 2x}{4} + C$", "$\\frac{x}{2} - \\frac{\\sin 2x}{4} + C$", "$\\frac{\\cos^3 x}{3} + C$", "$\\sin^2 x + C$"], correct: 0, sol: "Hạ bậc $\\cos^2 x = \\frac{1+\\cos 2x}{2}$. Nguyên hàm $= \\frac{x}{2} + \\frac{\\sin 2x}{4} + C$." },
+          { q: "Tính tích phân $I = \\int_0^{\\pi} (\\sin x + \\cos x)\\,dx$:", options: ["$2$", "$0$", "$1$", "$-2$"], correct: 0, sol: "$I = [-\\cos x + \\sin x]_0^{\\pi} = (-\\cos\\pi + \\sin\\pi) - (-\\cos 0 + \\sin 0) = (1+0) - (-1+0) = 2$." },
+          { q: "Họ nguyên hàm của hàm số $f(x) = \\sin 3x \\cos x$ là:", options: ["$-\\frac{1}{8}\\cos 4x - \\frac{1}{4}\\cos 2x + C$", "$\\frac{1}{8}\\cos 4x + \\frac{1}{4}\\cos 2x + C$", "$-\\frac{1}{4}\\cos 4x + C$", "$\\frac{1}{2}\\sin 2x + C$"], correct: 0, sol: "Biến đổi tích thành tổng: $\\sin 3x \\cos x = \\frac{1}{2}(\\sin 4x + \\sin 2x)$. Nguyên hàm $= -\\frac{1}{8}\\cos 4x - \\frac{1}{4}\\cos 2x + C$." },
+          { q: "Tính tích phân $I = \\int_0^{\\pi/6} \\sin 3x\\,dx$:", options: ["$\\frac{1}{3}$", "$-\\frac{1}{3}$", "$\\frac{1}{6}$", "$\\frac{\\sqrt{3}}{6}$"], correct: 0, sol: "$I = [-\\frac{1}{3}\\cos 3x]_0^{\\pi/6} = -\\frac{1}{3}\\cos(\\pi/2) - (-\\frac{1}{3}\\cos 0) = 0 + \\frac{1}{3} = \\frac{1}{3}$." },
+          { q: "Tính tích phân $I = \\int_0^{\\pi/3} \\frac{1}{\\cos^2(x - \\pi/3)}\\,dx$:", options: ["$\\sqrt{3}$", "$\\frac{\\sqrt{3}}{3}$", "$1$", "$2$"], correct: 0, sol: "$I = [\\tan(x - \\pi/3)]_0^{\\pi/3} = \\tan 0 - \\tan(-\\pi/3) = 0 - (-\\sqrt{3}) = \\sqrt{3}$." },
+          { q: "Biết $\\int_0^{\\pi/2} (a\\sin x + 2\\cos x)dx = 5$. Giá trị của $a$ là:", options: ["$3$", "$2$", "$4$", "$1$"], correct: 0, sol: "$[-a\\cos x + 2\\sin x]_0^{\\pi/2} = (0 + 2) - (-a + 0) = 2 + a = 5 \\implies a = 3$." }
+        ],
+        tf: [
+          {
+            stem: "Cho hàm số lượng giác $f(x) = 2\\sin x - \\cos 2x$ trên $\\mathbb{R}$:",
+            items: [
+              { label: "a) Một nguyên hàm của $f(x)$ là $F(x) = -2\\cos x - \\frac{1}{2}\\sin 2x$.", ans: true, exp: "$F'(x) = 2\\sin x - \\frac{1}{2}\\cdot 2\\cos 2x = 2\\sin x - \\cos 2x = f(x)$ đúng." },
+              { label: "b) Đạo hàm của $f(x)$ tại $x = 0$ bằng $2$.", ans: true, exp: "$f'(x) = 2\\cos x + 2\\sin 2x \\implies f'(0) = 2(1) + 0 = 2$." },
+              { label: "c) Giá trị tích phân $\\int_0^{\\pi/2} f(x)dx = 2$.", ans: true, exp: "$[-2\\cos x - \\frac{1}{2}\\sin 2x]_0^{\\pi/2} = (0 - 0) - (-2 - 0) = 2$." },
+              { label: "d) Giá trị tích phân $\\int_0^\\pi f(x)dx = 4$.", ans: true, exp: "$[-2\\cos x - \\frac{1}{2}\\sin 2x]_0^\\pi = (2 - 0) - (-2 - 0) = 4$." }
+            ]
+          },
+          {
+            stem: "Xét hàm số $g(x) = \\tan^2 x$ trên khoảng $(-\\frac{\\pi}{2}; \\frac{\\pi}{2})$:",
+            items: [
+              { label: "a) Ta có đồng nhất thức $\\tan^2 x = \\frac{1}{\\cos^2 x} - 1$.", ans: true, exp: "Đúng theo lượng giác cơ bản $1 + \\tan^2 x = \\frac{1}{\\cos^2 x}$." },
+              { label: "b) Nguyên hàm $\\int \\tan^2 x\\,dx = \\tan x - x + C$.", ans: true, exp: "$\\int (\\frac{1}{\\cos^2 x} - 1)dx = \\tan x - x + C$." },
+              { label: "c) Tích phân $\\int_0^{\\pi/4} \\tan^2 x\\,dx = 1 - \\frac{\\pi}{4}$.", ans: true, exp: "$[\\tan x - x]_0^{\\pi/4} = (1 - \\pi/4) - 0 = 1 - \\pi/4$." },
+              { label: "d) Tích phân $\\int_0^{\\pi/4} (\\tan^2 x + 1)\\,dx = \\frac{\\pi}{4}$.", ans: false, exp: "Tích phân $= \\int_0^{\\pi/4} \\frac{1}{\\cos^2 x}dx = [\\tan x]_0^{\\pi/4} = 1$." }
+            ]
+          },
+          {
+            stem: "Cho tích phân $I = \\int_0^{\\pi/2} \\sin^2 x\\,dx$ và $J = \\int_0^{\\pi/2} \\cos^2 x\\,dx$:",
+            items: [
+              { label: "a) $I + J = \\frac{\\pi}{2}$.", ans: true, exp: "$I+J = \\int_0^{\\pi/2} (\\sin^2 x + \\cos^2 x)dx = \\int_0^{\\pi/2} 1 dx = \\pi/2$." },
+              { label: "b) Đổi biến $x = \\frac{\\pi}{2} - t$ chứng minh được $I = J$.", ans: true, exp: "$\\sin(\\pi/2 - t) = \\cos t \\implies I = J$." },
+              { label: "c) Giá trị của $I = \\frac{\\pi}{4}$.", ans: true, exp: "Vì $I = J$ và $I + J = \\pi/2 \\implies I = \\pi/4$." },
+              { label: "d) Hiệu $I - J = 1$.", ans: false, exp: "Vì $I = J$ nên $I - J = 0$." }
+            ]
+          },
+          {
+            stem: "Xét hàm số $h(x) = \\sin 2x$ trên đoạn $[0; \\pi]$:",
+            items: [
+              { label: "a) $h(x) \\ge 0$ với mọi $x \\in [0; \\pi]$.", ans: false, exp: "Khi $x \\in (\\pi/2; \\pi)$ thì $2x \\in (\\pi; 2\\pi)$ nên $\\sin 2x < 0$." },
+              { label: "b) $\\int_0^{\\pi/2} \\sin 2x\\,dx = 1$.", ans: true, exp: "$[-\\frac{1}{2}\\cos 2x]_0^{\\pi/2} = -\\frac{1}{2}(-1) - (-\\frac{1}{2}(1)) = 1/2 + 1/2 = 1$." },
+              { label: "c) $\\int_{\\pi/2}^\\pi \\sin 2x\\,dx = -1$.", ans: true, exp: "$[-\\frac{1}{2}\\cos 2x]_{\\pi/2}^\\pi = -\\frac{1}{2}(1) - (-\\frac{1}{2}(-1)) = -1/2 - 1/2 = -1$." },
+              { label: "d) $\\int_0^\\pi \\sin 2x\\,dx = 0$.", ans: true, exp: "$1 + (-1) = 0$." }
+            ]
+          }
+        ],
+        sa: [
+          { q: "Tính giá trị tích phân $I = \\int_0^{\\pi} \\sin x\\,dx$.", ans: "2", exp: "$I = [-\\cos x]_0^\\pi = -(-1) - (-1) = 2$." },
+          { q: "Tính giá trị tích phân $I = \\int_0^{\\pi/2} \\cos x\\,dx$.", ans: "1", exp: "$I = [\\sin x]_0^{\\pi/2} = 1 - 0 = 1$." },
+          { q: "Biết $\\int_0^{\\pi/2} a\\sin 2x\\,dx = 4$. Tìm giá trị của số thực $a$.", ans: "4", exp: "$\\int_0^{\\pi/2} \\sin 2x dx = 1 \\implies a\\cdot 1 = 4 \\implies a = 4$." },
+          { q: "Tính giá trị tích phân $I = \\int_0^{\\pi/4} 4\\cos 2x\\,dx$.", ans: "2", exp: "$I = [2\\sin 2x]_0^{\\pi/4} = 2\\sin(\\pi/2) - 0 = 2$." },
+          { q: "Tính giá trị biểu thức $K = \\int_{-\\pi/4}^{\\pi/4} (\\sin x + 2)\\,dx$ (kết quả theo dạng chữ pi).", ans: "pi", exp: "$\\int_{-\\pi/4}^{\\pi/4} \\sin x dx = 0$, $\\int_{-\\pi/4}^{\\pi/4} 2 dx = 2(\\pi/2) = \\pi$." },
+          { q: "Tính giá trị tích phân $I = \\int_0^{\\pi/4} 2\\tan x\\cdot \\frac{1}{\\cos^2 x}\\,dx$.", ans: "1", exp: "Đặt $t = \\tan x \\implies dt = \\frac{dx}{\\cos^2 x}$. $I = \\int_0^1 2t dt = 1$." }
+        ]
+      },
+
+      // DẠNG 3: MŨ & LÔGARIT
+      3: {
+        title: "Dạng 3: Nguyên hàm & Tích phân Hàm Số Mũ & Lôgarit",
+        mcq: [
+          { q: "Nguyên hàm $\\int e^{3x-1}\\,dx$ bằng:", options: ["$\\frac{1}{3}e^{3x-1} + C$", "$3e^{3x-1} + C$", "$e^{3x-1} + C$", "$-\\frac{1}{3}e^{3x-1} + C$"], correct: 0, sol: "Áp dụng $\\int e^{ax+b}dx = \\frac{1}{a}e^{ax+b} + C$ với $a = 3$." },
+          { q: "Họ nguyên hàm của hàm số $f(x) = 2^x$ là:", options: ["$\\frac{2^x}{\\ln 2} + C$", "$2^x \\ln 2 + C$", "$\\frac{2^{x+1}}{x+1} + C$", "$2^x + C$"], correct: 0, sol: "Công thức cơ bản $\\int a^x dx = \\frac{a^x}{\\ln a} + C$." },
+          { q: "Tính tích phân $I = \\int_0^1 e^{2x}\\,dx$:", options: ["$\\frac{e^2 - 1}{2}$", "$e^2 - 1$", "$\\frac{e^2 + 1}{2}$", "$\\frac{e - 1}{2}$"], correct: 0, sol: "$I = [\\frac{1}{2}e^{2x}]_0^1 = \\frac{e^2-1}{2}$." },
+          { q: "Nguyên hàm $\\int (e^x - 2^x)\\,dx$ bằng:", options: ["$e^x - \\frac{2^x}{\\ln 2} + C$", "$e^x - 2^x\\ln 2 + C$", "$e^x + \\frac{2^x}{\\ln 2} + C$", "$\\frac{e^x}{\\ln e} - 2^x + C$"], correct: 0, sol: "$\\int e^x dx - \\int 2^x dx = e^x - \\frac{2^x}{\\ln 2} + C$." },
+          { q: "Tính tích phân $I = \\int_1^e \\frac{1}{x}\\,dx$:", options: ["$1$", "$0$", "$e$", "$e - 1$"], correct: 0, sol: "$I = [\\ln|x|]_1^e = \\ln e - \\ln 1 = 1 - 0 = 1$." },
+          { q: "Tính tích phân $I = \\int_0^2 3^x\\,dx$:", options: ["$\\frac{8}{\\ln 3}$", "$\\frac{9}{\\ln 3}$", "$8\\ln 3$", "$\\frac{26}{\\ln 3}$"], correct: 0, sol: "$I = [\\frac{3^x}{\\ln 3}]_0^2 = \\frac{9 - 1}{\\ln 3} = \\frac{8}{\\ln 3}$." },
+          { q: "Biết $\\int_0^1 (e^x + a)dx = e + 2$. Giá trị của hằng số $a$ là:", options: ["$3$", "$1$", "$2$", "$0$"], correct: 0, sol: "$[e^x + ax]_0^1 = (e + a) - 1 = e + a - 1 = e + 2 \\implies a = 3$." },
+          { q: "Nguyên hàm $\\int \\frac{e^x}{e^x + 1}\\,dx$ bằng:", options: ["$\\ln(e^x + 1) + C$", "$e^x + 1 + C$", "$\\frac{1}{e^x + 1} + C$", "$\\ln|e^x| + C$"], correct: 0, sol: "Đặt $t = e^x + 1 \\implies dt = e^x dx \\implies \\ln|t| + C = \\ln(e^x+1) + C$." },
+          { q: "Tính tích phân $I = \\int_1^e \\frac{\\ln x}{x}\\,dx$:", options: ["$\\frac{1}{2}$", "$1$", "$2$", "$\\frac{1}{4}$"], correct: 0, sol: "Đặt $t = \\ln x \\implies dt = \\frac{dx}{x}$. $I = \\int_0^1 t dt = [\\frac{t^2}{2}]_0^1 = \\frac{1}{2}$." },
+          { q: "Cho hàm số $f(x) = e^{2x} + 1$. Khẳng định nào sau đây đúng?", options: ["$\\int_0^1 f(x)dx = \\frac{e^2 + 1}{2}$", "$\\int_0^1 f(x)dx = \\frac{e^2 - 1}{2}$", "$\\int_0^1 f(x)dx = e^2 + 1$", "$\\int_0^1 f(x)dx = e^2 - 1$"], correct: 0, sol: "$[\\frac{1}{2}e^{2x} + x]_0^1 = (\\frac{1}{2}e^2 + 1) - \\frac{1}{2} = \\frac{e^2+1}{2}$." },
+          { q: "Nguyên hàm $\\int 5^{2x}\\,dx$ là:", options: ["$\\frac{5^{2x}}{2\\ln 5} + C$", "$\\frac{5^{2x}}{\\ln 5} + C$", "$2\\cdot 5^{2x}\\ln 5 + C$", "$\\frac{25^x}{\\ln 5} + C$"], correct: 0, sol: "$5^{2x} = 25^x \\implies \\int 25^x dx = \\frac{25^x}{\\ln 25} + C = \\frac{5^{2x}}{2\\ln 5} + C$." },
+          { q: "Tính tích phân $I = \\int_0^1 (2e^x - 1)\\,dx$:", options: ["$2e - 3$", "$2e - 1$", "$2e - 2$", "$e - 1$"], correct: 0, sol: "$I = [2e^x - x]_0^1 = (2e - 1) - 2 = 2e - 3$." }
+        ],
+        tf: [
+          {
+            stem: "Cho hàm số $f(x) = e^x - e^{-x}$ xác định trên $\\mathbb{R}$:",
+            items: [
+              { label: "a) $f(x)$ là hàm số lẻ trên $\\mathbb{R}$.", ans: true, exp: "$f(-x) = -(e^x - e^{-x}) = -f(x)$." },
+              { label: "b) Họ nguyên hàm của $f(x)$ là $F(x) = e^x + e^{-x} + C$.", ans: true, exp: "$(e^x + e^{-x})' = e^x - e^{-x} = f(x)$." },
+              { label: "c) Tích phân $\\int_{-1}^1 f(x)dx = 0$.", ans: true, exp: "Tích phân hàm lẻ trên khoảng đối xứng bằng 0." },
+              { label: "d) Tích phân $\\int_0^1 f(x)dx = e + \\frac{1}{e} - 2$.", ans: true, exp: "$[e^x + e^{-x}]_0^1 = (e + 1/e) - 2$." }
+            ]
+          },
+          {
+            stem: "Xét hàm số $g(x) = \\frac{1}{x\\ln x}$ trên đoạn $[e; e^2]$:",
+            items: [
+              { label: "a) Hàm số $g(x)$ liên tục và dương trên $[e; e^2]$.", ans: true, exp: "Với $x \\ge e > 1$ thì mẫu luôn dương và liên tục." },
+              { label: "b) Nguyên hàm $\\int g(x)dx = \\ln|\\ln x| + C$.", ans: true, exp: "Đặt $t = \\ln x \\implies dt = dx/x$." },
+              { label: "c) Giá trị tích phân $\\int_e^{e^2} g(x)dx = \\ln 2$.", ans: true, exp: "$[\\ln(\\ln x)]_e^{e^2} = \\ln 2 - \\ln 1 = \\ln 2$." },
+              { label: "d) Giá trị tích phân $\\int_e^{e^3} g(x)dx = 3$.", ans: false, exp: "Bằng $\\ln 3$ chứ không phải 3." }
+            ]
+          },
+          {
+            stem: "Cho hàm số mũ $h(x) = 2^x \\cdot 3^x$ trên $\\mathbb{R}$:",
+            items: [
+              { label: "a) Ta có thể viết gọn $h(x) = 6^x$.", ans: true, exp: "$2^x \\cdot 3^x = 6^x$." },
+              { label: "b) Nguyên hàm $\\int h(x)dx = \\frac{6^x}{\\ln 6} + C$.", ans: true, exp: "Theo công thức cơ bản." },
+              { label: "c) Tích phân $\\int_0^1 h(x)dx = \\frac{5}{\\ln 6}$.", ans: true, exp: "$[\\frac{6^x}{\\ln 6}]_0^1 = \\frac{5}{\\ln 6}$." },
+              { label: "d) Tích phân $\\int_1^2 h(x)dx = \\frac{36}{\\ln 6}$.", ans: false, exp: "$[\\frac{6^x}{\\ln 6}]_1^2 = \\frac{36 - 6}{\\ln 6} = \\frac{30}{\\ln 6}$." }
+            ]
+          },
+          {
+            stem: "Cho tích phân $I = \\int_0^1 (x+1)e^x\\,dx$:",
+            items: [
+              { label: "a) Có thể tính $I$ bằng tích phân từng phần với $u = x+1, dv = e^x dx$.", ans: true, exp: "Quy tắc 'nhì đa, tứ mũ'." },
+              { label: "b) Khi đó $du = dx$ và chọn $v = e^x$.", ans: true, exp: "Đúng." },
+              { label: "c) Giá trị của $I = e$.", ans: true, exp: "$[(x+1)e^x]_0^1 - [e^x]_0^1 = (2e - 1) - (e - 1) = e$." },
+              { label: "d) Giá trị của $I > 3$.", ans: false, exp: "$e \\approx 2.718 < 3$." }
+            ]
+          }
+        ],
+        sa: [
+          { q: "Tính giá trị tích phân $I = \\int_0^1 e^x\\,dx - e + 1$.", ans: "0", exp: "$\\int_0^1 e^x dx = e - 1 \\implies (e - 1) - e + 1 = 0$." },
+          { q: "Cho $\\int_1^e \\frac{3}{x}\\,dx = k$. Tìm giá trị của số nguyên $k$.", ans: "3", exp: "$[3\\ln|x|]_1^e = 3\\ln e = 3$." },
+          { q: "Biết $\\int_0^2 e^{ax}dx = \\frac{e^4 - 1}{2}$. Tìm giá trị của $a$.", ans: "2", exp: "$\\int_0^2 e^{ax} dx = \\frac{e^{2a} - 1}{a} \\implies a = 2$." },
+          { q: "Tính giá trị tích phân $I = \\int_0^1 (2^x \\ln 2)\\,dx$.", ans: "1", exp: "$I = [2^x]_0^1 = 2 - 1 = 1$." },
+          { q: "Cho $\\int_1^2 \\frac{2x}{x^2+1}\\,dx = \\ln(k/2)$. Tìm số nguyên dương $k$.", ans: "5", exp: "$[\\ln(x^2+1)]_1^2 = \\ln 5 - \\ln 2 = \\ln(5/2) \\implies k = 5$." },
+          { q: "Tính giá trị biểu thức $\\left(\\int_0^1 4x e^{x^2}\\,dx\\right) / (e-1)$.", ans: "2", exp: "Tích phân bằng $2(e-1)$, chia $(e-1)$ bằng 2." }
+        ]
+      },
+
+      // DẠNG 4: ĐỔI BIẾN SỐ & TỪNG PHẦN
+      4: {
+        title: "Dạng 4: Phương Pháp Đổi Biến Số & Tích Phân Từng Phần",
+        mcq: [
+          { q: "Tính tích phân $I = \\int_0^1 2x(x^2+1)^3\\,dx$:", options: ["$\\frac{15}{4}$", "$\\frac{15}{2}$", "$\\frac{16}{4}$", "$4$"], correct: 0, sol: "Đặt $t = x^2+1 \\implies dt = 2xdx$. $I = \\int_1^2 t^3 dt = [\\frac{t^4}{4}]_1^2 = \\frac{15}{4}$." },
+          { q: "Khi tính tích phân $I = \\int_0^2 x\\sqrt{x^2+1}\\,dx$ bằng cách đặt $t = x^2+1$, ta được tích phân mới nào?", options: ["$I = \\frac{1}{2}\\int_1^5 \\sqrt{t}\\,dt$", "$I = \\int_1^5 \\sqrt{t}\\,dt$", "$I = \\frac{1}{2}\\int_0^2 \\sqrt{t}\\,dt$", "$I = \\int_1^5 t\\,dt$"], correct: 0, sol: "$t = x^2+1 \\implies xdx = \\frac{1}{2}dt$. Cận $1 \\to 5$." },
+          { q: "Tính tích phân $I = \\int_0^1 x e^x\\,dx$:", options: ["$1$", "$e - 1$", "$e$", "$2$"], correct: 0, sol: "Từng phần: $I = [xe^x]_0^1 - \\int_0^1 e^x dx = e - (e - 1) = 1$." },
+          { q: "Tính tích phân $I = \\int_1^e x \\ln x\\,dx$:", options: ["$\\frac{e^2 + 1}{4}$", "$\\frac{e^2 - 1}{4}$", "$\\frac{e^2}{4}$", "$\\frac{e^2 + 1}{2}$"], correct: 0, sol: "$u = \\ln x, dv = x dx \\implies I = [\\frac{x^2}{2}\\ln x]_1^e - \\int_1^e \\frac{x}{2}dx = \\frac{e^2+1}{4}$." },
+          { q: "Cho $\\int_0^{\\pi/2} x \\cos x\\,dx = a\\frac{\\pi}{2} + b$ với $a, b \\in \\mathbb{Z}$. Tổng $a + b$ bằng:", options: ["$0$", "$1$", "$-1$", "$2$"], correct: 0, sol: "$[x\\sin x]_0^{\\pi/2} - \\int_0^{\\pi/2} \\sin x dx = \\frac{\\pi}{2} - 1 \\implies a=1, b=-1 \\implies a+b = 0$." },
+          { q: "Tính tích phân $I = \\int_0^1 \\frac{x}{x+1}\\,dx$:", options: ["$1 - \\ln 2$", "$\\ln 2$", "$1 + \\ln 2$", "$\\frac{1}{2}$"], correct: 0, sol: "$\\frac{x}{x+1} = 1 - \\frac{1}{x+1} \\implies [x - \\ln|x+1|]_0^1 = 1 - \\ln 2$." },
+          { q: "Tính tích phân $I = \\int_0^{\\pi/4} \\tan x\\,dx$:", options: ["$\\frac{1}{2}\\ln 2$", "$\\ln 2$", "$-\\ln 2$", "$1$"], correct: 0, sol: "$\\int \\frac{\\sin x}{\\cos x}dx = [-\\ln|\\cos x|]_0^{\\pi/4} = \\frac{1}{2}\\ln 2$." },
+          { q: "Cho $\\int_0^1 f(2x)dx = 4$. Khi đó $\\int_0^2 f(t)dt$ bằng:", options: ["$8$", "$2$", "$4$", "$16$"], correct: 0, sol: "Đặt $t = 2x \\implies \\frac{1}{2}\\int_0^2 f(t)dt = 4 \\implies 8$." },
+          { q: "Tính tích phân $I = \\int_1^2 2x(x^2 - 1)^2\\,dx$:", options: ["$9$", "$27$", "$\\frac{27}{3}$", "$18$"], correct: 0, sol: "Đặt $t = x^2 - 1 \\implies I = \\int_0^3 t^2 dt = 9$." },
+          { q: "Biết $\\int_0^1 (2x+3)e^x dx = a\\cdot e + b$ với $a, b$ nguyên. Tích $a \\cdot b$ là:", options: ["$-3$", "$3$", "$-6$", "$6$"], correct: 0, sol: "Từng phần thu được $3e - 1 \\implies a=3, b=-1 \\implies a\\cdot b = -3$." },
+          { q: "Tính tích phân $I = \\int_0^{\\sqrt{3}} \\frac{2x}{\\sqrt{x^2+1}}\\,dx$:", options: ["$2$", "$1$", "$3$", "$\\sqrt{3}$"], correct: 0, sol: "Đặt $t = \\sqrt{x^2+1} \\implies I = \\int_1^2 2 dt = 2$." },
+          { q: "Cho $\\int_1^2 f(x)dx = 3$. Tính $I = \\int_1^4 \\frac{f(\\sqrt{x})}{\\sqrt{x}}\\,dx$:", options: ["$6$", "$3$", "$\\frac{3}{2}$", "$12$"], correct: 0, sol: "Đặt $t = \\sqrt{x} \\implies I = 2\\int_1^2 f(t)dt = 6$." }
+        ],
+        tf: [
+          {
+            stem: "Cho tích phân $I = \\int_0^1 x(1-x)^5\\,dx$:",
+            items: [
+              { label: "a) Đặt $t = 1 - x$ thì vi phân $dt = -dx$.", ans: true, exp: "Đúng." },
+              { label: "b) Đổi cận: $x = 0 \\implies t = 1$ và $x = 1 \\implies t = 0$.", ans: true, exp: "Đúng." },
+              { label: "c) Sau khi đổi biến, ta có $I = \\int_0^1 (t^5 - t^6)\\,dt$.", ans: true, exp: "$I = -\\int_1^0 (1-t)t^5 dt = \\int_0^1 (t^5 - t^6)dt$." },
+              { label: "d) Giá trị của $I = \\frac{1}{42}$.", ans: true, exp: "$[\\frac{t^6}{6} - \\frac{t^7}{7}]_0^1 = \\frac{1}{42}$." }
+            ]
+          },
+          {
+            stem: "Xét tích phân từng phần $J = \\int_1^e \\ln x\\,dx$:",
+            items: [
+              { label: "a) Có thể biểu diễn $J = \\int_1^e 1\\cdot \\ln x\\,dx$.", ans: true, exp: "Đúng." },
+              { label: "b) Đặt $u = \\ln x, dv = dx \\implies du = \\frac{1}{x}dx, v = x$.", ans: true, exp: "Đúng." },
+              { label: "c) Khi đó $J = [x\\ln x]_1^e - \\int_1^e 1\\,dx$.", ans: true, exp: "Đúng." },
+              { label: "d) Giá trị của $J = 1$.", ans: true, exp: "$(e - 0) - (e - 1) = 1$." }
+            ]
+          },
+          {
+            stem: "Cho hàm số $f(x)$ liên tục trên $\\mathbb{R}$ thỏa mãn $\\int_0^6 f(x)dx = 12$:",
+            items: [
+              { label: "a) Tích phân $\\int_0^2 f(3x)dx = 4$.", ans: true, exp: "$\\frac{1}{3}\\cdot 12 = 4$." },
+              { label: "b) Tích phân $\\int_0^3 f(2x)dx = 6$.", ans: true, exp: "$\\frac{1}{2}\\cdot 12 = 6$." },
+              { label: "c) Tích phân $\\int_0^{\\sqrt{6}} x f(x^2)dx = 6$.", ans: true, exp: "$\\frac{1}{2}\\cdot 12 = 6$." },
+              { label: "d) Tích phân $\\int_0^6 [f(x) + 2]dx = 14$.", ans: false, exp: "$12 + 12 = 24 \\ne 14$." }
+            ]
+          },
+          {
+            stem: "Xét tích phân $K = \\int_0^{\\pi} x\\sin x\\,dx$:",
+            items: [
+              { label: "a) Đặt $u = x, dv = \\sin x dx \\implies v = -\\cos x$.", ans: true, exp: "Đúng." },
+              { label: "b) Ta có $[ -x\\cos x ]_0^{\\pi} = \\pi$.", ans: true, exp: "$-\\pi\\cos\\pi - 0 = \\pi$." },
+              { label: "c) Tích phân $\\int_0^{\\pi} \\cos x\\,dx = 0$.", ans: true, exp: "$[\\sin x]_0^\\pi = 0$." },
+              { label: "d) Kết quả của $K = 2\\pi$.", ans: false, exp: "$K = \\pi - 0 = \\pi \\ne 2\\pi$." }
+            ]
+          }
+        ],
+        sa: [
+          { q: "Tính giá trị tích phân $I = \\int_0^1 3x^2(x^3+1)^2\\,dx$ (làm tròn số thập phân 2 chữ số: 2.33 hoặc nhập 7/3).", ans: "2.33", exp: "$I = [t^3/3]_1^2 = 7/3 \\approx 2.33$." },
+          { q: "Tính giá trị tích phân $I = \\int_0^1 x e^x\\,dx$.", ans: "1", exp: "Từng phần ra kết quả đúng bằng 1." },
+          { q: "Cho $\\int_1^2 f(x)dx = 5$. Tính giá trị của $I = \\int_0^1 f(x+1)\\,dx$.", ans: "5", exp: "$I = \\int_1^2 f(t)dt = 5$." },
+          { q: "Tính giá trị tích phân $I = \\int_0^{\\pi/2} x \\cos x\\,dx - \\frac{\\pi}{2} + 2$.", ans: "1", exp: "Tích phân bằng $\\pi/2 - 1$, cộng $-\\pi/2 + 2 = 1$." },
+          { q: "Tính tích phân $I = \\int_1^e \\frac{2\\ln x}{x}\\,dx$.", ans: "1", exp: "$[(\\ln x)^2]_1^e = 1$." },
+          { q: "Cho $\\int_0^2 f(2x)dx = 3$. Tính giá trị của $\\int_0^4 f(x)\\,dx$.", ans: "6", exp: "$\\frac{1}{2}\\int_0^4 f(t)dt = 3 \\implies 6$." }
+        ]
+      },
+
+      // DẠNG 5: DIỆN TÍCH HÌNH PHẲNG & THỂ TÍCH KHỐI TRÒN XOAY
+      5: {
+        title: "Dạng 5: Ứng Dụng Hình Học (Diện Tích Phẳng & Thể Tích Khối Tròn Xoay)",
+        mcq: [
+          { q: "Diện tích hình phẳng giới hạn bởi đồ thị hàm số $y = x^2 - 4$, trục hoành $Ox$ và hai đường thẳng $x = 0, x = 2$ là:", options: ["$\\frac{16}{3}$", "$-\\frac{16}{3}$", "$\\frac{8}{3}$", "$4$"], correct: 0, sol: "$S = \\int_0^2 (4 - x^2)dx = [4x - \\frac{x^3}{3}]_0^2 = \\frac{16}{3}$." },
+          { q: "Diện tích hình phẳng giới hạn bởi đồ thị $y = x^3$, trục hoành và hai đường thẳng $x = -1, x = 2$ bằng:", options: ["$\\frac{17}{4}$", "$\\frac{15}{4}$", "$4$", "$\\frac{19}{4}$"], correct: 0, sol: "$\\int_{-1}^0 (-x^3)dx + \\int_0^2 x^3 dx = 1/4 + 4 = 17/4$." },
+          { q: "Diện tích hình phẳng giới hạn bởi hai đường cong $y = x^2$ và $y = 2x$ là:", options: ["$\\frac{4}{3}$", "$\\frac{2}{3}$", "$2$", "$\\frac{5}{3}$"], correct: 0, sol: "$x^2 - 2x = 0 \\iff x=0, x=2$. $S = \\int_0^2 (2x - x^2)dx = 4/3$." },
+          { q: "Thể tích khối tròn xoay sinh ra khi quay hình phẳng giới hạn bởi $y = x^2$, trục hoành và hai đường thẳng $x = 0, x = 2$ quanh trục $Ox$ là:", options: ["$\\frac{32\\pi}{5}$", "$\\frac{16\\pi}{5}$", "$\\frac{32}{5}$", "$\\frac{8\\pi}{3}$"], correct: 0, sol: "$V = \\pi \\int_0^2 x^4 dx = \\frac{32\\pi}{5}$." },
+          { q: "Thể tích khối tròn xoay sinh ra khi quay hình phẳng giới hạn bởi $y = \\sqrt{x}$, trục hoành và hai đường thẳng $x = 1, x = 4$ quanh trục $Ox$ là:", options: ["$\\frac{15\\pi}{2}$", "$\\frac{15}{2}$", "$7\\pi$", "$8\\pi$"], correct: 0, sol: "$V = \\pi \\int_1^4 x dx = \\frac{15\\pi}{2}$." },
+          { q: "Công thức tính thể tích khối tròn xoay tạo thành khi quay quanh trục $Ox$ hình phẳng giới hạn bởi đồ thị $y = f(x)$, trục hoành và hai đường thẳng $x = a, x = b$ ($a < b$) là:", options: ["$V = \\pi \\int_a^b [f(x)]^2\\,dx$", "$V = \\int_a^b [f(x)]^2\\,dx$", "$V = \\pi \\int_a^b |f(x)|\\,dx$", "$V = 2\\pi \\int_a^b f(x)\\,dx$"], correct: 0, sol: "Chuẩn định nghĩa SGK." },
+          { q: "Diện tích hình phẳng giới hạn bởi đồ thị $y = \\cos x$, trục hoành và hai đường thẳng $x = 0, x = \\pi$ là:", options: ["$2$", "$0$", "$1$", "$4$"], correct: 0, sol: "$S = \\int_0^{\\pi/2} \\cos x dx - \\int_{\\pi/2}^\\pi \\cos x dx = 1 - (-1) = 2$." },
+          { q: "Thể tích khối tròn xoay khi quay hình phẳng giới hạn bởi đồ thị $y = e^x$, trục hoành và $x = 0, x = 1$ quanh trục $Ox$ là:", options: ["$\\frac{\\pi(e^2 - 1)}{2}$", "$\\pi(e^2 - 1)$", "$\\frac{e^2 - 1}{2}$", "$\\pi(e - 1)$"], correct: 0, sol: "$V = \\pi \\int_0^1 e^{2x} dx = \\frac{\\pi(e^2-1)}{2}$." },
+          { q: "Diện tích hình phẳng giới hạn bởi hai đồ thị $y = -x^2 + 2x$ và $y = 0$ là:", options: ["$\\frac{4}{3}$", "$\\frac{2}{3}$", "$1$", "$2$"], correct: 0, sol: "$S = \\int_0^2 (-x^2+2x)dx = 4/3$." },
+          { q: "Thể tích khối tròn xoay khi quay hình phẳng giới hạn bởi $y = \\frac{1}{x}$, trục hoành và $x = 1, x = 3$ quanh trục $Ox$ là:", options: ["$\\frac{2\\pi}{3}$", "$\\pi\\ln 3$", "$\\frac{\\pi}{3}$", "$\\frac{2}{3}$"], correct: 0, sol: "$V = \\pi \\int_1^3 x^{-2} dx = \\pi [-\\frac{1}{x}]_1^3 = \\frac{2\\pi}{3}$." },
+          { q: "Diện tích hình phẳng giới hạn bởi $y = e^x$, trục hoành và hai đường thẳng $x = 0, x = \\ln 3$ bằng:", options: ["$2$", "$\\ln 3$", "$3$", "$1$"], correct: 0, sol: "$S = \\int_0^{\\ln 3} e^x dx = 3 - 1 = 2$." },
+          { q: "Biết diện tích hình phẳng giới hạn bởi parabol $y = a x^2$ ($a > 0$) và trục hoành trên đoạn $[0; 3]$ bằng $9$. Giá trị của $a$ là:", options: ["$1$", "$2$", "$3$", "$\\frac{1}{3}$"], correct: 0, sol: "$S = [\\frac{ax^3}{3}]_0^3 = 9a = 9 \\implies a = 1$." }
+        ],
+        tf: [
+          {
+            stem: "Xét hình phẳng $(H)$ giới hạn bởi đồ thị hàm số $y = 4 - x^2$ và trục hoành $Ox$:",
+            items: [
+              { label: "a) Hoành độ các giao điểm của đồ thị với trục hoành là $x = -2$ và $x = 2$.", ans: true, exp: "$4 - x^2 = 0 \\iff x = \\pm 2$." },
+              { label: "b) Hàm số $y = 4 - x^2 \\ge 0$ với mọi $x \\in [-2; 2]$.", ans: true, exp: "Parabol nhận giá trị không âm trong khoảng hai nghiệm." },
+              { label: "c) Diện tích của hình phẳng $(H)$ là $S = \\frac{32}{3}$.", ans: true, exp: "$S = 2\\int_0^2 (4-x^2)dx = 32/3$." },
+              { label: "d) Thể tích khối tròn xoay khi quay $(H)$ quanh $Ox$ là $V = \\frac{512\\pi}{15}$.", ans: true, exp: "$V = \\pi \\int_{-2}^2 (4-x^2)^2 dx = 512\\pi/15$." }
+            ]
+          },
+          {
+            stem: "Cho hình phẳng $(K)$ giới hạn bởi $y = \\sqrt{x}$, trục hoành và đường thẳng $x = 4$:",
+            items: [
+              { label: "a) Giao điểm của đường cong với trục hoành là gốc tọa độ $O(0; 0)$.", ans: true, exp: "Đúng." },
+              { label: "b) Diện tích của $(K)$ là $S = \\frac{16}{3}$.", ans: true, exp: "$[\\frac{2}{3}x\\sqrt{x}]_0^4 = 16/3$." },
+              { label: "c) Thể tích khối tròn xoay khi quay $(K)$ quanh $Ox$ là $V = 8\\pi$.", ans: true, exp: "$\\pi \\int_0^4 x dx = 8\\pi$." },
+              { label: "d) Thiết diện vuông góc với trục hoành tại $x=1$ là hình tròn diện tích $\\pi$.", ans: true, exp: "$R = \\sqrt{1} = 1 \\implies S = \\pi R^2 = \\pi$." }
+            ]
+          },
+          {
+            stem: "Xét diện tích giữa hai đồ thị $y = x^3$ và $y = x$:",
+            items: [
+              { label: "a) Phương trình hoành độ giao điểm có 3 nghiệm là $x = -1, x = 0, x = 1$.", ans: true, exp: "Đúng." },
+              { label: "b) Trên đoạn $[0; 1]$, ta có $x \\ge x^3$.", ans: true, exp: "Đúng." },
+              { label: "c) Diện tích hình phẳng giới hạn bởi hai đường trên toàn bộ phần khép kín là $S = \\frac{1}{2}$.", ans: true, exp: "$S = 1/4 + 1/4 = 1/2$." },
+              { label: "d) Do tính đối xứng, diện tích trên $[-1; 0]$ bằng diện tích trên $[0; 1]$.", ans: true, exp: "Đúng." }
+            ]
+          },
+          {
+            stem: "Một khối tròn xoay tạo bởi hình phẳng giới hạn bởi $y = \\sin x$, trục hoành và $x = 0, x = \\pi$ quay quanh $Ox$:",
+            items: [
+              { label: "a) Thể tích khối tròn xoay tính bởi $V = \\pi \\int_0^\\pi \\sin^2 x\\,dx$.", ans: true, exp: "Đúng." },
+              { label: "b) Ta có biến đổi hạ bậc $\\sin^2 x = \\frac{1 - \\cos 2x}{2}$.", ans: true, exp: "Đúng." },
+              { label: "c) Tích phân $\\int_0^\\pi \\cos 2x\\,dx = 0$.", ans: true, exp: "Đúng." },
+              { label: "d) Thể tích khối tròn xoay thu được là $V = \\frac{\\pi^2}{2}$.", ans: true, exp: "$V = \\pi \\cdot \\frac{\\pi}{2} = \\frac{\\pi^2}{2}$." }
+            ]
+          }
+        ],
+        sa: [
+          { q: "Tính diện tích hình phẳng giới hạn bởi parabol $y = 3x^2$, trục hoành và hai đường thẳng $x = 1, x = 3$.", ans: "26", exp: "$S = [x^3]_1^3 = 26$." },
+          { q: "Tính thể tích khối tròn xoay tạo thành khi quay quanh $Ox$ hình phẳng giới hạn bởi $y = 2x$, trục hoành và hai đường $x = 0, x = 3$ (nhập hệ số của pi, tức $V/\\pi$).", ans: "36", exp: "$V/\\pi = \\int_0^3 4x^2 dx = 36$." },
+          { q: "Tính diện tích hình phẳng giới hạn bởi $y = 2x - 2$, trục hoành và hai đường thẳng $x = 2, x = 5$.", ans: "15", exp: "$[x^2 - 2x]_2^5 = 15 - 0 = 15$." },
+          { q: "Tính diện tích hình phẳng giới hạn bởi đồ thị $y = x^2$ và đường thẳng $y = 4$ trên đoạn $[-2; 2]$ (làm tròn 2 chữ số thập phân: 10.67 hoặc 32/3).", ans: "10.67", exp: "$S = 32/3 \\approx 10.67$." },
+          { q: "Thể tích khối tròn xoay sinh bởi $y = \\sqrt{2x}$, trục hoành và $x = 0, x = 2$ quay quanh $Ox$ bằng $k\\pi$. Tìm số nguyên $k$.", ans: "4", exp: "$\\int_0^2 2x dx = 4 \\implies k = 4$." },
+          { q: "Tính diện tích hình phẳng giới hạn bởi $y = e^x$, trục hoành và $x = 0, x = 1$ (làm tròn số thập phân 2 chữ số của $e - 1 \\approx 1.72$).", ans: "1.72", exp: "$S = e - 1 \\approx 1.72$." }
+        ]
+      }
+    };
+
+    const officialTestData = {
+      // Phần I: 12 câu trắc nghiệm (3.0 điểm - 0.25đ/câu)
+      part1: [
+        { q: "Họ nguyên hàm của hàm số $f(x) = 4x^3 - 6x + 2$ trên $\\mathbb{R}$ là:", options: ["$F(x) = x^4 - 3x^2 + 2x + C$", "$F(x) = 12x^2 - 6 + C$", "$F(x) = x^4 - 6x^2 + 2x + C$", "$F(x) = 4x^4 - 3x^2 + 2x + C$"], correct: 0, sol: "Áp dụng $\\int (4x^3 - 6x + 2)dx = x^4 - 3x^2 + 2x + C$." },
+        { q: "Nguyên hàm $\\int \\frac{1}{3x-2}\\,dx$ trên khoảng $(\\frac{2}{3}; +\\infty)$ là:", options: ["$\\frac{1}{3}\\ln(3x-2) + C$", "$\\ln(3x-2) + C$", "$-\\frac{1}{3}\\ln(3x-2) + C$", "$\\frac{3}{(3x-2)^2} + C$"], correct: 0, sol: "Công thức mở rộng $\\int \\frac{1}{ax+b}dx = \\frac{1}{a}\\ln|ax+b| + C$ với $a = 3$." },
+        { q: "Cho $\\int_1^3 f(x)dx = 4$ và $\\int_1^3 g(x)dx = -1$. Giá trị $\\int_1^3 [f(x) - 2g(x)]dx$ bằng:", options: ["$6$", "$2$", "$5$", "$3$"], correct: 0, sol: "$4 - 2(-1) = 6$." },
+        { q: "Tính tích phân $I = \\int_0^1 e^{3x}\\,dx$:", options: ["$\\frac{e^3 - 1}{3}$", "$\\frac{e^3 + 1}{3}$", "$e^3 - 1$", "$\\frac{e^3}{3}$"], correct: 0, sol: "$I = [\\frac{1}{3}e^{3x}]_0^1 = \\frac{e^3 - 1}{3}$." },
+        { q: "Tính tích phân $I = \\int_0^{\\pi/2} \\cos(2x + \\pi)\\,dx$:", options: ["$0$", "$1$", "$-1$", "$\\frac{1}{2}$"], correct: 0, sol: "$I = [\\frac{1}{2}\\sin(2x+\\pi)]_0^{\\pi/2} = \\frac{1}{2}(\\sin 2\\pi - \\sin\\pi) = 0$." },
+        { q: "Tính tích phân $I = \\int_1^2 \\frac{3}{x^2}\\,dx$:", options: ["$\\frac{3}{2}$", "$-\\frac{3}{2}$", "$\\frac{1}{2}$", "$3$"], correct: 0, sol: "$I = [-\\frac{3}{x}]_1^2 = -\\frac{3}{2} - (-3) = \\frac{3}{2}$." },
+        { q: "Nguyên hàm $\\int (\\sin x - 2\\cos x)\\,dx$ bằng:", options: ["$-\\cos x - 2\\sin x + C$", "$\\cos x + 2\\sin x + C$", "$-\\cos x + 2\\sin x + C$", "$\\cos x - 2\\sin x + C$"], correct: 0, sol: "$\\int \\sin x dx = -\\cos x$ và $\\int -2\\cos x dx = -2\\sin x$." },
+        { q: "Tính tích phân $I = \\int_0^1 2x(x^2+2)^2\\,dx$:", options: ["$\\frac{19}{3}$", "$\\frac{19}{2}$", "$7$", "$\\frac{20}{3}$"], correct: 0, sol: "Đặt $t = x^2+2 \\implies I = \\int_2^3 t^2 dt = \\frac{19}{3}$." },
+        { q: "Tính tích phân từng phần $I = \\int_0^1 (x+1)e^x\\,dx$:", options: ["$e$", "$e - 1$", "$2e - 1$", "$e + 1$"], correct: 0, sol: "$I = [(x+1)e^x]_0^1 - \\int_0^1 e^x dx = 2e - 1 - (e - 1) = e$." },
+        { q: "Diện tích hình phẳng giới hạn bởi đồ thị hàm số $y = 3x^2$, trục hoành $Ox$ và hai đường $x = 0, x = 2$ là:", options: ["$8$", "$6$", "$12$", "$4$"], correct: 0, sol: "$S = [x^3]_0^2 = 8$." },
+        { q: "Thể tích khối tròn xoay khi quay hình phẳng giới hạn bởi $y = \\sqrt{3x}$, trục hoành và hai đường $x = 0, x = 2$ quanh $Ox$ là:", options: ["$6\\pi$", "$12\\pi$", "$3\\pi$", "$6$"], correct: 0, sol: "$V = \\pi \\int_0^2 3x dx = 6\\pi$." },
+        { q: "Nếu $\\int_1^4 f(x)dx = 9$ thì tích phân $\\int_1^2 x f(x^2)\\,dx$ bằng:", options: ["$\\frac{9}{2}$", "$18$", "$9$", "$3$"], correct: 0, sol: "Đặt $t = x^2 \\implies \\frac{1}{2}\\int_1^4 f(t)dt = \\frac{9}{2}$." }
+      ],
+
+      // Phần II: 4 câu Đúng/Sai (4.0 điểm - chuẩn Bộ GD&ĐT)
+      part2: [
+        {
+          stem: "Câu 1. Cho hàm số $f(x) = 2x - \\frac{1}{x^2}$ xác định trên $(0; +\\infty)$. Xét tính Đúng / Sai của các mệnh đề:",
+          items: [
+            { label: "a) Một nguyên hàm của hàm số $f(x)$ là $F(x) = x^2 + \\frac{1}{x}$.", ans: true, exp: "$F'(x) = 2x - 1/x^2 = f(x)$ đúng." },
+            { label: "b) Họ nguyên hàm của $f(x)$ là $\\int f(x)dx = x^2 - \\frac{1}{x} + C$.", ans: false, exp: "Dấu phải là cộng: $x^2 + \\frac{1}{x} + C$." },
+            { label: "c) Giá trị tích phân $\\int_1^2 f(x)dx = \\frac{7}{2}$.", ans: false, exp: "$[x^2 + 1/x]_1^2 = 9/2 - 2 = 5/2 \\ne 7/2$." },
+            { label: "d) Tích phân $\\int_1^3 f(x)dx = \\frac{22}{3}$.", ans: true, exp: "$[x^2 + 1/x]_1^3 = 28/3 - 2 = 22/3$ đúng." }
+          ]
+        },
+        {
+          stem: "Câu 2. Cho hàm số lượng giác $g(x) = 4\\cos^2 x$ trên đoạn $[0; \\pi]$:",
+          items: [
+            { label: "a) Sử dụng công thức hạ bậc, ta có $g(x) = 2 + 2\\cos 2x$.", ans: true, exp: "$4\\cos^2 x = 2 + 2\\cos 2x$ đúng." },
+            { label: "b) Nguyên hàm $\\int g(x)dx = 2x + \\sin 2x + C$.", ans: true, exp: "$\\int (2 + 2\\cos 2x)dx = 2x + \\sin 2x + C$ đúng." },
+            { label: "c) Tích phân $\\int_0^{\\pi/2} g(x)dx = \\pi$.", ans: true, exp: "$[2x + \\sin 2x]_0^{\\pi/2} = \\pi$ đúng." },
+            { label: "d) Tích phân $\\int_0^\\pi g(x)dx = 3\\pi$.", ans: false, exp: "$[2x + \\sin 2x]_0^\\pi = 2\\pi \\ne 3\\pi$." }
+          ]
+        },
+        {
+          stem: "Câu 3. Cho tích phân từng phần $I = \\int_1^e (2x - 1)\\ln x\\,dx$:",
+          items: [
+            { label: "a) Đặt $u = \\ln x$ và $dv = (2x - 1)dx$.", ans: true, exp: "Quy tắc 'nhất lô, nhì đa' chuẩn mực." },
+            { label: "b) Khi đó $du = \\frac{1}{x}dx$ và chọn $v = x^2 - x$.", ans: true, exp: "Nguyên hàm của $2x - 1$ là $x^2 - x$." },
+            { label: "c) Biểu thức tích phân thứ hai là $\\int_1^e v du = \\int_1^e (x - 1)dx$.", ans: true, exp: "$v du = (x - 1)dx$ đúng." },
+            { label: "d) Giá trị của $I = \\frac{e^2 - 1}{2}$.", ans: true, exp: "Tính toán từng bước cho kết quả $\\frac{e^2 - 1}{2}$ đúng." }
+          ]
+        },
+        {
+          stem: "Câu 4. Cho hình phẳng $(H)$ giới hạn bởi đồ thị hàm số $y = \\sqrt{2x+1}$, trục hoành và hai đường thẳng $x = 0, x = 4$:",
+          items: [
+            { label: "a) Hàm số $y = \\sqrt{2x+1} \\ge 0$ với mọi $x \\in [0; 4]$.", ans: true, exp: "Căn thức luôn không âm trên tập xác định." },
+            { label: "b) Diện tích của $(H)$ được tính bởi công thức $S = \\int_0^4 \\sqrt{2x+1}\\,dx$.", ans: true, exp: "Đúng theo công thức diện tích." },
+            { label: "c) Giá trị của diện tích $S = \\frac{26}{3}$.", ans: true, exp: "$[\\frac{1}{3}(2x+1)^{3/2}]_0^4 = 26/3$ đúng." },
+            { label: "d) Thể tích khối tròn xoay khi quay $(H)$ quanh trục $Ox$ là $V = 20\\pi$.", ans: true, exp: "$V = \\pi \\int_0^4 (2x+1)dx = 20\\pi$ đúng." }
+          ]
+        }
+      ],
+
+      // Phần III: 6 câu Trả lời ngắn (3.0 điểm - 0.5đ/câu)
+      part3: [
+        { q: "Câu 1. Tính giá trị tích phân $I = \\int_1^3 (3x^2 - 2x + 1)\\,dx$.", ans: "20", exp: "$I = [x^3 - x^2 + x]_1^3 = 21 - 1 = 20$." },
+        { q: "Câu 2. Tính giá trị tích phân $I = \\int_0^{\\pi/2} 4\\sin x\\,dx$.", ans: "4", exp: "$I = [-4\\cos x]_0^{\\pi/2} = 4$." },
+        { q: "Câu 3. Cho $\\int_2^4 \\frac{2}{x-1}\\,dx = \\ln k$. Tìm giá trị của số nguyên dương $k$.", ans: "9", exp: "$[2\\ln|x-1|]_2^4 = 2\\ln 3 = \\ln 9 \\implies k = 9$." },
+        { q: "Câu 4. Tính giá trị tích phân $I = \\int_0^2 (6x^2 - 4x + 1)\\,dx$.", ans: "10", exp: "$I = [2x^3 - 2x^2 + x]_0^2 = 16 - 8 + 2 = 10$." },
+        { q: "Câu 5. Tính diện tích hình phẳng giới hạn bởi parabol $y = 6x^2$, trục hoành $Ox$ và hai đường thẳng $x = 1, x = 2$.", ans: "14", exp: "$S = [2x^3]_1^2 = 16 - 2 = 14$." },
+        { q: "Câu 6. Thể tích khối tròn xoay khi quay hình phẳng giới hạn bởi $y = \\sqrt{4x}$, trục hoành và hai đường thẳng $x = 0, x = 3$ quanh trục hoành có giá trị là $k\\pi$. Tìm số nguyên $k$.", ans: "18", exp: "$V = \\pi \\int_0^3 4x dx = 18\\pi \\implies k = 18$." }
+      ]
+    };
+
+    let currentQuestionsState = null;
+
+    function switchPracticeSubTab(subIndex) {
+      currentPracticeSubTab = subIndex;
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`subtab-btn-${i}`);
+        if (i === subIndex) {
+          btn.className = 'subtab-active text-xs sm:text-sm py-2.5 px-3 rounded-xl transition-all text-center';
+        } else {
+          btn.className = 'bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm py-2.5 px-3 rounded-xl transition-all text-center';
+        }
+      }
+      document.getElementById('practice-score-banner').classList.add('hidden');
+      loadPracticeData(subIndex);
+    }
+
+    function randomizeCurrentSubTab() {
+      loadPracticeData(currentPracticeSubTab, true);
+      showModal("Xáo Đề Thành Công", "Đã tạo đề bài và xáo trộn các phương án ngẫu nhiên cho phân dạng này. Chúc em luyện tập hiệu quả!");
+    }
+
+    function loadPracticeData(subIndex, isShuffle = false) {
+      const raw = practiceData[subIndex];
+      document.getElementById('current-form-title').innerText = raw.title;
+
+      let mcqList = deepClone(raw.mcq);
+      let tfList = deepClone(raw.tf);
+      let saList = deepClone(raw.sa);
+
+      if (isShuffle) {
+        mcqList = shuffleArray(mcqList);
+        mcqList.forEach(q => {
+          const correctText = q.options[q.correct];
+          q.options = shuffleArray(q.options);
+          q.correct = q.options.indexOf(correctText);
+        });
+        saList = shuffleArray(saList);
+      }
+
+      currentQuestionsState = { mcq: mcqList, tf: tfList, sa: saList };
+      renderPracticeDOM();
+    }
+
+    function renderPracticeDOM() {
+      const container = document.getElementById('practice-questions-container');
+      container.innerHTML = '';
+
+      // --- PHẦN I: 12 CÂU TRẮC NGHIỆM ---
+      const part1Section = document.createElement('div');
+      part1Section.className = 'glass-card rounded-2xl p-5 sm:p-7 space-y-6 text-left';
+      part1Section.innerHTML = `
+        <div class="border-b border-slate-200 pb-3">
+          <span class="text-xs font-bold uppercase text-teal-600 bg-teal-50 px-2 py-0.5 rounded">Phần I</span>
+          <h4 class="text-lg font-bold text-slate-900 mt-1">12 Câu Trắc Nghiệm Nhiều Phương Án Lựa Chọn</h4>
+          <p class="text-xs text-slate-500">Bố trí 2 hàng (A, B) và (C, D). Mỗi câu chọn 1 phương án đúng.</p>
+        </div>
+      `;
+
+      currentQuestionsState.mcq.forEach((item, qIdx) => {
+        const qCard = document.createElement('div');
+        qCard.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3 text-left';
+        qCard.id = `prac-mcq-card-${qIdx}`;
+
+        const labels = ['A', 'B', 'C', 'D'];
+        let optionsHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2">`;
+        item.options.forEach((opt, optIdx) => {
+          optionsHTML += `
+            <label class="flex items-center gap-2.5 p-2.5 rounded-lg border border-slate-200 bg-white hover:bg-teal-50/50 cursor-pointer transition-all text-xs sm:text-sm">
+              <input type="radio" name="prac-mcq-${qIdx}" value="${optIdx}" class="text-teal-600 focus:ring-teal-500">
+              <span class="font-bold text-slate-700">${labels[optIdx]}.</span>
+              <span class="text-slate-800 math-left">${opt}</span>
+            </label>
+          `;
+        });
+        optionsHTML += `</div>`;
+
+        qCard.innerHTML = `
+          <div class="font-semibold text-slate-900 text-sm leading-relaxed">
+            <span class="text-teal-700 font-bold">Câu ${qIdx + 1}:</span> ${item.q}
+          </div>
+          ${optionsHTML}
+          <div id="prac-mcq-sol-${qIdx}" class="hidden mt-3 p-3 rounded-lg bg-teal-50 border border-teal-200 text-xs sm:text-sm text-slate-700">
+            <strong class="text-teal-800">Lời giải chi tiết:</strong> ${item.sol}
+          </div>
+        `;
+        part1Section.appendChild(qCard);
+      });
+      container.appendChild(part1Section);
+
+      // --- PHẦN II: 4 CÂU ĐÚNG / SAI ---
+      const part2Section = document.createElement('div');
+      part2Section.className = 'glass-card rounded-2xl p-5 sm:p-7 space-y-6 text-left';
+      part2Section.innerHTML = `
+        <div class="border-b border-slate-200 pb-3">
+          <span class="text-xs font-bold uppercase text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Phần II</span>
+          <h4 class="text-lg font-bold text-slate-900 mt-1">4 Câu Trắc Nghiệm Đúng / Sai</h4>
+          <p class="text-xs text-slate-500">Mỗi câu gồm 4 ý a, b, c, d. Học sinh chọn Đúng hoặc Sai cho từng ý.</p>
+        </div>
+      `;
+
+      currentQuestionsState.tf.forEach((tfQ, tfIdx) => {
+        const tfCard = document.createElement('div');
+        tfCard.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4 text-left';
+        tfCard.id = `prac-tf-card-${tfIdx}`;
+
+        let tableRows = '';
+        tfQ.items.forEach((it, itIdx) => {
+          tableRows += `
+            <tr class="border-b border-slate-200 text-xs sm:text-sm">
+              <td class="py-2.5 pr-2 font-medium text-slate-800 text-left">${it.label}</td>
+              <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="prac-tf-${tfIdx}-${itIdx}" value="true" class="text-teal-600 focus:ring-teal-500">
+                  <span class="text-xs font-semibold text-slate-700">Đúng</span>
+                </label>
+              </td>
+              <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="prac-tf-${tfIdx}-${itIdx}" value="false" class="text-rose-600 focus:ring-rose-500">
+                  <span class="text-xs font-semibold text-slate-700">Sai</span>
+                </label>
+              </td>
+            </tr>
+          `;
+        });
+
+        tfCard.innerHTML = `
+          <div class="font-bold text-slate-900 text-sm">
+            <span class="text-indigo-700">Câu ${tfIdx + 1}:</span> ${tfQ.stem}
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse bg-white rounded-lg overflow-hidden border border-slate-200">
+              <thead class="bg-slate-100 text-slate-700 text-xs font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-2 px-3 text-left">Phát biểu</th>
+                  <th class="py-2 px-3 text-center w-20">Đúng</th>
+                  <th class="py-2 px-3 text-center w-20">Sai</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${tableRows}
+              </tbody>
+            </table>
+          </div>
+          <div id="prac-tf-sol-${tfIdx}" class="hidden mt-3 p-3 rounded-lg bg-indigo-50 border border-indigo-200 text-xs sm:text-sm text-slate-700 space-y-1">
+            <strong class="text-indigo-800">Giải thích chi tiết:</strong>
+            ${tfQ.items.map(it => `<div>• <strong>${it.label.slice(0, 2)}:</strong> ${it.ans ? '<span class="text-teal-600 font-bold">[Đúng]</span>' : '<span class="text-rose-600 font-bold">[Sai]</span>'} ${it.exp}</div>`).join('')}
+          </div>
+        `;
+        part2Section.appendChild(tfCard);
+      });
+      container.appendChild(part2Section);
+
+      // --- PHẦN III: 6 CÂU TRẢ LỜI NGẮN ---
+      const part3Section = document.createElement('div');
+      part3Section.className = 'glass-card rounded-2xl p-5 sm:p-7 space-y-6 text-left';
+      part3Section.innerHTML = `
+        <div class="border-b border-slate-200 pb-3">
+          <span class="text-xs font-bold uppercase text-violet-600 bg-violet-50 px-2 py-0.5 rounded">Phần III</span>
+          <h4 class="text-lg font-bold text-slate-900 mt-1">6 Câu Trắc Nghiệm Trả Lời Ngắn</h4>
+          <p class="text-xs text-slate-500">Cận tích phân đa dạng. Điền đáp án số hoặc phân số vào ô bên dưới.</p>
+        </div>
+      `;
+
+      currentQuestionsState.sa.forEach((saQ, saIdx) => {
+        const saCard = document.createElement('div');
+        saCard.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3 text-left';
+        saCard.id = `prac-sa-card-${saIdx}`;
+
+        saCard.innerHTML = `
+          <div class="font-semibold text-slate-900 text-sm leading-relaxed">
+            <span class="text-violet-700 font-bold">Câu ${saIdx + 1}:</span> ${saQ.q}
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-slate-600">Đáp án của em:</label>
+            <input type="text" id="prac-sa-input-${saIdx}" placeholder="Nhập số..." class="w-36 px-3 py-1.5 rounded-lg border border-slate-300 text-sm font-medium focus:ring-2 focus:ring-violet-400 outline-none">
+          </div>
+          <div id="prac-sa-sol-${saIdx}" class="hidden mt-3 p-3 rounded-lg bg-violet-50 border border-violet-200 text-xs sm:text-sm text-slate-700">
+            <strong class="text-violet-800">Đáp án đúng:</strong> <span class="font-bold text-teal-700">${saQ.ans}</span><br>
+            <strong>Lời giải:</strong> ${saQ.exp}
+          </div>
+        `;
+        part3Section.appendChild(saCard);
+      });
+      container.appendChild(part3Section);
+
+      setTimeout(renderMath, 60);
+    }
+
+    function gradeCurrentSubTab() {
+      if (!currentQuestionsState) return;
+
+      let mcqCorrect = 0;
+      let tfFullCorrect = 0;
+      let saCorrect = 0;
+
+      // Grade MCQ
+      currentQuestionsState.mcq.forEach((item, idx) => {
+        const radios = document.getElementsByName(`prac-mcq-${idx}`);
+        let selected = -1;
+        for (let r of radios) {
+          if (r.checked) selected = parseInt(r.value);
+        }
+        const card = document.getElementById(`prac-mcq-card-${idx}`);
+        const sol = document.getElementById(`prac-mcq-sol-${idx}`);
+        sol.classList.remove('hidden');
+
+        if (selected === item.correct) {
+          mcqCorrect++;
+          card.classList.remove('border-rose-300', 'bg-rose-50/30');
+          card.classList.add('border-teal-400', 'bg-teal-50/30');
+        } else {
+          card.classList.remove('border-teal-400', 'bg-teal-50/30');
+          card.classList.add('border-rose-300', 'bg-rose-50/30');
+        }
+      });
+
+      // Grade TF
+      currentQuestionsState.tf.forEach((tfQ, tfIdx) => {
+        let countCorrectItems = 0;
+        tfQ.items.forEach((it, itIdx) => {
+          const radios = document.getElementsByName(`prac-tf-${tfIdx}-${itIdx}`);
+          let chosen = null;
+          for (let r of radios) {
+            if (r.checked) chosen = (r.value === 'true');
+          }
+          if (chosen === it.ans) countCorrectItems++;
+        });
+
+        const card = document.getElementById(`prac-tf-card-${tfIdx}`);
+        const sol = document.getElementById(`prac-tf-sol-${tfIdx}`);
+        sol.classList.remove('hidden');
+
+        if (countCorrectItems === 4) tfFullCorrect++;
+        if (countCorrectItems >= 3) {
+          card.classList.add('border-teal-400', 'bg-teal-50/20');
+        } else {
+          card.classList.add('border-slate-300');
+        }
+      });
+
+      // Grade SA
+      currentQuestionsState.sa.forEach((saQ, saIdx) => {
+        const input = document.getElementById(`prac-sa-input-${saIdx}`);
+        const userVal = input ? input.value.trim().toLowerCase().replace(/\s+/g, '') : '';
+        const correctVal = saQ.ans.trim().toLowerCase().replace(/\s+/g, '');
+
+        const card = document.getElementById(`prac-sa-card-${saIdx}`);
+        const sol = document.getElementById(`prac-sa-sol-${saIdx}`);
+        sol.classList.remove('hidden');
+
+        const isMatch = (userVal === correctVal) || (parseFloat(userVal) === parseFloat(correctVal));
+        if (isMatch) {
+          saCorrect++;
+          card.classList.add('border-teal-400', 'bg-teal-50/30');
+        } else {
+          card.classList.add('border-rose-300', 'bg-rose-50/30');
+        }
+      });
+
+      const banner = document.getElementById('practice-score-banner');
+      banner.classList.remove('hidden');
+      document.getElementById('practice-score-text').innerHTML = `
+        Đúng ${mcqCorrect}/12 câu Trắc nghiệm • Đúng ${tfFullCorrect}/4 câu Đúng/Sai toàn phần • Đúng ${saCorrect}/6 câu Trả lời ngắn.
+      `;
+
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(renderMath, 60);
+    }
+
+    function startOfficialTest() {
+      const nameInput = document.getElementById('student-name-input');
+      const name = nameInput.value.trim();
+
+      if (!name) {
+        showModal("Yêu cầu nhập họ và tên", "Em vui lòng điền đầy đủ Họ và tên trước khi bắt đầu bài kiểm tra năng lực!", true);
+        nameInput.focus();
+        return;
+      }
+
+      candidateName = name;
+      document.getElementById('test-gate-card').classList.add('hidden');
+      document.getElementById('test-main-content').classList.remove('hidden');
+      document.getElementById('display-student-name').innerText = `Học sinh: ${candidateName}`;
+
+      renderOfficialTestDOM();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderOfficialTestDOM() {
+      const container = document.getElementById('official-test-questions');
+      container.innerHTML = '';
+
+      // --- PHẦN I: 12 CÂU TRẮC NGHIỆM (3.0 ĐIỂM) ---
+      const part1Card = document.createElement('div');
+      part1Card.className = 'glass-card rounded-2xl p-6 sm:p-8 space-y-6 text-left';
+      part1Card.innerHTML = `
+        <div class="border-b border-slate-200 pb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded">Phần I (3.0 điểm)</span>
+          <h4 class="text-lg font-bold text-slate-900 mt-2">Câu Trắc Nghiệm Nhiều Phương Án Lựa Chọn</h4>
+          <p class="text-xs text-slate-500">Mỗi câu hỏi chọn 1 phương án (0.25 điểm/câu). Bố trí 2 hàng A, B và C, D.</p>
+        </div>
+      `;
+
+      officialTestData.part1.forEach((q, idx) => {
+        const qBox = document.createElement('div');
+        qBox.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3 text-left';
+        qBox.id = `test-p1-card-${idx}`;
+
+        const labels = ['A', 'B', 'C', 'D'];
+        let optionsHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-2">`;
+        q.options.forEach((opt, optIdx) => {
+          optionsHTML += `
+            <label class="flex items-center gap-2.5 p-2.5 rounded-lg border border-slate-200 bg-white hover:bg-teal-50/50 cursor-pointer transition-all text-xs sm:text-sm">
+              <input type="radio" name="test-p1-${idx}" value="${optIdx}" class="text-teal-600 focus:ring-teal-500">
+              <span class="font-bold text-slate-700">${labels[optIdx]}.</span>
+              <span class="text-slate-800 math-left">${opt}</span>
+            </label>
+          `;
+        });
+        optionsHTML += `</div>`;
+
+        qBox.innerHTML = `
+          <div class="font-semibold text-slate-900 text-sm leading-relaxed">
+            <span class="text-teal-700 font-bold">Câu ${idx + 1}:</span> ${q.q}
+          </div>
+          ${optionsHTML}
+          <div id="test-p1-sol-${idx}" class="hidden mt-3 p-3 rounded-lg bg-teal-50 border border-teal-200 text-xs sm:text-sm text-slate-700">
+            <strong class="text-teal-800">Lời giải chi tiết:</strong> ${q.sol}
+          </div>
+        `;
+        part1Card.appendChild(qBox);
+      });
+      container.appendChild(part1Card);
+
+      // --- PHẦN II: 4 CÂU ĐÚNG / SAI (4.0 ĐIỂM) ---
+      const part2Card = document.createElement('div');
+      part2Card.className = 'glass-card rounded-2xl p-6 sm:p-8 space-y-6 text-left';
+      part2Card.innerHTML = `
+        <div class="border-b border-slate-200 pb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded">Phần II (4.0 điểm)</span>
+          <h4 class="text-lg font-bold text-slate-900 mt-2">Câu Trắc Nghiệm Đúng / Sai</h4>
+          <p class="text-xs text-slate-500">Trong mỗi ý a), b), c), d), chọn Đúng hoặc Sai. Điểm chuẩn Bộ GD&ĐT: đúng 1 ý = 0.1đ; 2 ý = 0.25đ; 3 ý = 0.5đ; 4 ý = 1.0đ.</p>
+        </div>
+      `;
+
+      officialTestData.part2.forEach((tfQ, tfIdx) => {
+        const tfBox = document.createElement('div');
+        tfBox.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4 text-left';
+        tfBox.id = `test-p2-card-${tfIdx}`;
+
+        let rows = '';
+        tfQ.items.forEach((it, itIdx) => {
+          rows += `
+            <tr class="border-b border-slate-200 text-xs sm:text-sm">
+              <td class="py-2.5 pr-2 font-medium text-slate-800 text-left">${it.label}</td>
+              <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="test-p2-${tfIdx}-${itIdx}" value="true" class="text-teal-600 focus:ring-teal-500">
+                  <span class="text-xs font-semibold text-slate-700">Đúng</span>
+                </label>
+              </td>
+              <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                <label class="inline-flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="test-p2-${tfIdx}-${itIdx}" value="false" class="text-rose-600 focus:ring-rose-500">
+                  <span class="text-xs font-semibold text-slate-700">Sai</span>
+                </label>
+              </td>
+            </tr>
+          `;
+        });
+
+        tfBox.innerHTML = `
+          <div class="font-bold text-slate-900 text-sm">
+            ${tfQ.stem}
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse bg-white rounded-lg overflow-hidden border border-slate-200">
+              <thead class="bg-slate-100 text-slate-700 text-xs font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-2 px-3 text-left">Phát biểu</th>
+                  <th class="py-2 px-3 text-center w-20">Đúng</th>
+                  <th class="py-2 px-3 text-center w-20">Sai</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${rows}
+              </tbody>
+            </table>
+          </div>
+          <div id="test-p2-sol-${tfIdx}" class="hidden mt-3 p-3 rounded-lg bg-indigo-50 border border-indigo-200 text-xs sm:text-sm text-slate-700 space-y-1">
+            <strong class="text-indigo-800">Lời giải chi tiết:</strong>
+            ${tfQ.items.map(it => `<div>• <strong>${it.label.slice(0, 2)}:</strong> ${it.ans ? '<span class="text-teal-600 font-bold">[Đúng]</span>' : '<span class="text-rose-600 font-bold">[Sai]</span>'} ${it.exp}</div>`).join('')}
+          </div>
+        `;
+        part2Card.appendChild(tfBox);
+      });
+      container.appendChild(part2Card);
+
+      // --- PHẦN III: 6 CÂU TRẢ LỜI NGẮN (3.0 ĐIỂM) ---
+      const part3Card = document.createElement('div');
+      part3Card.className = 'glass-card rounded-2xl p-6 sm:p-8 space-y-6 text-left';
+      part3Card.innerHTML = `
+        <div class="border-b border-slate-200 pb-3">
+          <span class="text-xs font-bold uppercase tracking-wider text-violet-700 bg-violet-50 px-2.5 py-1 rounded">Phần III (3.0 điểm)</span>
+          <h4 class="text-lg font-bold text-slate-900 mt-2">Câu Trắc Nghiệm Trả Lời Ngắn</h4>
+          <p class="text-xs text-slate-500">Mỗi câu trả lời đúng được 0.5 điểm. Các cận tích phân phong phú.</p>
+        </div>
+      `;
+
+      officialTestData.part3.forEach((saQ, idx) => {
+        const saBox = document.createElement('div');
+        saBox.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-3 text-left';
+        saBox.id = `test-p3-card-${idx}`;
+
+        saBox.innerHTML = `
+          <div class="font-semibold text-slate-900 text-sm leading-relaxed">
+            ${saQ.q}
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-slate-600">Điền câu trả lời:</label>
+            <input type="text" id="test-p3-input-${idx}" placeholder="Nhập số..." class="w-36 px-3 py-1.5 rounded-lg border border-slate-300 text-sm font-medium focus:ring-2 focus:ring-violet-400 outline-none">
+          </div>
+          <div id="test-p3-sol-${idx}" class="hidden mt-3 p-3 rounded-lg bg-violet-50 border border-violet-200 text-xs sm:text-sm text-slate-700">
+            <strong class="text-violet-800">Đáp án chuẩn:</strong> <span class="font-bold text-teal-700">${saQ.ans}</span><br>
+            <strong>Lời giải:</strong> ${saQ.exp}
+          </div>
+        `;
+        part3Card.appendChild(saBox);
+      });
+      container.appendChild(part3Card);
+
+      setTimeout(renderMath, 60);
+    }
+
+    function submitOfficialTest() {
+      if (testSubmitted) {
+        showModal("Bài đã nộp", "Em đã nộp bài thi rồi. Hãy kéo xuống để xem chi tiết điểm số và lời giải bài làm nhé!");
+        return;
+      }
+
+      let p1Score = 0.0;
+      let p2Score = 0.0;
+      let p3Score = 0.0;
+
+      // 1. Chấm Phần I (12 câu x 0.25đ = 3.0đ)
+      officialTestData.part1.forEach((q, idx) => {
+        const radios = document.getElementsByName(`test-p1-${idx}`);
+        let sel = -1;
+        for (let r of radios) {
+          if (r.checked) sel = parseInt(r.value);
+        }
+        const card = document.getElementById(`test-p1-card-${idx}`);
+        const sol = document.getElementById(`test-p1-sol-${idx}`);
+        sol.classList.remove('hidden');
+
+        if (sel === q.correct) {
+          p1Score += 0.25;
+          card.classList.add('border-teal-400', 'bg-teal-50/20');
+        } else {
+          card.classList.add('border-rose-300', 'bg-rose-50/20');
+        }
+      });
+
+      // 2. Chấm Phần II (4 câu x 1.0đ = 4.0đ; chuẩn Bộ GD&ĐT)
+      officialTestData.part2.forEach((tfQ, tfIdx) => {
+        let correctCount = 0;
+        tfQ.items.forEach((it, itIdx) => {
+          const radios = document.getElementsByName(`test-p2-${tfIdx}-${itIdx}`);
+          let chosen = null;
+          for (let r of radios) {
+            if (r.checked) chosen = (r.value === 'true');
+          }
+          if (chosen === it.ans) correctCount++;
+        });
+
+        let questionPoints = 0.0;
+        if (correctCount === 1) questionPoints = 0.1;
+        else if (correctCount === 2) questionPoints = 0.25;
+        else if (correctCount === 3) questionPoints = 0.5;
+        else if (correctCount === 4) questionPoints = 1.0;
+
+        p2Score += questionPoints;
+
+        const card = document.getElementById(`test-p2-card-${tfIdx}`);
+        const sol = document.getElementById(`test-p2-sol-${tfIdx}`);
+        sol.classList.remove('hidden');
+
+        if (correctCount === 4) {
+          card.classList.add('border-teal-400', 'bg-teal-50/20');
+        } else {
+          card.classList.add('border-slate-300');
+        }
+      });
+
+      // 3. Chấm Phần III (6 câu x 0.5đ = 3.0đ)
+      officialTestData.part3.forEach((saQ, idx) => {
+        const inp = document.getElementById(`test-p3-input-${idx}`);
+        const userVal = inp ? inp.value.trim().toLowerCase().replace(/\s+/g, '') : '';
+        const correctVal = saQ.ans.trim().toLowerCase().replace(/\s+/g, '');
+
+        const card = document.getElementById(`test-p3-card-${idx}`);
+        const sol = document.getElementById(`test-p3-sol-${idx}`);
+        sol.classList.remove('hidden');
+
+        const isMatch = (userVal === correctVal) || (parseFloat(userVal) === parseFloat(correctVal));
+        if (isMatch) {
+          p3Score += 0.5;
+          card.classList.add('border-teal-400', 'bg-teal-50/20');
+        } else {
+          card.classList.add('border-rose-300', 'bg-rose-50/20');
+        }
+      });
+
+      const totalScore = Math.round((p1Score + p2Score + p3Score) * 100) / 100;
+      testSubmitted = true;
+
+      // Personalized feedback by score tiers
+      let tierBadge = "";
+      let tierColor = "";
+      let personalizedComment = "";
+
+      if (totalScore >= 8.5) {
+        tierBadge = "XUẤT SẮC";
+        tierColor = "text-emerald-700 bg-emerald-100 border-emerald-300";
+        personalizedComment = `Chúc mừng em <strong>${candidateName}</strong>! Em đã thể hiện tư duy toán học xuất sắc và kỹ năng giải tích phân cực kỳ chuẩn xác. Với mức điểm <strong>${totalScore}/10</strong>, em đã làm chủ trọn vẹn cả kiến thức định nghĩa lẫn các bài toán đổi biến, từng phần và ứng dụng hình học. Hãy tiếp tục duy trì phong độ này để đạt điểm 10 tuyệt đối trong kỳ thi tốt nghiệp THPT nhé!`;
+      } else if (totalScore >= 7.0) {
+        tierBadge = "KHÁ TỐT";
+        tierColor = "text-teal-700 bg-teal-100 border-teal-300";
+        personalizedComment = `Rất tốt em <strong>${candidateName}</strong>! Em đạt kết quả <strong>${totalScore}/10</strong>, nắm chắc toàn bộ kiến thức trọng tâm SGK Kết Nối Tri Thức. Em chỉ cần lưu ý quan sát kỹ hơn ở các ý Đúng/Sai và rèn luyện thêm một vài kỹ năng tính nhanh ở phần ứng dụng hình học để tự tin bứt phá lên mức 9+!`;
+      } else if (totalScore >= 5.0) {
+        tierBadge = "TRUNG BÌNH - ĐẠT";
+        tierColor = "text-amber-700 bg-amber-100 border-amber-300";
+        personalizedComment = `Cố gắng lên em <strong>${candidateName}</strong>! Em đạt <strong>${totalScore}/10</strong>. Em đã nhớ được các công thức nguyên hàm cơ bản nhưng còn dễ nhầm dấu ở phương pháp tích phân từng phần và ứng dụng thể tích tròn xoay. Em hãy xem lại lý thuyết ở Tab 1 và luyện tập thêm ở Tab 2 để củng cố phản xạ giải bài tập nhé!`;
+      } else {
+        tierBadge = "CẦN CỦNG CỐ KIẾN THỨC";
+        tierColor = "text-rose-700 bg-rose-100 border-rose-300";
+        personalizedComment = `Em <strong>${candidateName}</strong> cần dành thêm thời gian ôn tập kỹ chuyên đề này (Điểm hiện tại: <strong>${totalScore}/10</strong>). Nguyên hàm và tích phân là nội dung trọng tâm chiếm tỉ trọng điểm số cao trong đề thi. Em hãy đọc kỹ từng ví dụ mẫu ở Tab 1, ghi nhớ bảng nguyên hàm và làm lại bài kiểm tra sau khi đã ôn tập nhé!`;
+      }
+
+      // Render Result Card
+      const resCard = document.getElementById('test-result-card');
+      resCard.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border ${tierColor}">
+              XẾP LOẠI: ${tierBadge}
+            </span>
+            <h3 class="text-2xl font-black text-slate-900 mt-2">
+              KẾT QUẢ ĐÁNH GIÁ NĂNG LỰC: ${totalScore} / 10.0 ĐIỂM
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500">Thí sinh: <strong>${candidateName}</strong> • Trạng thái: Đã hoàn thành bài thi</p>
+          </div>
+          <div class="text-right">
+            <span class="text-4xl sm:text-5xl font-black text-teal-700">${totalScore}</span>
+            <span class="text-sm text-slate-400 font-bold">/ 10</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+          <div class="p-4 bg-teal-50 rounded-2xl border border-teal-200">
+            <span class="text-xs font-bold text-teal-700 uppercase">Phần I: Trắc nghiệm</span>
+            <div class="text-xl sm:text-2xl font-black text-teal-900 mt-1">${p1Score.toFixed(2)} / 3.0</div>
+            <span class="text-[11px] text-slate-500">12 câu (0.25đ/câu)</span>
+          </div>
+          <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-200">
+            <span class="text-xs font-bold text-indigo-700 uppercase">Phần II: Đúng / Sai</span>
+            <div class="text-xl sm:text-2xl font-black text-indigo-900 mt-1">${p2Score.toFixed(2)} / 4.0</div>
+            <span class="text-[11px] text-slate-500">Chuẩn Bộ GD&ĐT</span>
+          </div>
+          <div class="p-4 bg-violet-50 rounded-2xl border border-violet-200">
+            <span class="text-xs font-bold text-violet-700 uppercase">Phần III: Trả lời ngắn</span>
+            <div class="text-xl sm:text-2xl font-black text-violet-900 mt-1">${p3Score.toFixed(2)} / 3.0</div>
+            <span class="text-[11px] text-slate-500">6 câu (0.5đ/câu)</span>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-2 text-left">
+          <div class="flex items-center gap-2 text-teal-800 font-bold text-sm">
+            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            Nhận Xét & Lời Khuyên Dành Riêng Cho Em:
+          </div>
+          <p class="text-slate-700 text-sm leading-relaxed">
+            ${personalizedComment}
+          </p>
+        </div>
+
+        <div class="p-3 bg-slate-100 rounded-xl text-xs text-slate-600 text-center">
+          💡 Toàn bộ đáp án đúng và lời giải chi tiết đã được mở bên dưới từng câu hỏi để em đối chiếu.
+        </div>
+      `;
+      resCard.classList.remove('hidden');
+
+      resCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(renderMath, 60);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadPracticeData(1, false);
+      setTimeout(renderMath, 250);
+    });
+  </script>
+</body>
+</html>
