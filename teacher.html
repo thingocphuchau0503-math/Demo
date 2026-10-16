@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <!-- SCRIPT XÁC THỰC MẬT KHẨU TÁCH RIÊNG (LUÔN SẴN SÀNG) -->
+  <!-- SCRIPT XÁC THỰC MẬT KHẨU TÁCH RIÊNG -->
   <script>
     const TEACHER_ADMIN_KEY = "thayhau121@2026";
 
@@ -113,7 +113,7 @@
       <!-- Navigation Tabs -->
       <div class="flex border-b border-slate-200 bg-white rounded-t-xl px-4 pt-2 shadow-sm gap-2 overflow-x-auto">
         <button id="tabBtnAssignments" onclick="switchTeacherTab('assignments')" class="py-3 px-5 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 transition flex items-center gap-2 whitespace-nowrap">
-          ⚡ Soạn Đề Thi Azota & Bài Giảng
+          ⚡ Soạn Đề Thi Trực Tuyến & Bài Giảng
         </button>
         <button id="tabBtnReviewStudents" onclick="switchTeacherTab('reviewStudents')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition flex items-center gap-2 whitespace-nowrap">
           👤 Duyệt Tài Khoản (<span id="pendingCountBadge" class="text-rose-600 font-bold">0</span>)
@@ -126,7 +126,7 @@
         </button>
       </div>
 
-      <!-- ==================== TAB: SOẠN ĐỀ THI AZOTA EDITOR & KHO BÀI ==================== -->
+      <!-- ==================== TAB: SOẠN ĐỀ THI TRỰC TUYẾN & KHO BÀI ==================== -->
       <section id="tabContentAssignments" class="space-y-6">
 
         <div class="flex items-center justify-between bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex-wrap gap-3">
@@ -135,7 +135,7 @@
             <span class="text-sm font-bold text-slate-700">Chế độ tạo:</span>
             <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50">
               <button type="button" id="subTabBtnOnlineExam" onclick="switchAssignmentSubTab('onlineExam')" class="py-1.5 px-3 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-sm transition">
-                ⚡ Trình soạn đề Azota Editor (Cấu trúc mới)
+                ⚡ Soạn đề thi trực tuyến (Cấu trúc mới)
               </button>
               <button type="button" id="subTabBtnStandard" onclick="switchAssignmentSubTab('standard')" class="py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition">
                 📁 Đăng thường (Link / Tài liệu Drive / Nhúng Web)
@@ -150,7 +150,7 @@
           </div>
         </div>
 
-        <!-- AZOTA EDITOR GIAO DIỆN 2 CỘT -->
+        <!-- TRÌNH SOẠN ĐỀ GIAO DIỆN 2 CỘT -->
         <div id="subTabContentOnlineExam" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
           
           <div class="p-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
@@ -213,11 +213,11 @@
               <div id="azotaLivePreviewContainer" class="flex-1 overflow-y-auto p-5 space-y-6"></div>
             </div>
 
-            <!-- Cột phải: Khung gõ text Azota -->
+            <!-- Cột phải: Khung gõ text -->
             <div class="flex flex-col h-full bg-white">
               <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs">
                 <span class="font-bold text-slate-700 flex items-center gap-1.5">
-                  📝 Khung soạn thảo cú pháp Azota (Gõ hoặc dán từ Word)
+                  📝 Khung soạn thảo cú pháp (Gõ hoặc dán từ Word)
                 </span>
                 <span class="text-[11px] text-slate-500">Tự động nhận diện A. B. C. D. và Đúng/Sai</span>
               </div>
@@ -472,7 +472,7 @@
 
   </div>
 
-  <!-- SCRIPT LOGIC (AZOTA PARSER & API GOOGLE SHEETS) -->
+  <!-- SCRIPT LOGIC (PARSER & API GOOGLE SHEETS) -->
   <script type="module">
     import { getSheetData, postSheetData } from './api.js';
 
@@ -484,7 +484,7 @@
     window.initDashboardData = () => {
       const attDateEl = document.getElementById('attendanceDate');
       if (attDateEl) attDateEl.valueAsDate = new Date();
-      loadDefaultAzotaContent();
+      loadDefaultExamContent();
       loadPendingStudents();
       loadStudents().then(() => calculateCumulativeAttendance());
       loadLeaveRequests();
@@ -522,7 +522,7 @@
         : "py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition";
     };
 
-    function loadDefaultAzotaContent() {
+    function loadDefaultExamContent() {
       const defaultText = [
         "PHẦN I",
         "Câu 1: Cho hàm số $y = f(x)$ có bảng biến thiên như sau. Giá trị cực đại của hàm số đã cho là:",
@@ -930,7 +930,7 @@
           div.innerHTML = '<div class="flex-1 min-w-[200px]">' +
               '<div class="flex items-center gap-2">' +
                 '<span class="text-[11px] font-semibold px-2 py-0.5 rounded ' + tagColor + '">' + tagLabel + '</span>' +
-                (item.assignmentType === 'new_format' ? '<span class="text-[10px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded">⚡ Đề thi Azota</span>' : '') +
+                (item.assignmentType === 'new_format' ? '<span class="text-[10px] font-bold bg-purple-100 text-purple-700 px-2 py-0.5 rounded">⚡ Đề thi trực tuyến</span>' : '') +
                 '<h4 class="font-bold text-slate-800 text-sm">' + item.title + '</h4>' +
               '</div>' +
               '<p class="text-[11px] text-slate-400 mt-1">Đăng ngày: ' + (item.createdAt || 'Mới') + '</p>' +
