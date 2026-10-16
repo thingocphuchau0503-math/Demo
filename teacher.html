@@ -44,7 +44,6 @@
     </div>
   </div>
 
-  <!-- SCRIPT XÁC THỰC MẬT KHẨU TÁCH RIÊNG -->
   <script>
     const TEACHER_ADMIN_KEY = "thayhau121@2026";
 
@@ -200,7 +199,7 @@
           <!-- 2 CỘT: LIVE PREVIEW & RAW EDITOR -->
           <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 h-[680px]">
             
-            <!-- Cột trái: Live Preview (Hiển thị phân tách từng phần rõ rệt) -->
+            <!-- Cột trái: Live Preview -->
             <div class="flex flex-col h-full bg-slate-50/50 min-h-0">
               <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs shrink-0">
                 <span class="font-bold text-slate-700 flex items-center gap-1.5">
@@ -229,7 +228,6 @@
 
           </div>
 
-          <!-- Bottom bar -->
           <div class="p-2.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex flex-wrap justify-between items-center px-4 shrink-0">
             <span>💡 <strong>Hướng dẫn format:</strong> Ghi rõ dòng <code>PHẦN I</code>, <code>PHẦN II</code>, <code>PHẦN III</code>. Ở Phần II, mỗi khẳng định 1 dòng: <code>a)</code>, <code>b)</code>, <code>c)</code>, <code>d)</code> (thêm dấu <code>*</code> hoặc <code>+</code> trước ý đúng).</span>
             <span class="font-semibold text-indigo-600">KaTeX tự động</span>
@@ -473,7 +471,7 @@
 
   </div>
 
-  <!-- SCRIPT LOGIC: PHÂN TÍCH VÀ HIỂN THỊ ĐỀ THI ĐÚNG / SAI CHUẨN FORMAT -->
+  <!-- SCRIPT LOGIC: PARSER THÔNG MINH NHẬN DIỆN CHUẨN 3 PHẦN -->
   <script type="module">
     import { getSheetData, postSheetData } from './api.js';
 
@@ -523,37 +521,24 @@
         : "py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition";
     };
 
-    // MẪU ĐỀ THI MẶC ĐỊNH ĐẦY ĐỦ CẢ 3 PHẦN
     function loadDefaultExamContent() {
       const defaultText = [
-        "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn.",
-        "Thí sinh trả lời từ câu 1 đến câu 2. Mỗi câu hỏi thí sinh chỉ chọn một phương án.",
-        "",
+        "PHẦN I",
         "Câu 1. Cho hàm số $y = f(x)$ xác định trên $\\mathbb{R}$ và có đạo hàm $f'(x) = x(x-2)^3(x+1)^2$. Số điểm cực trị của hàm số đã cho là",
         "A. 1.",
         "*B. 2.",
         "C. 3.",
         "D. 4.",
         "",
-        "Câu 2. Cho hàm số $y = \\frac{2x-1}{x+3}$. Đường tiệm cận đứng của đồ thị hàm số là đường thẳng",
-        "A. $x = 2$.",
-        "*B. $x = -3$.",
-        "C. $y = 2$.",
-        "D. $y = -3$.",
+        "PHẦN II",
+        "Câu 2. Cho hàm số $f(x) = x^3 - 3x^2 + 2$. Xét tính đúng sai của các khẳng định sau:",
+        "*a) Đạo hàm của hàm số là $f'(x) = 3x^2 - 6x$.",
+        "-b) Giá trị cực tiểu của hàm số bằng 0.",
+        "*c) Hàm số đồng biến trên khoảng $(2; +\\infty)$.",
+        "-d) Đồ thị có tâm đối xứng nằm trên trục hoành.",
         "",
-        "PHẦN II. Câu trắc nghiệm đúng sai.",
-        "Thí sinh trả lời câu 3. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.",
-        "",
-        "Câu 3. Cho hàm số $f(x) = x^3 - 3x^2 + 2$. Xét tính đúng sai của các khẳng định sau:",
-        "+a) Đạo hàm của hàm số là $f'(x) = 3x^2 - 6x$.",
-        "*b) Hàm số đồng biến trên các khoảng $(-\\infty; 0)$ và $(2; +\\infty)$.",
-        "-c) Giá trị cực tiểu của hàm số bằng 0.",
-        "+d) Phương trình $f(x) = 0$ có 3 nghiệm thực phân biệt.",
-        "",
-        "PHẦN III. Câu trắc nghiệm trả lời ngắn.",
-        "Thí sinh trả lời câu 4.",
-        "",
-        "Câu 4. Tìm số điểm cực trị của đồ thị hàm số $y = x^4 - 2x^2 + 3$.",
+        "PHẦN III",
+        "Câu 3. Tìm số điểm cực trị của hàm số $y = x^4 - 2x^2 + 3$.",
         "Đáp án: 3"
       ].join("\n");
 
@@ -599,7 +584,7 @@
       parseExamText();
     };
 
-    // THUẬT TOÁN NHẬN DẠNG FORMAT ĐỀ CHUẨN BỘ GIÁO DỤC
+    // BỘ PHÂN TÍCH CHUẨN XÁC: TÁCH RIÊNG 3 PHẦN VÀ NHẬN DIỆN ĐÚNG/SAI
     window.parseExamText = () => {
       const ta = document.getElementById('rawExamTextarea');
       if (!ta) return;
@@ -608,35 +593,36 @@
 
       let currentPart = 'part1';
       parsedExamData = { part1: [], part2: [], part3: [] };
-
       let currentQuestion = null;
 
       for (let i = 0; i < lines.length; i++) {
-        const rawLine = lines[i].trim();
+        let rawLine = lines[i].trim();
         if (!rawLine) continue;
 
-        const upper = rawLine.toUpperCase();
-        // Nhận diện dòng chuyển Phần
-        if (upper.includes('PHẦN I') || upper.includes('PHAN I') || upper.includes('PHẦN 1') || upper.includes('PHAN 1')) {
+        // Chuẩn hóa chuỗi để nhận diện tiêu đề Phần
+        const cleanUpper = rawLine.toUpperCase().replace(/\s+/g, ' ');
+
+        // 1. Nhận diện chuyển phần
+        if (/^PH[ẦA]N\s*(I|1)\b/i.test(cleanUpper)) {
           currentPart = 'part1';
           currentQuestion = null;
           continue;
-        } else if (upper.includes('PHẦN II') || upper.includes('PHAN II') || upper.includes('PHẦN 2') || upper.includes('PHAN 2')) {
+        } else if (/^PH[ẦA]N\s*(II|2)\b/i.test(cleanUpper)) {
           currentPart = 'part2';
           currentQuestion = null;
           continue;
-        } else if (upper.includes('PHẦN III') || upper.includes('PHAN III') || upper.includes('PHẦN 3') || upper.includes('PHAN 3')) {
+        } else if (/^PH[ẦA]N\s*(III|3)\b/i.test(cleanUpper)) {
           currentPart = 'part3';
           currentQuestion = null;
           continue;
         }
 
-        // Bỏ qua các dòng mô tả chung (ví dụ: "Thí sinh trả lời từ câu...")
-        if (rawLine.startsWith('Thí sinh trả lời') || rawLine.startsWith('Trong mỗi ý a')) {
+        // Bỏ qua dòng chỉ dẫn của đề thi
+        if (rawLine.startsWith('Thí sinh') || rawLine.startsWith('Trong mỗi ý')) {
           continue;
         }
 
-        // Bắt đầu Câu mới (VD: "Câu 1.", "Câu 1:", "1.", "1:")
+        // 2. Nhận diện dòng bắt đầu Câu hỏi (VD: "Câu 1.", "Câu 1:", "1.", "1:")
         const questionMatch = rawLine.match(/^(?:Câu\s*\d+[\.:]|\d+[\.:])\s*(.*)/i);
         if (questionMatch) {
           currentQuestion = {
@@ -645,7 +631,7 @@
             imageUrl: '',
             options: [],
             correctAnswer: 'A',
-            items: [], // Dành riêng cho 4 ý a,b,c,d của Phần II
+            items: [],
             points: currentPart === 'part1' ? 0.25 : (currentPart === 'part2' ? 1.0 : 0.5)
           };
           parsedExamData[currentPart].push(currentQuestion);
@@ -654,8 +640,8 @@
 
         if (!currentQuestion) continue;
 
-        // Xử lý các lựa chọn Phần I (A, B, C, D)
-        const optMatch = rawLine.match(/^(\*?|\+?)([A-D])[\.:]\s*(.*)/i);
+        // 3. Nhận diện Lựa chọn Phần I (A, B, C, D)
+        const optMatch = rawLine.match(/^(\*?|\+?)\s*([A-D])[\.:]\s*(.*)/i);
         if (optMatch && currentPart === 'part1') {
           const isCorrect = (optMatch[1] === '*' || optMatch[1] === '+');
           const letter = optMatch[2].toUpperCase();
@@ -665,12 +651,12 @@
           continue;
         }
 
-        // Xử lý các khẳng định Phần II: mỗi câu khẳng định là 1 hàng a), b), c), d)
-        // Nhận diện dấu *, +, - đứng trước để biết đúng hay sai
-        const itemMatch = rawLine.match(/^(\*?|\+?|\-?)([a-d])[\)\.]\s*(.*)/i);
+        // 4. Nhận diện các ý Phần II: a), b), c), d)
+        // Chấp nhận các ký hiệu: *, +, -, hoặc gạch ngang Word: –, —
+        const itemMatch = rawLine.match(/^(\*|\+|\-|\–|\—)?\s*([a-d])[\)\.]\s*(.*)/i);
         if (itemMatch && currentPart === 'part2') {
-          const mark = itemMatch[1];
-          // Dấu * hoặc + là ĐÚNG, dấu - hoặc không dấu là SAI
+          const mark = itemMatch[1] || '';
+          // Nếu có dấu * hoặc + là ĐÚNG; dấu -, gạch ngang hoặc không dấu là SAI
           const isCorrect = (mark === '*' || mark === '+');
           currentQuestion.items.push({
             letter: itemMatch[2].toLowerCase(),
@@ -680,20 +666,20 @@
           continue;
         }
 
-        // Xử lý đáp án trả lời ngắn Phần III
+        // 5. Nhận diện Đáp án Phần III (Trả lời ngắn)
         const ansMatch = rawLine.match(/^(?:Đáp án|Đáp số|ĐA|DA)[\.:]\s*(.*)/i);
         if (ansMatch && currentPart === 'part3') {
           currentQuestion.correctAnswer = ansMatch[1].trim();
           continue;
         }
 
-        // Nếu dòng là link ảnh đính kèm
+        // 6. Nhận diện ảnh
         if (rawLine.startsWith('http://') || rawLine.startsWith('https://')) {
           currentQuestion.imageUrl = rawLine;
           continue;
         }
 
-        // Nếu là dòng text mô tả tiếp theo của đề
+        // 7. Nối các dòng văn bản mô tả thêm của đề bài
         if (currentPart === 'part1' && currentQuestion.options.length === 0) {
           currentQuestion.question += ' ' + rawLine;
         } else if (currentPart === 'part2' && currentQuestion.items.length === 0) {
@@ -706,7 +692,7 @@
       renderLivePreview();
     };
 
-    // RENDER XEM TRƯỚC: PHÂN TÁCH PHẦN I, PHẦN II, PHẦN III RÕ RÀNG
+    // RENDER GIAO DIỆN XEM TRƯỚC: PHÂN TÁCH PHẦN I, PHẦN II, PHẦN III ĐÚNG CHUẨN
     function renderLivePreview() {
       const container = document.getElementById('examLivePreviewContainer');
       const badge = document.getElementById('previewStatsBadge');
@@ -728,7 +714,7 @@
 
       var qIndexCounter = 1;
 
-      // ==================== KHUNG PHẦN I ====================
+      // ==================== KHUNG PHẦN I: TRẮC NGHIỆM 4 PHƯƠNG ÁN ====================
       if (parsedExamData.part1.length > 0) {
         var sec1 = document.createElement('div');
         sec1.className = "space-y-4";
@@ -768,7 +754,7 @@
         container.appendChild(sec1);
       }
 
-      // ==================== KHUNG PHẦN II (ĐÚNG / SAI 4 HÀNG CÓ TÍCH CHỌN) ====================
+      // ==================== KHUNG PHẦN II: TRẮC NGHIỆM ĐÚNG / SAI 4 HÀNG ====================
       if (parsedExamData.part2.length > 0) {
         var sec2 = document.createElement('div');
         sec2.className = "space-y-4 pt-2";
@@ -777,29 +763,27 @@
           '<span class="text-[11px] text-purple-700">Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.</span>' +
         '</div>';
 
-        parsedExamData.part2.forEach(function(q, qIdx) {
+        parsedExamData.part2.forEach(function(q) {
           var card = document.createElement('div');
           card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3 text-xs";
 
-          // Tạo 4 hàng khẳng định a, b, c, d
           var defaultLetters = ['a', 'b', 'c', 'd'];
           var itemsHtml = '';
           
           for (var itemI = 0; itemI < 4; itemI++) {
             var item = (q.items && q.items[itemI]) ? q.items[itemI] : { letter: defaultLetters[itemI], text: '(Chưa nhập khẳng định)', isCorrect: false };
-            var isTrue = item.isCorrect === true;
+            var isTrue = (item.isCorrect === true);
 
             itemsHtml += '<div class="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 bg-slate-50/70 gap-3">' +
               '<div class="flex-1 text-slate-800">' +
-                '<span class="font-bold text-purple-700 mr-1">' + item.letter + ')</span>' +
+                '<span class="font-bold text-purple-700 mr-1.5">' + item.letter + ')</span>' +
                 '<span>' + item.text + '</span>' +
               '</div>' +
-              // Cụm nút tích chọn Đúng / Sai trực quan
-              '<div class="flex items-center gap-2 shrink-0 font-bold">' +
-                '<span class="px-2.5 py-1 rounded-md text-[11px] flex items-center gap-1 ' + (isTrue ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-200 text-slate-500 opacity-60') + '">' +
+              '<div class="flex items-center gap-1.5 shrink-0 font-bold">' +
+                '<span class="px-2.5 py-1 rounded-md text-[11px] flex items-center gap-1 ' + (isTrue ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-200 text-slate-400') + '">' +
                   (isTrue ? '●' : '○') + ' Đúng' +
                 '</span>' +
-                '<span class="px-2.5 py-1 rounded-md text-[11px] flex items-center gap-1 ' + (!isTrue ? 'bg-rose-600 text-white shadow-xs' : 'bg-slate-200 text-slate-500 opacity-60') + '">' +
+                '<span class="px-2.5 py-1 rounded-md text-[11px] flex items-center gap-1 ' + (!isTrue ? 'bg-rose-600 text-white shadow-xs' : 'bg-slate-200 text-slate-400') + '">' +
                   (!isTrue ? '●' : '○') + ' Sai' +
                 '</span>' +
               '</div>' +
@@ -821,7 +805,7 @@
         container.appendChild(sec2);
       }
 
-      // ==================== KHUNG PHẦN III (TRẢ LỜI NGẮN) ====================
+      // ==================== KHUNG PHẦN III: TRẢ LỜI NGẮN ====================
       if (parsedExamData.part3.length > 0) {
         var sec3 = document.createElement('div');
         sec3.className = "space-y-4 pt-2";
@@ -850,7 +834,6 @@
         container.appendChild(sec3);
       }
 
-      // Render KaTeX cho toàn bộ các phần
       if (window.renderMathInElement) {
         renderMathInElement(container, {
           delimiters: [
