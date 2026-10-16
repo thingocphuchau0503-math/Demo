@@ -17,7 +17,7 @@
     <div class="bg-white max-w-md w-full rounded-2xl shadow-xl border border-slate-200 p-8 space-y-6">
       
       <div class="text-center">
-        <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3">
+        <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-3xl mb-3 shadow-inner">
           🎓
         </div>
         <h2 class="text-xl font-bold text-slate-800" id="authTitle">Cổng Học Sinh Lớp 12.1</h2>
@@ -111,6 +111,10 @@
         </div>
       </form>
 
+      <div class="pt-2 text-center border-t border-slate-100">
+        <a href="index.html" class="text-xs text-slate-400 hover:text-indigo-600 transition">← Quay lại trang chủ</a>
+      </div>
+
     </div>
   </div>
 
@@ -136,7 +140,7 @@
       </div>
     </header>
 
-    <main class="max-w-5xl mx-auto p-6 space-y-6">
+    <main class="max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
       <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-6 text-white shadow-md">
         <h2 class="text-xl font-bold mb-1" id="bannerGreeting">Chào em!</h2>
         <p class="text-xs text-indigo-100">Chúc em học tập hiệu quả cùng Thầy Hậu.</p>
@@ -144,52 +148,117 @@
 
       <!-- Điều hướng 3 tabs -->
       <div class="flex border-b border-slate-200 bg-white rounded-t-xl px-4 pt-2 shadow-sm gap-2 overflow-x-auto">
-        <button id="tabBtnLecture" onclick="switchMainTab('lecture')" class="py-3 px-5 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 transition">📖 Bài Giảng</button>
-        <button id="tabBtnPractice" onclick="switchMainTab('practice')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition">📝 Bài Tập & Thi Online</button>
-        <button id="tabBtnAttendance" onclick="switchMainTab('attendance')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition">📅 Chuyên Cần & Đơn Phép</button>
+        <button id="tabBtnLecture" onclick="switchMainTab('lecture')" class="py-3 px-5 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 transition whitespace-nowrap">
+          📖 Bài Giảng
+        </button>
+        <button id="tabBtnPractice" onclick="switchMainTab('practice')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition whitespace-nowrap">
+          📝 Bài Tập & Thi Online
+        </button>
+        <button id="tabBtnAttendance" onclick="switchMainTab('attendance')" class="py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition whitespace-nowrap">
+          📅 Chuyên Cần & Đơn Phép
+        </button>
       </div>
 
+      <!-- TAB 1: BÀI GIẢNG -->
       <div id="tabContentLecture" class="space-y-4">
-        <div id="lectureListContainer" class="space-y-4"><p class="text-center py-10 text-slate-400 text-sm">Đang tải bài giảng...</p></div>
+        <div id="lectureListContainer" class="space-y-4">
+          <p class="text-center py-10 text-slate-400 text-sm">Đang tải bài giảng...</p>
+        </div>
       </div>
 
+      <!-- TAB 2: BÀI TẬP & THI ONLINE -->
       <div id="tabContentPractice" class="space-y-4 hidden">
-        <div id="practiceListContainer" class="space-y-4"><p class="text-center py-10 text-slate-400 text-sm">Đang tải bài tập...</p></div>
+        <div id="practiceListContainer" class="space-y-4">
+          <p class="text-center py-10 text-slate-400 text-sm">Đang tải bài tập...</p>
+        </div>
       </div>
 
+      <!-- TAB 3: CHUYÊN CẦN & ĐƠN PHÉP -->
       <div id="tabContentAttendance" class="space-y-6 hidden">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="space-y-4">
             <section class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
               <h3 class="font-bold text-slate-800 text-sm">Tạo Đơn Xin Phép</h3>
               <form id="leaveRequestForm" class="space-y-3">
-                <select id="leaveType" class="w-full border border-slate-300 rounded-lg p-2 text-xs">
-                  <option value="absent">Nghỉ học</option>
-                  <option value="late">Vào học muộn</option>
-                </select>
-                <input type="date" id="leaveDate" required class="w-full border border-slate-300 rounded-lg p-2 text-xs">
-                <textarea id="leaveReason" rows="3" required placeholder="Lý do..." class="w-full border border-slate-300 rounded-lg p-2 text-xs"></textarea>
-                <button type="submit" class="w-full py-2 bg-indigo-600 text-white rounded-lg text-xs font-semibold">Gửi Đơn</button>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Loại đơn:</label>
+                  <select id="leaveType" class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none bg-white">
+                    <option value="absent">Nghỉ học</option>
+                    <option value="late">Vào học muộn</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Ngày xin phép:</label>
+                  <input type="date" id="leaveDate" required class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 mb-1">Lý do cụ thể:</label>
+                  <textarea id="leaveReason" rows="3" required placeholder="Em xin phép nghỉ/vào muộn vì..." class="w-full border border-slate-300 rounded-lg p-2 text-xs outline-none"></textarea>
+                </div>
+                <button type="submit" id="btnSubmitLeave" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold transition">
+                  Gửi Đơn Đến Thầy Hậu
+                </button>
               </form>
             </section>
           </div>
-          <section class="md:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-            <h3 class="font-bold text-slate-800 text-sm mb-3">Lịch Sử Chuyên Cần</h3>
-            <table class="w-full text-left text-xs">
-              <tbody id="myAttendanceHistoryBody"><tr><td class="text-center py-4 text-slate-400">Đang tải...</td></tr></tbody>
-            </table>
+          
+          <section class="md:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <h3 class="font-bold text-slate-800 text-sm">Lịch Sử Điểm Danh & Đơn Phép</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-50 text-slate-600 border-b border-slate-200">
+                  <tr>
+                    <th class="py-2.5 px-3">Ngày</th>
+                    <th class="py-2.5 px-3">Trạng thái</th>
+                    <th class="py-2.5 px-3">Ghi chú</th>
+                  </tr>
+                </thead>
+                <tbody id="myAttendanceHistoryBody" class="divide-y divide-slate-100">
+                  <tr><td colspan="3" class="text-center py-4 text-slate-400">Đang tải lịch sử...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </section>
         </div>
       </div>
     </main>
+
+    <!-- MODAL LÀM BÀI THI TRỰC TUYẾN (AZOTA EXAM PLAYER) -->
+    <div id="examPlayerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4 hidden">
+      <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[95vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="flex justify-between items-center p-4 border-b border-slate-200 bg-slate-50">
+          <div>
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-purple-100 text-purple-700">⚡ Đề thi trực tuyến</span>
+            <h3 class="font-bold text-slate-800 text-base mt-0.5" id="examPlayerTitle">Tên bài kiểm tra</h3>
+          </div>
+          <button onclick="closeExamPlayer()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-lg font-bold transition">
+            ✕
+          </button>
+        </div>
+
+        <div id="examPlayerBody" class="p-4 sm:p-6 overflow-y-auto space-y-6 flex-1">
+          <!-- Các câu hỏi render ở đây -->
+        </div>
+
+        <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-between items-center">
+          <span class="text-xs text-slate-500 font-medium">Lưu ý kiểm tra kỹ tất cả các câu trước khi bấm nộp bài.</span>
+          <button onclick="submitExamAnswers()" id="btnSubmitExam" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow-md">
+            Hoàn Thành & Nộp Bài Thi
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script type="module">
     import { getSheetData, postSheetData } from './api.js';
 
     let currentStudent = null;
+    let allAssignments = [];
+    let activeExamTask = null;
+    let studentExamAnswers = { part1: {}, part2: {}, part3: {} };
 
-    // Chuyển đổi giữa Đăng nhập và Đăng ký
     window.toggleAuthMode = (mode) => {
       const loginF = document.getElementById('studentLoginForm');
       const regF = document.getElementById('studentRegisterForm');
@@ -209,7 +278,7 @@
       }
     };
 
-    // Xử lý Đăng ký
+    // Đăng ký
     document.getElementById('studentRegisterForm').onsubmit = async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnRegSubmit');
@@ -238,8 +307,8 @@
         succ.innerText = "🎉 Đăng ký thành công! Vui lòng chờ Thầy Hậu phê duyệt tài khoản của em nhé.";
         succ.classList.remove('hidden');
         document.getElementById('studentRegisterForm').reset();
-      } catch (e) {
-        err.innerText = e.message || "Lỗi đăng ký, vui lòng thử lại!";
+      } catch (errObj) {
+        err.innerText = errObj.message || "Lỗi đăng ký, vui lòng thử lại!";
         err.classList.remove('hidden');
       } finally {
         btn.innerText = "Gửi Yêu Cầu Đăng Ký";
@@ -247,7 +316,7 @@
       }
     };
 
-    // Xử lý Đăng nhập
+    // Đăng nhập
     document.getElementById('studentLoginForm').onsubmit = async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnLoginSubmit');
@@ -266,8 +335,8 @@
         sessionStorage.setItem('current_student', JSON.stringify(student));
 
         showDashboard(student);
-      } catch (e) {
-        err.innerText = e.message;
+      } catch (errObj) {
+        err.innerText = errObj.message;
         err.classList.remove('hidden');
       } finally {
         btn.innerText = "Đăng Nhập";
@@ -280,7 +349,10 @@
       document.getElementById('studentDashboard').classList.remove('hidden');
       document.getElementById('headerStudentName').innerText = s.fullName;
       document.getElementById('headerStudentEmail').innerText = s.email;
-      document.getElementById('bannerGreeting').innerText = `Chào em, ${s.fullName}!`;
+      document.getElementById('bannerGreeting').innerText = 'Chào em, ' + s.fullName + '!';
+
+      loadStudentAssignments();
+      loadMyAttendanceHistory();
     }
 
     window.logoutStudent = () => {
@@ -288,7 +360,406 @@
       window.location.reload();
     };
 
-    // Kiểm tra phiên đăng nhập
+    // Tải danh sách bài giảng & bài tập
+    async function loadStudentAssignments() {
+      const lectureContainer = document.getElementById('lectureListContainer');
+      const practiceContainer = document.getElementById('practiceListContainer');
+
+      lectureContainer.innerHTML = '<p class="text-center py-8 text-slate-400 text-sm">Đang tải bài giảng từ hệ thống...</p>';
+      practiceContainer.innerHTML = '<p class="text-center py-8 text-slate-400 text-sm">Đang tải bài tập từ hệ thống...</p>';
+
+      try {
+        allAssignments = await getSheetData('getAssignments');
+        const submissions = await getSheetData('getSubmissions', {});
+        const mySubs = {};
+        (submissions || []).forEach(sub => {
+          if (sub.studentId === currentStudent.id) {
+            mySubs[sub.assignmentId] = sub;
+          }
+        });
+
+        renderAssignments(allAssignments, mySubs);
+      } catch (err) {
+        lectureContainer.innerHTML = '<p class="text-center py-8 text-rose-500 text-sm">Không thể tải dữ liệu: ' + err.message + '</p>';
+        practiceContainer.innerHTML = '<p class="text-center py-8 text-rose-500 text-sm">Không thể tải dữ liệu: ' + err.message + '</p>';
+      }
+    }
+
+    function renderAssignments(list, subMap) {
+      const lectureContainer = document.getElementById('lectureListContainer');
+      const practiceContainer = document.getElementById('practiceListContainer');
+
+      lectureContainer.innerHTML = '';
+      practiceContainer.innerHTML = '';
+
+      const lectures = list.filter(item => item.category === 'lecture');
+      const practices = list.filter(item => item.category === 'homework' || item.category === 'exam');
+
+      // 1. Render Bài giảng
+      if (lectures.length === 0) {
+        lectureContainer.innerHTML = '<p class="text-center py-8 text-slate-400 text-sm">Hiện chưa có bài giảng nào được công bố.</p>';
+      } else {
+        lectures.slice().reverse().forEach(item => {
+          const div = document.createElement('div');
+          div.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3";
+          
+          let contentHtml = '';
+          if (item.fileUrl) {
+            contentHtml += '<div class="pt-1"><a href="' + item.fileUrl + '" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold border border-indigo-200 transition">📄 Mở tài liệu bài giảng</a></div>';
+          }
+          if (item.embedHtml) {
+            contentHtml += '<div class="mt-2 p-3 bg-slate-50 rounded-xl border border-slate-200 overflow-hidden text-xs">' + item.embedHtml + '</div>';
+          }
+
+          div.innerHTML = '<div class="flex items-center justify-between gap-2">' +
+              '<h3 class="font-bold text-slate-800 text-sm">' + item.title + '</h3>' +
+              '<span class="text-[11px] text-slate-400">' + (item.createdAt || 'Mới') + '</span>' +
+            '</div>' +
+            contentHtml;
+          lectureContainer.appendChild(div);
+        });
+      }
+
+      // 2. Render Bài tập & Thi online
+      if (practices.length === 0) {
+        practiceContainer.innerHTML = '<p class="text-center py-8 text-slate-400 text-sm">Hiện chưa có bài tập hoặc đề kiểm tra nào.</p>';
+      } else {
+        practices.slice().reverse().forEach(item => {
+          const sub = subMap[item.id];
+          const div = document.createElement('div');
+          div.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3";
+
+          let tag = item.category === 'exam' 
+            ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-700">Đề kiểm tra</span>'
+            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700">Bài rèn luyện</span>';
+
+          let statusCol = '<span class="text-xs text-rose-500 font-semibold">Chưa làm</span>';
+          let actionCol = '';
+
+          if (sub && (sub.completionStatus === 'completed' || sub.score !== '')) {
+            const scoreDisplay = (sub.score !== undefined && sub.score !== '') ? (' - ' + sub.score + ' điểm') : '';
+            statusCol = '<span class="text-xs text-emerald-600 font-bold">✅ Đã nộp' + scoreDisplay + '</span>';
+            if (sub.feedback) {
+              statusCol += '<p class="text-[11px] text-slate-500 italic mt-0.5">Lời phê của thầy: ' + sub.feedback + '</p>';
+            }
+          }
+
+          if (item.assignmentType === 'new_format') {
+            actionCol = '<button onclick="openExamPlayer(\'' + item.id + '\')" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition shadow-sm">' +
+              (sub ? 'Xem lại bài thi' : '⚡ Bắt đầu làm bài') +
+            '</button>';
+          } else if (item.fileUrl) {
+            actionCol = '<a href="' + item.fileUrl + '" target="_blank" class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold border border-indigo-200 transition">📄 Xem đề bài</a>';
+          }
+
+          div.innerHTML = '<div class="flex flex-wrap items-center justify-between gap-3">' +
+              '<div>' +
+                '<div class="flex items-center gap-2">' +
+                  tag +
+                  '<h3 class="font-bold text-slate-800 text-sm">' + item.title + '</h3>' +
+                '</div>' +
+                '<p class="text-[11px] text-slate-400 mt-1">Hạn nộp: ' + (item.deadline ? new Date(item.deadline).toLocaleString('vi-VN') : 'Không giới hạn') + '</p>' +
+              '</div>' +
+              '<div class="flex items-center gap-4">' +
+                '<div class="text-right">' + statusCol + '</div>' +
+                actionCol +
+              '</div>' +
+            '</div>';
+          practiceContainer.appendChild(div);
+        });
+      }
+
+      // Tự động render KaTeX cho toàn bộ giao diện bài tập
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ]
+        });
+      }
+    }
+
+    // ==================== LÀM BÀI THI TRỰC TUYẾN ====================
+    window.openExamPlayer = (taskId) => {
+      const task = allAssignments.find(t => t.id === taskId);
+      if (!task) return;
+
+      activeExamTask = task;
+      studentExamAnswers = { part1: {}, part2: {}, part3: {} };
+
+      let examData = null;
+      try {
+        examData = typeof task.examData === 'string' ? JSON.parse(task.examData) : (task.examData || {});
+      } catch (e) {
+        examData = {};
+      }
+
+      document.getElementById('examPlayerTitle').innerText = task.title + ' (' + (task.duration || 50) + ' phút)';
+      const container = document.getElementById('examPlayerBody');
+      container.innerHTML = '';
+
+      let qIndex = 1;
+
+      // Render Phần I
+      if (examData.part1 && examData.part1.length > 0) {
+        const sec1 = document.createElement('div');
+        sec1.className = "space-y-4";
+        sec1.innerHTML = '<div class="p-3 bg-indigo-50 border border-indigo-100 rounded-xl font-bold text-xs text-indigo-900">' +
+          'PHẦN I: Trắc nghiệm 4 lựa chọn (Mỗi câu chọn một đáp án đúng)' +
+        '</div>';
+
+        examData.part1.forEach((q, idx) => {
+          const card = document.createElement('div');
+          card.className = "p-4 rounded-xl border border-slate-200 space-y-3 bg-white";
+          
+          const optHtml = ['A', 'B', 'C', 'D'].map((letter, optI) => {
+            const optText = (q.options && q.options[optI]) ? q.options[optI] : '';
+            return '<label class="flex items-start gap-2 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer transition text-xs">' +
+              '<input type="radio" name="p1_q_' + idx + '" value="' + letter + '" onchange="recordPart1Answer(' + idx + ', \'' + letter + '\')" class="mt-0.5">' +
+              '<span class="font-bold">' + letter + '.</span>' +
+              '<span>' + optText + '</span>' +
+            '</label>';
+          }).join('');
+
+          card.innerHTML = '<div class="font-semibold text-xs leading-relaxed text-slate-800">' +
+            '<span class="font-bold text-indigo-600">Câu ' + (qIndex++) + ':</span> ' + q.question +
+          '</div>' +
+          '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">' + optHtml + '</div>';
+
+          sec1.appendChild(card);
+        });
+        container.appendChild(sec1);
+      }
+
+      // Render Phần II
+      if (examData.part2 && examData.part2.length > 0) {
+        const sec2 = document.createElement('div');
+        sec2.className = "space-y-4";
+        sec2.innerHTML = '<div class="p-3 bg-purple-50 border border-purple-100 rounded-xl font-bold text-xs text-purple-900">' +
+          'PHẦN II: Trắc nghiệm Đúng / Sai (Trong mỗi ý thí sinh chọn Đúng hoặc Sai)' +
+        '</div>';
+
+        examData.part2.forEach((q, idx) => {
+          const card = document.createElement('div');
+          card.className = "p-4 rounded-xl border border-slate-200 space-y-3 bg-white";
+
+          const itemsHtml = (q.items || []).map((item, itemI) => {
+            return '<div class="flex items-center justify-between p-2 rounded-lg border border-slate-100 bg-slate-50 text-xs">' +
+              '<span><strong>' + item.letter + ')</strong> ' + item.text + '</span>' +
+              '<div class="space-x-3 font-bold">' +
+                '<label class="cursor-pointer text-emerald-700"><input type="radio" name="p2_q_' + idx + '_item_' + itemI + '" value="true" onchange="recordPart2Answer(' + idx + ', ' + itemI + ', true)"> Đ</label>' +
+                '<label class="cursor-pointer text-rose-700"><input type="radio" name="p2_q_' + idx + '_item_' + itemI + '" value="false" onchange="recordPart2Answer(' + idx + ', ' + itemI + ', false)"> S</label>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+
+          card.innerHTML = '<div class="font-semibold text-xs leading-relaxed text-slate-800">' +
+            '<span class="font-bold text-purple-600">Câu ' + (qIndex++) + ':</span> ' + q.question +
+          '</div>' +
+          '<div class="space-y-1.5 pt-1">' + itemsHtml + '</div>';
+
+          sec2.appendChild(card);
+        });
+        container.appendChild(sec2);
+      }
+
+      // Render Phần III
+      if (examData.part3 && examData.part3.length > 0) {
+        const sec3 = document.createElement('div');
+        sec3.className = "space-y-4";
+        sec3.innerHTML = '<div class="p-3 bg-emerald-50 border border-emerald-100 rounded-xl font-bold text-xs text-emerald-900">' +
+          'PHẦN III: Trả lời ngắn (Nhập đáp án gọn vào ô)' +
+        '</div>';
+
+        examData.part3.forEach((q, idx) => {
+          const card = document.createElement('div');
+          card.className = "p-4 rounded-xl border border-slate-200 space-y-2.5 bg-white";
+
+          card.innerHTML = '<div class="font-semibold text-xs leading-relaxed text-slate-800">' +
+            '<span class="font-bold text-emerald-600">Câu ' + (qIndex++) + ':</span> ' + q.question +
+          '</div>' +
+          '<div class="flex items-center gap-2 pt-1 text-xs">' +
+            '<span class="font-semibold text-slate-600">Điền kết quả:</span>' +
+            '<input type="text" placeholder="Nhập đáp số..." onchange="recordPart3Answer(' + idx + ', this.value)" class="border border-slate-300 rounded px-2.5 py-1 text-xs font-mono font-bold text-emerald-700 outline-none w-36">' +
+          '</div>';
+
+          sec3.appendChild(card);
+        });
+        container.appendChild(sec3);
+      }
+
+      document.getElementById('examPlayerModal').classList.remove('hidden');
+
+      if (window.renderMathInElement) {
+        renderMathInElement(container, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ]
+        });
+      }
+    };
+
+    window.closeExamPlayer = () => {
+      if (confirm("Em có chắc chắn muốn đóng giao diện làm bài thi không?")) {
+        document.getElementById('examPlayerModal').classList.add('hidden');
+      }
+    };
+
+    window.recordPart1Answer = (qIdx, letter) => { studentExamAnswers.part1[qIdx] = letter; };
+    window.recordPart2Answer = (qIdx, itemI, val) => {
+      if (!studentExamAnswers.part2[qIdx]) studentExamAnswers.part2[qIdx] = {};
+      studentExamAnswers.part2[qIdx][itemI] = val;
+    };
+    window.recordPart3Answer = (qIdx, val) => { studentExamAnswers.part3[qIdx] = val.trim(); };
+
+    // Tự động chấm điểm bài thi Azota
+    window.submitExamAnswers = async () => {
+      if (!confirm("Xác nhận hoàn thành và nộp bài thi?")) return;
+
+      const btn = document.getElementById('btnSubmitExam');
+      btn.innerText = "Đang nộp bài...";
+      btn.disabled = true;
+
+      let examData = {};
+      try {
+        examData = typeof activeExamTask.examData === 'string' ? JSON.parse(activeExamTask.examData) : (activeExamTask.examData || {});
+      } catch(e) {}
+
+      let totalScore = 0;
+
+      // Chấm Phần I (0.25đ / câu)
+      if (examData.part1) {
+        examData.part1.forEach((q, idx) => {
+          if (studentExamAnswers.part1[idx] && studentExamAnswers.part1[idx] === q.correctAnswer) {
+            totalScore += (q.points || 0.25);
+          }
+        });
+      }
+
+      // Chấm Phần II (theo thang quy chuẩn bộ: đúng 1 ý 0.1đ, 2 ý 0.25đ, 3 ý 0.5đ, 4 ý 1.0đ)
+      if (examData.part2) {
+        examData.part2.forEach((q, idx) => {
+          let correctItems = 0;
+          (q.items || []).forEach((item, itemI) => {
+            const userChoice = studentExamAnswers.part2[idx] ? studentExamAnswers.part2[idx][itemI] : undefined;
+            if (userChoice === item.isCorrect) correctItems++;
+          });
+          if (correctItems === 1) totalScore += 0.1;
+          else if (correctItems === 2) totalScore += 0.25;
+          else if (correctItems === 3) totalScore += 0.5;
+          else if (correctItems === 4) totalScore += 1.0;
+        });
+      }
+
+      // Chấm Phần III (0.5đ / câu)
+      if (examData.part3) {
+        examData.part3.forEach((q, idx) => {
+          const userAns = studentExamAnswers.part3[idx] || '';
+          if (userAns && String(userAns).trim() === String(q.correctAnswer).trim()) {
+            totalScore += (q.points || 0.5);
+          }
+        });
+      }
+
+      totalScore = Math.round(totalScore * 100) / 100;
+
+      try {
+        await postSheetData('submitAssignment', {
+          taskId: activeExamTask.id,
+          studentId: currentStudent.id,
+          studentName: currentStudent.fullName,
+          score: totalScore,
+          completionStatus: 'completed',
+          submissionType: 'online'
+        });
+
+        alert("🎉 Em đã hoàn thành bài thi! Điểm số: " + totalScore + " điểm.");
+        document.getElementById('examPlayerModal').classList.add('hidden');
+        loadStudentAssignments();
+      } catch (err) {
+        alert("Lỗi nộp bài: " + err.message);
+      } finally {
+        btn.innerText = "Hoàn Thành & Nộp Bài Thi";
+        btn.disabled = false;
+      }
+    };
+
+    // Lịch sử chuyên cần & đơn phép
+    async function loadMyAttendanceHistory() {
+      const tbody = document.getElementById('myAttendanceHistoryBody');
+      try {
+        const attList = await getSheetData('getAttendance');
+        const myAtt = (attList || []).filter(a => a.studentId === currentStudent.id);
+
+        tbody.innerHTML = '';
+        if (myAtt.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-slate-400">Chưa có bản ghi điểm danh nào.</td></tr>';
+          return;
+        }
+
+        myAtt.reverse().forEach(item => {
+          const tr = document.createElement('tr');
+          let statusLabel = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">Có mặt</span>';
+          if (item.status === 'late') statusLabel = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Đi muộn</span>';
+          if (item.status === 'absent') statusLabel = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-100 text-rose-800">Vắng mặt</span>';
+
+          tr.innerHTML = '<td class="py-2.5 px-3 font-medium text-slate-700">' + (item.date || '') + '</td>' +
+            '<td class="py-2.5 px-3">' + statusLabel + '</td>' +
+            '<td class="py-2.5 px-3 text-slate-500">' + (item.note || '---') + '</td>';
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-rose-500">Lỗi tải lịch sử chuyên cần.</td></tr>';
+      }
+    }
+
+    // Gửi đơn xin phép
+    document.getElementById('leaveRequestForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmitLeave');
+      const type = document.getElementById('leaveType').value;
+      const date = document.getElementById('leaveDate').value;
+      const reason = document.getElementById('leaveReason').value.trim();
+
+      try {
+        btn.innerText = "Đang gửi đơn...";
+        btn.disabled = true;
+
+        await postSheetData('createLeaveRequest', {
+          studentId: currentStudent.id,
+          studentName: currentStudent.fullName,
+          type, date, reason
+        });
+
+        alert("Đã gửi đơn xin phép thành công đến Thầy Hậu!");
+        document.getElementById('leaveRequestForm').reset();
+      } catch (err) {
+        alert("Lỗi gửi đơn: " + err.message);
+      } finally {
+        btn.innerText = "Gửi Đơn Đến Thầy Hậu";
+        btn.disabled = false;
+      }
+    };
+
+    window.switchMainTab = (t) => {
+      ['lecture', 'practice', 'attendance'].forEach(tab => {
+        const isCur = (tab === t);
+        const capitalized = tab.charAt(0).toUpperCase() + tab.slice(1);
+        const section = document.getElementById('tabContent' + capitalized);
+        const btn = document.getElementById('tabBtn' + capitalized);
+
+        if (section) section.classList.toggle('hidden', !isCur);
+        if (btn) {
+          btn.className = isCur
+            ? "py-3 px-5 font-semibold text-sm border-b-2 border-indigo-600 text-indigo-600 transition whitespace-nowrap"
+            : "py-3 px-5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition whitespace-nowrap";
+        }
+      });
+    };
+
+    // Tự động khôi phục phiên đăng nhập
     const cached = sessionStorage.getItem('current_student');
     if (cached) {
       try {
@@ -296,12 +767,6 @@
         showDashboard(currentStudent);
       } catch(e) {}
     }
-
-    window.switchMainTab = (t) => {
-      ['lecture', 'practice', 'attendance'].forEach(tab => {
-        document.getElementById(`tabContent${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.toggle('hidden', tab !== t);
-      });
-    };
   </script>
 </body>
 </html>
