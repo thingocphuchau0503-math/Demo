@@ -135,7 +135,7 @@
             <span class="text-sm font-bold text-slate-700">Chế độ tạo:</span>
             <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50">
               <button type="button" id="subTabBtnOnlineExam" onclick="switchAssignmentSubTab('onlineExam')" class="py-1.5 px-3 text-xs font-bold rounded-md bg-white text-indigo-600 shadow-sm transition">
-                ⚡ Soạn đề thi trực tuyến (Cấu trúc mới)
+                ⚡ Soạn đề thi trực tuyến (Cấu trúc mới: P.I - P.II - P.III)
               </button>
               <button type="button" id="subTabBtnStandard" onclick="switchAssignmentSubTab('standard')" class="py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition">
                 📁 Đăng thường (Link / Tài liệu Drive / Nhúng Web)
@@ -165,16 +165,16 @@
             </div>
 
             <div class="flex items-center gap-2 flex-wrap text-xs">
-              <button type="button" onclick="insertAzotaTemplate('part1')" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200 transition">
-                + Mẫu Phần I (4 lựa chọn)
+              <button type="button" onclick="insertExamTemplate('part1')" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200 transition">
+                + Chèn Mẫu Phần I (4 lựa chọn)
               </button>
-              <button type="button" onclick="insertAzotaTemplate('part2')" class="px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-lg border border-purple-200 transition">
-                + Mẫu Phần II (Đúng/Sai)
+              <button type="button" onclick="insertExamTemplate('part2')" class="px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-lg border border-purple-200 transition">
+                + Chèn Mẫu Phần II (Đúng / Sai)
               </button>
-              <button type="button" onclick="insertAzotaTemplate('part3')" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg border border-emerald-200 transition">
-                + Mẫu Phần III (Trả lời ngắn)
+              <button type="button" onclick="insertExamTemplate('part3')" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg border border-emerald-200 transition">
+                + Chèn Mẫu Phần III (Trả lời ngắn)
               </button>
-              <button type="button" onclick="publishAzotaExam()" id="btnPublishAzota" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+              <button type="button" onclick="publishExam()" id="btnPublishAzota" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
                 <span>🚀 Xuất Bản Đề Thi</span>
               </button>
             </div>
@@ -183,46 +183,46 @@
           <!-- Thanh chèn công thức nhanh -->
           <div class="px-4 py-2 bg-slate-100/60 border-b border-slate-200 flex flex-wrap items-center gap-1.5 text-xs shrink-0">
             <span class="text-[11px] font-bold text-slate-500 mr-2">∑ Chèn công thức:</span>
-            <button type="button" onclick="insertMathToAzota('\\frac{a}{b}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\frac{a}{b}$</button>
-            <button type="button" onclick="insertMathToAzota('x^{2}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$x^2$</button>
-            <button type="button" onclick="insertMathToAzota('\\sqrt{x}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\sqrt{x}$</button>
-            <button type="button" onclick="insertMathToAzota('\\int f(x)dx')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\int$</button>
-            <button type="button" onclick="insertMathToAzota('\\int_{a}^{b} f(x)dx')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\int_a^b$</button>
-            <button type="button" onclick="insertMathToAzota('\\vec{u}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\vec{u}$</button>
-            <button type="button" onclick="insertMathToAzota('\\pi')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\pi$</button>
-            <button type="button" onclick="insertMathToAzota('\\infty')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\infty$</button>
-            <button type="button" onclick="insertMathToAzota('\\Delta')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\Delta$</button>
-            <button type="button" onclick="insertMathToAzota('\\in')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\in$</button>
-            <button type="button" onclick="insertMathToAzota('\\ge')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\ge$</button>
-            <button type="button" onclick="insertMathToAzota('\\le')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\le$</button>
+            <button type="button" onclick="insertMathToEditor('\\frac{a}{b}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\frac{a}{b}$</button>
+            <button type="button" onclick="insertMathToEditor('x^{2}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$x^2$</button>
+            <button type="button" onclick="insertMathToEditor('\\sqrt{x}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\sqrt{x}$</button>
+            <button type="button" onclick="insertMathToEditor('\\int f(x)dx')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\int$</button>
+            <button type="button" onclick="insertMathToEditor('\\int_{a}^{b} f(x)dx')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\int_a^b$</button>
+            <button type="button" onclick="insertMathToEditor('\\vec{u}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\vec{u}$</button>
+            <button type="button" onclick="insertMathToEditor('\\pi')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\pi$</button>
+            <button type="button" onclick="insertMathToEditor('\\infty')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\infty$</button>
+            <button type="button" onclick="insertMathToEditor('\\Delta')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\Delta$</button>
+            <button type="button" onclick="insertMathToEditor('\\in')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\in$</button>
+            <button type="button" onclick="insertMathToEditor('\\ge')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\ge$</button>
+            <button type="button" onclick="insertMathToEditor('\\le')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\le$</button>
           </div>
 
-          <!-- 2 CỘT SPLIT SCREEN: CÓ ĐỘ CAO CỐ ĐỊNH VÀ CUỘN ĐỘC LẬP -->
+          <!-- 2 CỘT: LIVE PREVIEW & RAW EDITOR -->
           <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 h-[680px]">
             
-            <!-- Cột trái: Live Preview -->
+            <!-- Cột trái: Live Preview (Hiển thị phân tách từng phần rõ rệt) -->
             <div class="flex flex-col h-full bg-slate-50/50 min-h-0">
               <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs shrink-0">
                 <span class="font-bold text-slate-700 flex items-center gap-1.5">
-                  👁️ Xem trước đề thi trực tiếp (Live Preview)
+                  👁️ Xem trước đề thi trực tiếp (Phân loại theo Phần)
                 </span>
                 <span id="previewStatsBadge" class="bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded text-[11px]">
                   0 câu hỏi
                 </span>
               </div>
-              <div id="azotaLivePreviewContainer" class="flex-1 overflow-y-auto p-5 space-y-6"></div>
+              <div id="examLivePreviewContainer" class="flex-1 overflow-y-auto p-5 space-y-6"></div>
             </div>
 
-            <!-- Cột phải: Khung gõ text có thanh cuộn mượt mà -->
+            <!-- Cột phải: Khung gõ text có thanh cuộn riêng -->
             <div class="flex flex-col h-full bg-white min-h-0">
               <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs shrink-0">
                 <span class="font-bold text-slate-700 flex items-center gap-1.5">
                   📝 Khung soạn thảo cú pháp (Gõ hoặc dán từ Word)
                 </span>
-                <span class="text-[11px] text-slate-500">Tự động nhận diện A. B. C. D. và Đúng/Sai</span>
+                <span class="text-[11px] text-slate-500">Tự động nhận diện Phần I, II, III</span>
               </div>
               <div class="flex-1 relative p-2 overflow-hidden">
-                <textarea id="azotaRawTextarea" oninput="parseAzotaText()" placeholder="Dán đề thi của Thầy vào đây..." 
+                <textarea id="rawExamTextarea" oninput="parseExamText()" placeholder="Dán đề thi vào đây..." 
                           class="w-full h-full p-3 font-mono text-xs text-slate-800 leading-relaxed outline-none resize-none border border-slate-200 rounded-xl focus:border-indigo-500 overflow-y-auto"></textarea>
               </div>
             </div>
@@ -231,7 +231,7 @@
 
           <!-- Bottom bar -->
           <div class="p-2.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex flex-wrap justify-between items-center px-4 shrink-0">
-            <span>💡 <strong>Mẹo:</strong> Đặt dấu <strong>*</strong> trước đáp án đúng (VD: <code>*A.</code>, <code>*a)</code>). Với phần III ghi <code>Đáp án: [kết quả]</code>. Đặt công thức trong <code>$...$</code></span>
+            <span>💡 <strong>Hướng dẫn format:</strong> Ghi rõ dòng <code>PHẦN I</code>, <code>PHẦN II</code>, <code>PHẦN III</code>. Ở Phần II, mỗi khẳng định 1 dòng: <code>a)</code>, <code>b)</code>, <code>c)</code>, <code>d)</code> (thêm dấu <code>*</code> hoặc <code>+</code> trước ý đúng).</span>
             <span class="font-semibold text-indigo-600">KaTeX tự động</span>
           </div>
 
@@ -473,7 +473,7 @@
 
   </div>
 
-  <!-- SCRIPT LOGIC (PARSER & API GOOGLE SHEETS) -->
+  <!-- SCRIPT LOGIC: PHÂN TÍCH VÀ HIỂN THỊ ĐỀ THI ĐÚNG / SAI CHUẨN FORMAT -->
   <script type="module">
     import { getSheetData, postSheetData } from './api.js';
 
@@ -523,68 +523,72 @@
         : "py-1.5 px-3 text-xs font-bold rounded-md text-slate-500 hover:text-slate-800 transition";
     };
 
+    // MẪU ĐỀ THI MẶC ĐỊNH ĐẦY ĐỦ CẢ 3 PHẦN
     function loadDefaultExamContent() {
       const defaultText = [
-        "PHẦN I",
-        "Câu 1: Cho hàm số $y = f(x)$ có bảng biến thiên như sau. Giá trị cực đại của hàm số đã cho là:",
-        "A. 1",
-        "*B. 2",
-        "C. 3",
-        "D. -1",
+        "PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn.",
+        "Thí sinh trả lời từ câu 1 đến câu 2. Mỗi câu hỏi thí sinh chỉ chọn một phương án.",
         "",
-        "Câu 2: Nguyên hàm của hàm số $f(x) = 2x + \\sin x$ là:",
-        "*A. $x^2 - \\cos x + C$",
-        "B. $x^2 + \\cos x + C$",
-        "C. $2 - \\cos x + C$",
-        "D. $x^2 + \\sin x + C$",
+        "Câu 1. Cho hàm số $y = f(x)$ xác định trên $\\mathbb{R}$ và có đạo hàm $f'(x) = x(x-2)^3(x+1)^2$. Số điểm cực trị của hàm số đã cho là",
+        "A. 1.",
+        "*B. 2.",
+        "C. 3.",
+        "D. 4.",
         "",
-        "PHẦN II",
-        "Câu 3: Cho hàm số $f(x) = x^3 - 3x^2 + 2$. Xét tính đúng sai của các khẳng định sau:",
-        "*a) Đạo hàm của hàm số là $f'(x) = 3x^2 - 6x$",
-        "*b) Hàm số đồng biến trên các khoảng $(-\\infty; 0)$ và $(2; +\\infty)$",
-        "c) Giá trị cực tiểu của hàm số bằng 0",
-        "*d) Phương trình $f(x) = 0$ có 3 nghiệm thực phân biệt",
+        "Câu 2. Cho hàm số $y = \\frac{2x-1}{x+3}$. Đường tiệm cận đứng của đồ thị hàm số là đường thẳng",
+        "A. $x = 2$.",
+        "*B. $x = -3$.",
+        "C. $y = 2$.",
+        "D. $y = -3$.",
         "",
-        "PHẦN III",
-        "Câu 4: Tìm số điểm cực trị của hàm số $y = x^4 - 2x^2 + 3$.",
-        "Đáp án: 3",
+        "PHẦN II. Câu trắc nghiệm đúng sai.",
+        "Thí sinh trả lời câu 3. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.",
         "",
-        "Câu 5: Tính tích phân $I = \\int_{0}^{1} 2x dx$.",
-        "Đáp án: 1"
+        "Câu 3. Cho hàm số $f(x) = x^3 - 3x^2 + 2$. Xét tính đúng sai của các khẳng định sau:",
+        "+a) Đạo hàm của hàm số là $f'(x) = 3x^2 - 6x$.",
+        "*b) Hàm số đồng biến trên các khoảng $(-\\infty; 0)$ và $(2; +\\infty)$.",
+        "-c) Giá trị cực tiểu của hàm số bằng 0.",
+        "+d) Phương trình $f(x) = 0$ có 3 nghiệm thực phân biệt.",
+        "",
+        "PHẦN III. Câu trắc nghiệm trả lời ngắn.",
+        "Thí sinh trả lời câu 4.",
+        "",
+        "Câu 4. Tìm số điểm cực trị của đồ thị hàm số $y = x^4 - 2x^2 + 3$.",
+        "Đáp án: 3"
       ].join("\n");
 
-      const ta = document.getElementById('azotaRawTextarea');
+      const ta = document.getElementById('rawExamTextarea');
       if (ta) {
         ta.value = defaultText;
-        parseAzotaText();
+        parseExamText();
       }
     }
 
-    window.insertAzotaTemplate = (part) => {
-      const ta = document.getElementById('azotaRawTextarea');
+    window.insertExamTemplate = (part) => {
+      const ta = document.getElementById('rawExamTextarea');
       if (!ta) return;
       let snippet = '';
-      const qNum = getQuestionIndex();
+      const qNum = getNextQuestionNumber();
       if (part === 'part1') {
-        snippet = "\n\nCâu " + qNum + ": Cho hàm số...\nA. Phương án 1\n*B. Phương án 2 đúng\nC. Phương án 3\nD. Phương án 4";
+        snippet = "\n\nPHẦN I\nCâu " + qNum + ". Cho hàm số...\nA. Phương án 1\n*B. Phương án 2 đúng\nC. Phương án 3\nD. Phương án 4";
       } else if (part === 'part2') {
-        snippet = "\n\nCâu " + qNum + ": Cho hàm số... Xét tính đúng sai:\n*a) Mệnh đề đúng 1\nb) Mệnh đề sai 2\n*c) Mệnh đề đúng 3\nd) Mệnh đề sai 4";
+        snippet = "\n\nPHẦN II\nCâu " + qNum + ". Cho hàm số... Xét tính đúng sai của các mệnh đề:\n*a) Mệnh đề đúng 1\n-b) Mệnh đề sai 2\n*c) Mệnh đề đúng 3\n-d) Mệnh đề sai 4";
       } else if (part === 'part3') {
-        snippet = "\n\nCâu " + qNum + ": Giá trị của biểu thức...\nĐáp án: 10";
+        snippet = "\n\nPHẦN III\nCâu " + qNum + ". Giá trị biểu thức...\nĐáp án: 10";
       }
 
       ta.value += snippet;
-      parseAzotaText();
+      parseExamText();
       ta.scrollTop = ta.scrollHeight;
     };
 
-    function getQuestionIndex() {
+    function getNextQuestionNumber() {
       const total = parsedExamData.part1.length + parsedExamData.part2.length + parsedExamData.part3.length;
       return total + 1;
     }
 
-    window.insertMathToAzota = (formula) => {
-      const ta = document.getElementById('azotaRawTextarea');
+    window.insertMathToEditor = (formula) => {
+      const ta = document.getElementById('rawExamTextarea');
       if (!ta) return;
       const start = ta.selectionStart || 0;
       const end = ta.selectionEnd || 0;
@@ -592,11 +596,12 @@
       ta.value = ta.value.substring(0, start) + wrap + ta.value.substring(end);
       ta.focus();
       ta.selectionStart = ta.selectionEnd = start + wrap.length;
-      parseAzotaText();
+      parseExamText();
     };
 
-    window.parseAzotaText = () => {
-      const ta = document.getElementById('azotaRawTextarea');
+    // THUẬT TOÁN NHẬN DẠNG FORMAT ĐỀ CHUẨN BỘ GIÁO DỤC
+    window.parseExamText = () => {
+      const ta = document.getElementById('rawExamTextarea');
       if (!ta) return;
       const text = ta.value;
       const lines = text.split('\n');
@@ -611,20 +616,27 @@
         if (!rawLine) continue;
 
         const upper = rawLine.toUpperCase();
-        if (upper.includes('PHẦN I') || upper.includes('PHAN I')) {
+        // Nhận diện dòng chuyển Phần
+        if (upper.includes('PHẦN I') || upper.includes('PHAN I') || upper.includes('PHẦN 1') || upper.includes('PHAN 1')) {
           currentPart = 'part1';
           currentQuestion = null;
           continue;
-        } else if (upper.includes('PHẦN II') || upper.includes('PHAN II')) {
+        } else if (upper.includes('PHẦN II') || upper.includes('PHAN II') || upper.includes('PHẦN 2') || upper.includes('PHAN 2')) {
           currentPart = 'part2';
           currentQuestion = null;
           continue;
-        } else if (upper.includes('PHẦN III') || upper.includes('PHAN III')) {
+        } else if (upper.includes('PHẦN III') || upper.includes('PHAN III') || upper.includes('PHẦN 3') || upper.includes('PHAN 3')) {
           currentPart = 'part3';
           currentQuestion = null;
           continue;
         }
 
+        // Bỏ qua các dòng mô tả chung (ví dụ: "Thí sinh trả lời từ câu...")
+        if (rawLine.startsWith('Thí sinh trả lời') || rawLine.startsWith('Trong mỗi ý a')) {
+          continue;
+        }
+
+        // Bắt đầu Câu mới (VD: "Câu 1.", "Câu 1:", "1.", "1:")
         const questionMatch = rawLine.match(/^(?:Câu\s*\d+[\.:]|\d+[\.:])\s*(.*)/i);
         if (questionMatch) {
           currentQuestion = {
@@ -633,7 +645,7 @@
             imageUrl: '',
             options: [],
             correctAnswer: 'A',
-            items: [],
+            items: [], // Dành riêng cho 4 ý a,b,c,d của Phần II
             points: currentPart === 'part1' ? 0.25 : (currentPart === 'part2' ? 1.0 : 0.5)
           };
           parsedExamData[currentPart].push(currentQuestion);
@@ -642,9 +654,10 @@
 
         if (!currentQuestion) continue;
 
-        const optMatch = rawLine.match(/^(\*?)([A-D])[\.:]\s*(.*)/i);
+        // Xử lý các lựa chọn Phần I (A, B, C, D)
+        const optMatch = rawLine.match(/^(\*?|\+?)([A-D])[\.:]\s*(.*)/i);
         if (optMatch && currentPart === 'part1') {
-          const isCorrect = optMatch[1] === '*';
+          const isCorrect = (optMatch[1] === '*' || optMatch[1] === '+');
           const letter = optMatch[2].toUpperCase();
           const content = optMatch[3];
           currentQuestion.options.push(content);
@@ -652,9 +665,13 @@
           continue;
         }
 
-        const itemMatch = rawLine.match(/^(\*?)([a-d])[\)\.]\s*(.*)/i);
+        // Xử lý các khẳng định Phần II: mỗi câu khẳng định là 1 hàng a), b), c), d)
+        // Nhận diện dấu *, +, - đứng trước để biết đúng hay sai
+        const itemMatch = rawLine.match(/^(\*?|\+?|\-?)([a-d])[\)\.]\s*(.*)/i);
         if (itemMatch && currentPart === 'part2') {
-          const isCorrect = itemMatch[1] === '*';
+          const mark = itemMatch[1];
+          // Dấu * hoặc + là ĐÚNG, dấu - hoặc không dấu là SAI
+          const isCorrect = (mark === '*' || mark === '+');
           currentQuestion.items.push({
             letter: itemMatch[2].toLowerCase(),
             text: itemMatch[3],
@@ -663,17 +680,20 @@
           continue;
         }
 
+        // Xử lý đáp án trả lời ngắn Phần III
         const ansMatch = rawLine.match(/^(?:Đáp án|Đáp số|ĐA|DA)[\.:]\s*(.*)/i);
         if (ansMatch && currentPart === 'part3') {
           currentQuestion.correctAnswer = ansMatch[1].trim();
           continue;
         }
 
+        // Nếu dòng là link ảnh đính kèm
         if (rawLine.startsWith('http://') || rawLine.startsWith('https://')) {
           currentQuestion.imageUrl = rawLine;
           continue;
         }
 
+        // Nếu là dòng text mô tả tiếp theo của đề
         if (currentPart === 'part1' && currentQuestion.options.length === 0) {
           currentQuestion.question += ' ' + rawLine;
         } else if (currentPart === 'part2' && currentQuestion.items.length === 0) {
@@ -683,62 +703,63 @@
         }
       }
 
-      renderAzotaLivePreview();
+      renderLivePreview();
     };
 
-    function renderAzotaLivePreview() {
-      const container = document.getElementById('azotaLivePreviewContainer');
+    // RENDER XEM TRƯỚC: PHÂN TÁCH PHẦN I, PHẦN II, PHẦN III RÕ RÀNG
+    function renderLivePreview() {
+      const container = document.getElementById('examLivePreviewContainer');
       const badge = document.getElementById('previewStatsBadge');
       if (!container) return;
       container.innerHTML = '';
 
       const totalCount = parsedExamData.part1.length + parsedExamData.part2.length + parsedExamData.part3.length;
       if (badge) {
-        badge.innerText = totalCount + ' câu hỏi (P.I: ' + parsedExamData.part1.length + ' | P.II: ' + parsedExamData.part2.length + ' | P.III: ' + parsedExamData.part3.length + ')';
+        badge.innerText = totalCount + ' câu (P.I: ' + parsedExamData.part1.length + ' | P.II: ' + parsedExamData.part2.length + ' | P.III: ' + parsedExamData.part3.length + ')';
       }
 
       if (totalCount === 0) {
         container.innerHTML = '<div class="text-center py-20 text-slate-400">' +
           '<span class="text-4xl block mb-2">📄</span>' +
-          '<p class="text-xs">Đang chờ Thầy nhập đề thi vào khung bên phải...</p>' +
+          '<p class="text-xs">Đang chờ Thầy nhập hoặc dán đề thi vào khung bên phải...</p>' +
         '</div>';
         return;
       }
 
       var qIndexCounter = 1;
 
-      // PHẦN I
+      // ==================== KHUNG PHẦN I ====================
       if (parsedExamData.part1.length > 0) {
         var sec1 = document.createElement('div');
         sec1.className = "space-y-4";
-        sec1.innerHTML = '<div class="p-2.5 bg-indigo-50/70 border border-indigo-100 rounded-xl">' +
-          '<span class="font-bold text-xs text-indigo-900 block">PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</span>' +
-          '<span class="text-[11px] text-indigo-700">Thí sinh trả lời từ câu 1 đến câu ' + parsedExamData.part1.length + '. Mỗi câu chọn một phương án.</span>' +
+        sec1.innerHTML = '<div class="p-3 bg-indigo-50 border-l-4 border-indigo-600 rounded-r-xl shadow-xs">' +
+          '<span class="font-bold text-xs text-indigo-900 block uppercase tracking-wide">PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</span>' +
+          '<span class="text-[11px] text-indigo-700">Thí sinh trả lời từ câu ' + qIndexCounter + ' đến câu ' + (qIndexCounter + parsedExamData.part1.length - 1) + '. Mỗi câu chỉ chọn một phương án.</span>' +
         '</div>';
 
         parsedExamData.part1.forEach(function(q) {
           var card = document.createElement('div');
-          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5 text-xs";
+          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3 text-xs";
           
           var optionsHtml = ['A', 'B', 'C', 'D'].map(function(letter, optI) {
             var isAns = (q.correctAnswer === letter);
             var optText = (q.options && q.options[optI]) ? q.options[optI] : '';
-            var borderClass = isAns ? 'border-emerald-300 bg-emerald-50/60 font-semibold text-emerald-800' : 'border-slate-100 bg-slate-50/50';
-            var badgeHtml = isAns ? '<span class="ml-auto text-[10px] text-emerald-600 font-bold">✓ Đáp án</span>' : '';
-            return '<div class="p-2 rounded-lg border ' + borderClass + ' flex items-start gap-1.5">' +
+            var borderClass = isAns ? 'border-emerald-300 bg-emerald-50/70 font-semibold text-emerald-800' : 'border-slate-100 bg-slate-50/60';
+            var badgeHtml = isAns ? '<span class="ml-auto text-[10px] text-emerald-600 font-bold bg-emerald-100 px-1.5 py-0.5 rounded">✓ Đáp án</span>' : '';
+            return '<div class="p-2.5 rounded-lg border ' + borderClass + ' flex items-start gap-2">' +
               '<span class="font-bold">' + letter + '.</span>' +
-              '<span>' + optText + '</span>' +
+              '<span class="flex-1">' + optText + '</span>' +
               badgeHtml +
             '</div>';
           }).join('');
 
-          var imgHtml = q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-28 rounded border object-contain my-1">' : '';
+          var imgHtml = q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-32 rounded border object-contain my-2 mx-auto">' : '';
 
-          card.innerHTML = '<div class="font-bold text-slate-800 leading-relaxed">' +
-            '<span class="text-indigo-600">Câu ' + (qIndexCounter++) + ':</span> ' + q.question +
+          card.innerHTML = '<div class="font-bold text-slate-800 leading-relaxed text-[13px]">' +
+            '<span class="text-indigo-600">Câu ' + (qIndexCounter++) + '.</span> ' + q.question +
           '</div>' +
           imgHtml +
-          '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">' +
+          '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">' +
             optionsHtml +
           '</div>';
 
@@ -747,36 +768,51 @@
         container.appendChild(sec1);
       }
 
-      // PHẦN II
+      // ==================== KHUNG PHẦN II (ĐÚNG / SAI 4 HÀNG CÓ TÍCH CHỌN) ====================
       if (parsedExamData.part2.length > 0) {
         var sec2 = document.createElement('div');
-        sec2.className = "space-y-4";
-        sec2.innerHTML = '<div class="p-2.5 bg-purple-50/70 border border-purple-100 rounded-xl">' +
-          '<span class="font-bold text-xs text-purple-900 block">PHẦN II. Câu trắc nghiệm đúng sai</span>' +
+        sec2.className = "space-y-4 pt-2";
+        sec2.innerHTML = '<div class="p-3 bg-purple-50 border-l-4 border-purple-600 rounded-r-xl shadow-xs">' +
+          '<span class="font-bold text-xs text-purple-900 block uppercase tracking-wide">PHẦN II. Câu trắc nghiệm đúng sai</span>' +
           '<span class="text-[11px] text-purple-700">Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn đúng hoặc sai.</span>' +
         '</div>';
 
-        parsedExamData.part2.forEach(function(q) {
+        parsedExamData.part2.forEach(function(q, qIdx) {
           var card = document.createElement('div');
-          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5 text-xs";
+          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3 text-xs";
 
-          var itemsHtml = (q.items || []).map(function(item) {
-            var statusBadge = item.isCorrect 
-              ? '<span class="font-bold px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800">ĐÚNG</span>' 
-              : '<span class="font-bold px-2 py-0.5 rounded text-[10px] bg-rose-100 text-rose-800">SAI</span>';
-            return '<div class="flex items-center justify-between p-2 rounded-lg border border-slate-100 bg-slate-50/60">' +
-              '<span><strong>' + item.letter + ')</strong> ' + item.text + '</span>' +
-              statusBadge +
+          // Tạo 4 hàng khẳng định a, b, c, d
+          var defaultLetters = ['a', 'b', 'c', 'd'];
+          var itemsHtml = '';
+          
+          for (var itemI = 0; itemI < 4; itemI++) {
+            var item = (q.items && q.items[itemI]) ? q.items[itemI] : { letter: defaultLetters[itemI], text: '(Chưa nhập khẳng định)', isCorrect: false };
+            var isTrue = item.isCorrect === true;
+
+            itemsHtml += '<div class="flex items-center justify-between p-2.5 rounded-lg border border-slate-100 bg-slate-50/70 gap-3">' +
+              '<div class="flex-1 text-slate-800">' +
+                '<span class="font-bold text-purple-700 mr-1">' + item.letter + ')</span>' +
+                '<span>' + item.text + '</span>' +
+              '</div>' +
+              // Cụm nút tích chọn Đúng / Sai trực quan
+              '<div class="flex items-center gap-2 shrink-0 font-bold">' +
+                '<span class="px-2.5 py-1 rounded-md text-[11px] flex items-center gap-1 ' + (isTrue ? 'bg-emerald-600 text-white shadow-xs' : 'bg-slate-200 text-slate-500 opacity-60') + '">' +
+                  (isTrue ? '●' : '○') + ' Đúng' +
+                '</span>' +
+                '<span class="px-2.5 py-1 rounded-md text-[11px] flex items-center gap-1 ' + (!isTrue ? 'bg-rose-600 text-white shadow-xs' : 'bg-slate-200 text-slate-500 opacity-60') + '">' +
+                  (!isTrue ? '●' : '○') + ' Sai' +
+                '</span>' +
+              '</div>' +
             '</div>';
-          }).join('');
+          }
 
-          var imgHtml = q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-28 rounded border object-contain my-1">' : '';
+          var imgHtml = q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-32 rounded border object-contain my-2 mx-auto">' : '';
 
-          card.innerHTML = '<div class="font-bold text-slate-800 leading-relaxed">' +
-            '<span class="text-purple-600">Câu ' + (qIndexCounter++) + ':</span> ' + q.question +
+          card.innerHTML = '<div class="font-bold text-slate-800 leading-relaxed text-[13px]">' +
+            '<span class="text-purple-600">Câu ' + (qIndexCounter++) + '.</span> ' + q.question +
           '</div>' +
           imgHtml +
-          '<div class="space-y-1.5 pt-1">' +
+          '<div class="space-y-2 pt-1">' +
             itemsHtml +
           '</div>';
 
@@ -785,28 +821,28 @@
         container.appendChild(sec2);
       }
 
-      // PHẦN III
+      // ==================== KHUNG PHẦN III (TRẢ LỜI NGẮN) ====================
       if (parsedExamData.part3.length > 0) {
         var sec3 = document.createElement('div');
-        sec3.className = "space-y-4";
-        sec3.innerHTML = '<div class="p-2.5 bg-emerald-50/70 border border-emerald-100 rounded-xl">' +
-          '<span class="font-bold text-xs text-emerald-900 block">PHẦN III. Câu trắc nghiệm trả lời ngắn</span>' +
-          '<span class="text-[11px] text-emerald-700">Thí sinh nhập đáp án ngắn vào ô kết quả.</span>' +
+        sec3.className = "space-y-4 pt-2";
+        sec3.innerHTML = '<div class="p-3 bg-emerald-50 border-l-4 border-emerald-600 rounded-r-xl shadow-xs">' +
+          '<span class="font-bold text-xs text-emerald-900 block uppercase tracking-wide">PHẦN III. Câu trắc nghiệm trả lời ngắn</span>' +
+          '<span class="text-[11px] text-emerald-700">Thí sinh nhập đáp án số/kết quả gọn vào ô trống.</span>' +
         '</div>';
 
         parsedExamData.part3.forEach(function(q) {
           var card = document.createElement('div');
-          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2 text-xs";
-          var imgHtml = q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-28 rounded border object-contain my-1">' : '';
+          card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2.5 text-xs";
+          var imgHtml = q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-32 rounded border object-contain my-2 mx-auto">' : '';
           var ansText = q.correctAnswer ? q.correctAnswer : '(Chưa nhập)';
 
-          card.innerHTML = '<div class="font-bold text-slate-800 leading-relaxed">' +
-            '<span class="text-emerald-600">Câu ' + (qIndexCounter++) + ':</span> ' + q.question +
+          card.innerHTML = '<div class="font-bold text-slate-800 leading-relaxed text-[13px]">' +
+            '<span class="text-emerald-600">Câu ' + (qIndexCounter++) + '.</span> ' + q.question +
           '</div>' +
           imgHtml +
-          '<div class="p-2 rounded-lg bg-emerald-50/40 border border-emerald-100 flex items-center justify-between">' +
-            '<span class="text-slate-600">Đáp án chính xác:</span>' +
-            '<span class="font-mono font-bold text-emerald-700 bg-white px-3 py-1 rounded border border-emerald-200">' + ansText + '</span>' +
+          '<div class="p-2.5 rounded-lg bg-emerald-50/50 border border-emerald-100 flex items-center justify-between">' +
+            '<span class="text-slate-600 font-medium">Đáp án chính xác:</span>' +
+            '<span class="font-mono font-bold text-emerald-700 bg-white px-3 py-1 rounded-md border border-emerald-200 shadow-xs text-xs">' + ansText + '</span>' +
           '</div>';
 
           sec3.appendChild(card);
@@ -814,6 +850,7 @@
         container.appendChild(sec3);
       }
 
+      // Render KaTeX cho toàn bộ các phần
       if (window.renderMathInElement) {
         renderMathInElement(container, {
           delimiters: [
@@ -824,13 +861,14 @@
       }
     }
 
-    window.publishAzotaExam = async () => {
+    // XUẤT BẢN ĐỀ THI LÊN GOOGLE SHEET
+    window.publishExam = async () => {
       const title = document.getElementById('azotaExamTitle').value.trim();
       const duration = parseInt(document.getElementById('azotaExamDuration').value) || 50;
       const btn = document.getElementById('btnPublishAzota');
 
       if (!title) {
-        alert("Thầy vui lòng nhập Tên đề thi ở thanh công cụ phía trên nhé!");
+        alert("Thầy vui lòng nhập Tên đề thi ở ô trên cùng nhé!");
         document.getElementById('azotaExamTitle').focus();
         return;
       }
@@ -865,6 +903,7 @@
       }
     };
 
+    // ĐĂNG BÀI THƯỜNG
     const stdForm = document.getElementById('createStandardForm');
     if (stdForm) {
       stdForm.onsubmit = async (e) => {
@@ -898,6 +937,7 @@
       };
     }
 
+    // TẢI KHO BÀI ĐÃ ĐĂNG
     window.loadPublishedAssignments = async () => {
       const container = document.getElementById('publishedListContainer');
       const select = document.getElementById('gradeTaskSelect');
@@ -959,6 +999,7 @@
       }
     };
 
+    // QUẢN LÝ DUYỆT HỌC SINH
     window.loadPendingStudents = async () => {
       const tbody = document.getElementById('pendingStudentsTableBody');
       const badge = document.getElementById('pendingCountBadge');
