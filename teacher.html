@@ -470,7 +470,7 @@
             <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700 uppercase tracking-wide">Chi tiết đề thi</span>
             <h3 class="font-bold text-slate-800 text-base mt-0.5" id="viewModalTitle">Tiêu đề bài kiểm tra</h3>
           </div>
-          <button onclick="closeViewModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-base font-bold transition">
+          <button onclick="window.closeViewModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-base font-bold transition">
             ✕
           </button>
         </div>
@@ -480,7 +480,7 @@
         </div>
 
         <div class="p-3 border-t border-slate-200 bg-slate-50 flex justify-end">
-          <button onclick="closeViewModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs rounded-xl transition">
+          <button onclick="window.closeViewModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs rounded-xl transition">
             Đóng cửa sổ
           </button>
         </div>
@@ -602,7 +602,7 @@
       parseExamText();
     };
 
-    // BỘ PHÂN TÍCH CÚ PHÁP CHUẨN XÁC 100%
+    // BỘ PHÂN TÍCH CÚ PHÁP
     window.parseExamText = () => {
       const ta = document.getElementById('rawExamTextarea');
       if (!ta) return;
@@ -853,7 +853,7 @@
       }
     }
 
-    // XUẤT BẢN ĐỀ THI
+    // XUẤT BẢN ĐỀ THI: SERIALIZE JSON CHUẨN
     window.publishExam = async () => {
       const title = document.getElementById('azotaExamTitle').value.trim();
       const duration = parseInt(document.getElementById('azotaExamDuration').value) || 50;
@@ -865,9 +865,11 @@
         return;
       }
 
+      parseExamText();
+
       const total = parsedExamData.part1.length + parsedExamData.part2.length + parsedExamData.part3.length;
       if (total === 0) {
-        alert("Đề thi chưa có câu hỏi nào!");
+        alert("Đề thi chưa có câu hỏi nào! Thầy vui lòng kiểm tra lại nội dung soạn thảo.");
         return;
       }
 
@@ -875,13 +877,15 @@
         btn.innerText = "Đang lưu vào Sheet...";
         btn.disabled = true;
 
+        const serializedExam = JSON.stringify(parsedExamData);
+
         await postSheetData('createAssignment', {
           category: 'exam',
           title: title,
           deadline: null,
           assignmentType: 'new_format',
           duration: duration,
-          examData: parsedExamData
+          examData: serializedExam
         });
 
         alert("Đã xuất bản đề thi '" + title + "' thành công lên Google Sheet!");
@@ -929,7 +933,7 @@
       };
     }
 
-    // TẢI KHO BÀI ĐÃ ĐĂNG: ĐÃ BỔ SUNG NÚT XEM ĐỀ CHI TIẾT
+    // TẢI KHO BÀI ĐÃ ĐĂNG
     window.loadPublishedAssignments = async () => {
       const container = document.getElementById('publishedListContainer');
       const select = document.getElementById('gradeTaskSelect');
@@ -969,10 +973,10 @@
               '<p class="text-[11px] text-slate-400 mt-1">Đăng ngày: ' + (item.createdAt || 'Mới') + '</p>' +
             '</div>' +
             '<div class="flex items-center gap-2">' +
-              '<button onclick="viewAssignmentDetails(\'' + item.id + '\')" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-lg border border-indigo-200 transition shadow-xs">' +
+              '<button type="button" onclick="window.viewAssignmentDetails(\'' + item.id + '\')" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-lg border border-indigo-200 transition shadow-xs">' +
                 '👁️ Xem đề' +
               '</button>' +
-              '<button onclick="deletePublishedAssignment(\'' + item.id + '\', \'' + item.title.replace(/'/g, "\\'") + '\')" class="px-2.5 py-1.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs rounded-lg shadow-xs">' +
+              '<button type="button" onclick="deletePublishedAssignment(\'' + item.id + '\', \'' + item.title.replace(/'/g, "\\'") + '\')" class="px-2.5 py-1.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs rounded-lg shadow-xs">' +
                 '🗑️ Xóa bài' +
               '</button>' +
             '</div>';
@@ -983,31 +987,44 @@
       }
     };
 
-    // HÀM MỞ POPUP XEM CHI TIẾT ĐỀ THI ĐÃ ĐĂNG
+    // HÀM MỞ POPUP XEM CHI TIẾT ĐỀ THI
     window.viewAssignmentDetails = (taskId) => {
-      const task = currentAssignments.find(t => t.id === taskId);
-      if (!task) return;
+      const task = currentAssignments.find(t => String(t.id) === String(taskId));
+      if (!task) {
+        alert("Không tìm thấy thông tin bài tập này!");
+        return;
+      }
 
-      document.getElementById('viewModalTitle').innerText = task.title + ' (' + (task.duration || 50) + ' phút)';
+      const modal = document.getElementById('viewExamModal');
+      const titleEl = document.getElementById('viewModalTitle');
       const body = document.getElementById('viewModalBody');
+      if (!modal || !body) return;
+
+      titleEl.innerText = task.title + ' (' + (task.duration || 50) + ' phút)';
       body.innerHTML = '';
 
       if (task.assignmentType === 'new_format') {
         let examData = task.examData;
         if (typeof examData === 'string') {
-          try { examData = JSON.parse(examData); } catch(e) { examData = {}; }
+          try {
+            examData = JSON.parse(examData);
+            if (typeof examData === 'string') examData = JSON.parse(examData);
+          } catch(e) { examData = {}; }
         }
+        examData = examData || {};
 
+        let hasQuestions = false;
         let qIndex = 1;
 
         // PHẦN I
-        if (examData.part1 && examData.part1.length > 0) {
+        if (examData.part1 && Array.isArray(examData.part1) && examData.part1.length > 0) {
+          hasQuestions = true;
           const sec = document.createElement('div');
           sec.className = "space-y-3";
-          sec.innerHTML = '<div class="p-2.5 bg-indigo-50 border border-indigo-200 rounded-lg font-bold text-xs text-indigo-900">PHẦN I. Câu trắc nghiệm 4 lựa chọn</div>';
+          sec.innerHTML = '<div class="p-2.5 bg-indigo-50 border border-indigo-200 rounded-lg font-bold text-xs text-indigo-900 uppercase">PHẦN I. Câu trắc nghiệm 4 lựa chọn</div>';
           examData.part1.forEach(q => {
             const card = document.createElement('div');
-            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs";
+            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs shadow-xs";
             const optHtml = ['A', 'B', 'C', 'D'].map((letter, optI) => {
               const isAns = (q.correctAnswer === letter);
               return '<div class="p-2 rounded border ' + (isAns ? 'border-emerald-300 bg-emerald-50 font-bold text-emerald-800' : 'border-slate-100 bg-slate-50') + ' flex items-center justify-between">' +
@@ -1016,6 +1033,7 @@
               '</div>';
             }).join('');
             card.innerHTML = '<div class="font-bold text-slate-800 text-[13px]"><span class="text-indigo-600">Câu ' + (qIndex++) + '.</span> ' + q.question + '</div>' +
+              (q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-28 rounded border object-contain my-2 mx-auto">' : '') +
               '<div class="grid grid-cols-2 gap-2 pt-1">' + optHtml + '</div>';
             sec.appendChild(card);
           });
@@ -1023,13 +1041,14 @@
         }
 
         // PHẦN II
-        if (examData.part2 && examData.part2.length > 0) {
+        if (examData.part2 && Array.isArray(examData.part2) && examData.part2.length > 0) {
+          hasQuestions = true;
           const sec = document.createElement('div');
-          sec.className = "space-y-3";
-          sec.innerHTML = '<div class="p-2.5 bg-purple-50 border border-purple-200 rounded-lg font-bold text-xs text-purple-900">PHẦN II. Câu trắc nghiệm Đúng / Sai</div>';
+          sec.className = "space-y-3 pt-2";
+          sec.innerHTML = '<div class="p-2.5 bg-purple-50 border border-purple-200 rounded-lg font-bold text-xs text-purple-900 uppercase">PHẦN II. Câu trắc nghiệm Đúng / Sai</div>';
           examData.part2.forEach(q => {
             const card = document.createElement('div');
-            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs";
+            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs shadow-xs";
             const itemsHtml = (q.items || []).map(item => {
               const isTrue = item.isCorrect === true;
               return '<div class="flex items-center justify-between p-2 rounded border border-slate-100 bg-slate-50">' +
@@ -1038,6 +1057,7 @@
               '</div>';
             }).join('');
             card.innerHTML = '<div class="font-bold text-slate-800 text-[13px]"><span class="text-purple-600">Câu ' + (qIndex++) + '.</span> ' + q.question + '</div>' +
+              (q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-28 rounded border object-contain my-2 mx-auto">' : '') +
               '<div class="space-y-1.5 pt-1">' + itemsHtml + '</div>';
             sec.appendChild(card);
           });
@@ -1045,14 +1065,16 @@
         }
 
         // PHẦN III
-        if (examData.part3 && examData.part3.length > 0) {
+        if (examData.part3 && Array.isArray(examData.part3) && examData.part3.length > 0) {
+          hasQuestions = true;
           const sec = document.createElement('div');
-          sec.className = "space-y-3";
-          sec.innerHTML = '<div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg font-bold text-xs text-emerald-900">PHẦN III. Trả lời ngắn</div>';
+          sec.className = "space-y-3 pt-2";
+          sec.innerHTML = '<div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg font-bold text-xs text-emerald-900 uppercase">PHẦN III. Trả lời ngắn</div>';
           examData.part3.forEach(q => {
             const card = document.createElement('div');
-            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs";
+            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs shadow-xs";
             card.innerHTML = '<div class="font-bold text-slate-800 text-[13px]"><span class="text-emerald-600">Câu ' + (qIndex++) + '.</span> ' + q.question + '</div>' +
+              (q.imageUrl ? '<img src="' + q.imageUrl + '" class="h-28 rounded border object-contain my-2 mx-auto">' : '') +
               '<div class="p-2 rounded bg-emerald-50 border border-emerald-100 flex items-center justify-between">' +
                 '<span>Đáp án chính xác:</span>' +
                 '<span class="font-mono font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-200">' + (q.correctAnswer || '(Chưa nhập)') + '</span>' +
@@ -1061,6 +1083,14 @@
           });
           body.appendChild(sec);
         }
+
+        if (!hasQuestions) {
+          body.innerHTML = '<div class="text-center py-12 text-slate-400 text-sm">' +
+            '<p class="text-3xl mb-2">⚠️</p>' +
+            '<p>Bài kiểm tra này chưa có nội dung câu hỏi trong cơ sở dữ liệu (tạo từ bản cũ).</p>' +
+            '<p class="text-xs text-slate-500 mt-1">Thầy vui lòng bấm nút "Xóa bài" và xuất bản lại một bài mới nhé!</p>' +
+          '</div>';
+        }
       } else {
         body.innerHTML = '<div class="space-y-3 text-xs">' +
           (task.fileUrl ? '<p><strong>Tệp đính kèm:</strong> <a href="' + task.fileUrl + '" target="_blank" class="text-indigo-600 underline">Mở liên kết</a></p>' : '') +
@@ -1068,7 +1098,7 @@
         '</div>';
       }
 
-      document.getElementById('viewExamModal').classList.remove('hidden');
+      modal.classList.remove('hidden');
 
       if (window.renderMathInElement) {
         renderMathInElement(body, {
@@ -1276,7 +1306,7 @@
           }
 
           tr.innerHTML = '<td class="py-3 px-4 font-semibold text-slate-800">' + (req.studentName || 'Học sinh') + '</td>' +
-            '<td class="py-3 px-4">' + typeBadge + '</td>' +
+            '<td class="py-3 px-4">${typeBadge}</td>' +
             '<td class="py-3 px-4 font-medium text-slate-700">' + (req.date || '---') + '</td>' +
             '<td class="py-3 px-4 text-xs text-slate-600 max-w-xs break-words">' + (req.reason || '') + '</td>' +
             '<td class="py-3 px-4 text-center">' + statusBadge + '</td>' +
