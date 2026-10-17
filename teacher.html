@@ -310,7 +310,7 @@
                 <th class="py-3 px-4">Họ và Tên</th>
                 <th class="py-3 px-4">Lớp / Trường</th>
                 <th class="py-3 px-4">Giới tính / SĐT</th>
-                <th class="py-3 px-4">Tài khoản Email Google</th>
+                <th class="py-3 px-4 text-xs font-mono text-slate-700">Tài khoản Email Google</th>
                 <th class="py-3 px-4 text-center">Trạng thái</th>
                 <th class="py-3 px-4 text-right">Thao tác phê duyệt</th>
               </tr>
@@ -853,7 +853,7 @@
       }
     }
 
-    // XUẤT BẢN ĐỀ THI: SERIALIZE JSON CHUẨN
+    // XUẤT BẢN ĐỀ THI: MÃ HÓA URL-ENCODE AN TOÀN TRUYỀN CHO GOOGLE SHEET
     window.publishExam = async () => {
       const title = document.getElementById('azotaExamTitle').value.trim();
       const duration = parseInt(document.getElementById('azotaExamDuration').value) || 50;
@@ -877,7 +877,9 @@
         btn.innerText = "Đang lưu vào Sheet...";
         btn.disabled = true;
 
-        const serializedExam = JSON.stringify(parsedExamData);
+        // Mã hóa encodeURIComponent để bảo vệ ký tự công thức Toán KaTeX khi gửi qua Sheet
+        const rawJson = JSON.stringify(parsedExamData);
+        const safeExamPayload = encodeURIComponent(rawJson);
 
         await postSheetData('createAssignment', {
           category: 'exam',
@@ -885,7 +887,7 @@
           deadline: null,
           assignmentType: 'new_format',
           duration: duration,
-          examData: serializedExam
+          examData: safeExamPayload
         });
 
         alert("Đã xuất bản đề thi '" + title + "' thành công lên Google Sheet!");
@@ -987,7 +989,7 @@
       }
     };
 
-    // HÀM MỞ POPUP XEM CHI TIẾT ĐỀ THI
+    // HÀM MỞ POPUP XEM CHI TIẾT ĐỀ THI ĐÃ ĐĂNG
     window.viewAssignmentDetails = (taskId) => {
       const task = currentAssignments.find(t => String(t.id) === String(taskId));
       if (!task) {
@@ -1005,11 +1007,18 @@
 
       if (task.assignmentType === 'new_format') {
         let examData = task.examData;
+
+        // Giải mã an toàn
         if (typeof examData === 'string') {
           try {
+            if (examData.startsWith('%7B') || examData.includes('%22')) {
+              examData = decodeURIComponent(examData);
+            }
             examData = JSON.parse(examData);
             if (typeof examData === 'string') examData = JSON.parse(examData);
-          } catch(e) { examData = {}; }
+          } catch(e) {
+            try { examData = JSON.parse(task.examData); } catch(err) { examData = {}; }
+          }
         }
         examData = examData || {};
 
@@ -1306,7 +1315,7 @@
           }
 
           tr.innerHTML = '<td class="py-3 px-4 font-semibold text-slate-800">' + (req.studentName || 'Học sinh') + '</td>' +
-            '<td class="py-3 px-4">${typeBadge}</td>' +
+            '<td class="py-3 px-4">' + typeBadge + '</td>' +
             '<td class="py-3 px-4 font-medium text-slate-700">' + (req.date || '---') + '</td>' +
             '<td class="py-3 px-4 text-xs text-slate-600 max-w-xs break-words">' + (req.reason || '') + '</td>' +
             '<td class="py-3 px-4 text-center">' + statusBadge + '</td>' +
