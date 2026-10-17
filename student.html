@@ -278,7 +278,7 @@
       }
     };
 
-    // Đăng ký
+    // Đăng ký tài khoản
     document.getElementById('studentRegisterForm').onsubmit = async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnRegSubmit');
@@ -316,7 +316,7 @@
       }
     };
 
-    // Đăng nhập
+    // Đăng nhập học sinh
     document.getElementById('studentLoginForm').onsubmit = async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnLoginSubmit');
@@ -360,7 +360,7 @@
       window.location.reload();
     };
 
-    // Tải danh sách bài giảng & bài tập
+    // Tải danh sách nhiệm vụ từ Google Sheet
     async function loadStudentAssignments() {
       const lectureContainer = document.getElementById('lectureListContainer');
       const practiceContainer = document.getElementById('practiceListContainer');
@@ -479,7 +479,7 @@
       }
     }
 
-    // ==================== HÀM MỞ BÀI THI: XỬ LÝ DỮ LIỆU ĐỀ THI AN TOÀN ====================
+    // ==================== HÀM MỞ BÀI THI TRỰC TUYẾN: GIẢI MÃ AN TOÀN ĐA TẦNG ====================
     window.openExamPlayer = (taskId) => {
       const task = allAssignments.find(t => String(t.id) === String(taskId));
       if (!task) return;
@@ -488,16 +488,24 @@
       studentExamAnswers = { part1: {}, part2: {}, part3: {} };
 
       let examData = task.examData;
-      // Khử lồng chuỗi JSON an toàn
+
+      // Xử lý giải mã decodeURIComponent và parse JSON an toàn
       if (typeof examData === 'string') {
         try {
+          if (examData.startsWith('%7B') || examData.includes('%22')) {
+            examData = decodeURIComponent(examData);
+          }
           examData = JSON.parse(examData);
           if (typeof examData === 'string') {
             examData = JSON.parse(examData);
           }
         } catch (e) {
-          console.error("Lỗi parse examData:", e);
-          examData = {};
+          try {
+            examData = JSON.parse(task.examData);
+          } catch(err) {
+            console.error("Lỗi parse examData:", err);
+            examData = {};
+          }
         }
       }
       examData = examData || {};
@@ -508,11 +516,11 @@
 
       let qIndex = 1;
 
-      // Render Phần I
+      // Render Phần I: Trắc nghiệm 4 lựa chọn
       if (examData.part1 && Array.isArray(examData.part1) && examData.part1.length > 0) {
         const sec1 = document.createElement('div');
         sec1.className = "space-y-4";
-        sec1.innerHTML = '<div class="p-3 bg-indigo-50 border-l-4 border-indigo-600 rounded-r-xl font-bold text-xs text-indigo-900 uppercase">' +
+        sec1.innerHTML = '<div class="p-3 bg-indigo-50 border-l-4 border-indigo-600 rounded-r-xl font-bold text-xs text-indigo-900 uppercase tracking-wide">' +
           'PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn (Chọn 1 đáp án)' +
         '</div>';
 
@@ -540,11 +548,11 @@
         container.appendChild(sec1);
       }
 
-      // Render Phần II: Đúng / Sai 4 hàng
+      // Render Phần II: Trắc nghiệm Đúng / Sai 4 hàng độc lập
       if (examData.part2 && Array.isArray(examData.part2) && examData.part2.length > 0) {
         const sec2 = document.createElement('div');
         sec2.className = "space-y-4 pt-2";
-        sec2.innerHTML = '<div class="p-3 bg-purple-50 border-l-4 border-purple-600 rounded-r-xl font-bold text-xs text-purple-900 uppercase">' +
+        sec2.innerHTML = '<div class="p-3 bg-purple-50 border-l-4 border-purple-600 rounded-r-xl font-bold text-xs text-purple-900 uppercase tracking-wide">' +
           'PHẦN II. Câu trắc nghiệm đúng sai (Trong mỗi ý thí sinh chọn Đúng hoặc Sai)' +
         '</div>';
 
@@ -589,7 +597,7 @@
       if (examData.part3 && Array.isArray(examData.part3) && examData.part3.length > 0) {
         const sec3 = document.createElement('div');
         sec3.className = "space-y-4 pt-2";
-        sec3.innerHTML = '<div class="p-3 bg-emerald-50 border-l-4 border-emerald-600 rounded-r-xl font-bold text-xs text-emerald-900 uppercase">' +
+        sec3.innerHTML = '<div class="p-3 bg-emerald-50 border-l-4 border-emerald-600 rounded-r-xl font-bold text-xs text-emerald-900 uppercase tracking-wide">' +
           'PHẦN III. Câu trắc nghiệm trả lời ngắn (Nhập đáp án gọn vào ô)' +
         '</div>';
 
@@ -643,7 +651,7 @@
     };
     window.recordPart3Answer = (qIdx, val) => { studentExamAnswers.part3[qIdx] = val.trim(); };
 
-    // Tự động chấm điểm bài thi
+    // Tự động chấm điểm bài thi và lưu về Sheet
     window.submitExamAnswers = async () => {
       if (!confirm("Xác nhận hoàn thành và nộp bài thi?")) return;
 
@@ -654,6 +662,9 @@
       let examData = activeExamTask.examData;
       if (typeof examData === 'string') {
         try {
+          if (examData.startsWith('%7B') || examData.includes('%22')) {
+            examData = decodeURIComponent(examData);
+          }
           examData = JSON.parse(examData);
           if (typeof examData === 'string') examData = JSON.parse(examData);
         } catch(e) { examData = {}; }
