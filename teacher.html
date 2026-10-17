@@ -87,7 +87,6 @@
 
   <!-- ==================== GIAO DIỆN QUẢN TRỊ ==================== -->
   <div id="teacherDashboard" class="hidden">
-    <!-- Header -->
     <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm sticky top-0 z-20">
       <div class="flex items-center gap-3">
         <span class="text-2xl">👨‍🏫</span>
@@ -149,7 +148,7 @@
           </div>
         </div>
 
-        <!-- TRÌNH SOẠN ĐỀ GIAO DIỆN 2 CỘT CÓ THANH CUỘN ĐỘC LẬP -->
+        <!-- TRÌNH SOẠN ĐỀ GIAO DIỆN 2 CỘT -->
         <div id="subTabContentOnlineExam" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
           
           <div class="p-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
@@ -165,13 +164,13 @@
 
             <div class="flex items-center gap-2 flex-wrap text-xs">
               <button type="button" onclick="insertExamTemplate('part1')" class="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold rounded-lg border border-indigo-200 transition">
-                + Chèn Mẫu Phần I (4 lựa chọn)
+                + Chèn Mẫu Phần I
               </button>
               <button type="button" onclick="insertExamTemplate('part2')" class="px-2.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold rounded-lg border border-purple-200 transition">
-                + Chèn Mẫu Phần II (Đúng / Sai)
+                + Chèn Mẫu Phần II (Đúng/Sai)
               </button>
               <button type="button" onclick="insertExamTemplate('part3')" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg border border-emerald-200 transition">
-                + Chèn Mẫu Phần III (Trả lời ngắn)
+                + Chèn Mẫu Phần III
               </button>
               <button type="button" onclick="publishExam()" id="btnPublishAzota" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
                 <span>🚀 Xuất Bản Đề Thi</span>
@@ -179,7 +178,7 @@
             </div>
           </div>
 
-          <!-- Thanh chèn công thức nhanh -->
+          <!-- Thanh ký hiệu Toán nhanh -->
           <div class="px-4 py-2 bg-slate-100/60 border-b border-slate-200 flex flex-wrap items-center gap-1.5 text-xs shrink-0">
             <span class="text-[11px] font-bold text-slate-500 mr-2">∑ Chèn công thức:</span>
             <button type="button" onclick="insertMathToEditor('\\frac{a}{b}')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\frac{a}{b}$</button>
@@ -196,10 +195,8 @@
             <button type="button" onclick="insertMathToEditor('\\le')" class="px-2 py-0.5 bg-white border border-slate-300 rounded hover:bg-indigo-50 font-mono text-[11px]">$\le$</button>
           </div>
 
-          <!-- 2 CỘT: LIVE PREVIEW & RAW EDITOR -->
+          <!-- 2 CỘT SPLIT SCREEN -->
           <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 h-[680px]">
-            
-            <!-- Cột trái: Live Preview -->
             <div class="flex flex-col h-full bg-slate-50/50 min-h-0">
               <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs shrink-0">
                 <span class="font-bold text-slate-700 flex items-center gap-1.5">
@@ -212,7 +209,6 @@
               <div id="examLivePreviewContainer" class="flex-1 overflow-y-auto p-5 space-y-6"></div>
             </div>
 
-            <!-- Cột phải: Khung gõ text có thanh cuộn riêng -->
             <div class="flex flex-col h-full bg-white min-h-0">
               <div class="p-3 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center text-xs shrink-0">
                 <span class="font-bold text-slate-700 flex items-center gap-1.5">
@@ -225,11 +221,10 @@
                           class="w-full h-full p-3 font-mono text-xs text-slate-800 leading-relaxed outline-none resize-none border border-slate-200 rounded-xl focus:border-indigo-500 overflow-y-auto"></textarea>
               </div>
             </div>
-
           </div>
 
           <div class="p-2.5 bg-slate-50 border-t border-slate-200 text-[11px] text-slate-500 flex flex-wrap justify-between items-center px-4 shrink-0">
-            <span>💡 <strong>Hướng dẫn format:</strong> Ghi rõ dòng <code>PHẦN I</code>, <code>PHẦN II</code>, <code>PHẦN III</code>. Ở Phần II, mỗi khẳng định 1 dòng: <code>a)</code>, <code>b)</code>, <code>c)</code>, <code>d)</code> (thêm dấu <code>*</code> hoặc <code>+</code> trước ý đúng).</span>
+            <span>💡 <strong>Hướng dẫn format:</strong> Ghi rõ dòng <code>PHẦN I</code>, <code>PHẦN II</code>, <code>PHẦN III</code>. Ở Phần II: <code>*a)</code> (đúng), <code>-b)</code> (sai).</span>
             <span class="font-semibold text-indigo-600">KaTeX tự động</span>
           </div>
 
@@ -329,7 +324,6 @@
 
       <!-- ==================== TAB: ĐIỂM DANH & CHUYÊN CẦN ==================== -->
       <section id="tabContentAttendance" class="hidden space-y-6">
-        
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-4">
           <div class="flex flex-wrap justify-between items-center gap-4">
             <div>
@@ -421,7 +415,6 @@
             </table>
           </div>
         </div>
-
       </section>
 
       <!-- ==================== TAB: SỔ ĐÁNH GIÁ & CHẤM ĐIỂM ==================== -->
@@ -469,9 +462,34 @@
 
     </main>
 
+    <!-- ==================== MODAL XEM CHI TIẾT ĐỀ THI ĐÃ ĐĂNG ==================== -->
+    <div id="viewExamModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+      <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+        <div class="flex justify-between items-center p-4 border-b border-slate-200 bg-slate-50">
+          <div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700 uppercase tracking-wide">Chi tiết đề thi</span>
+            <h3 class="font-bold text-slate-800 text-base mt-0.5" id="viewModalTitle">Tiêu đề bài kiểm tra</h3>
+          </div>
+          <button onclick="closeViewModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-base font-bold transition">
+            ✕
+          </button>
+        </div>
+
+        <div id="viewModalBody" class="p-5 overflow-y-auto space-y-6 flex-1">
+          <!-- Nội dung chi tiết đề thi render tại đây -->
+        </div>
+
+        <div class="p-3 border-t border-slate-200 bg-slate-50 flex justify-end">
+          <button onclick="closeViewModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs rounded-xl transition">
+            Đóng cửa sổ
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- SCRIPT LOGIC: PARSER THÔNG MINH NHẬN DIỆN CHUẨN 3 PHẦN -->
+  <!-- SCRIPT LOGIC -->
   <script type="module">
     import { getSheetData, postSheetData } from './api.js';
 
@@ -557,7 +575,7 @@
       if (part === 'part1') {
         snippet = "\n\nPHẦN I\nCâu " + qNum + ". Cho hàm số...\nA. Phương án 1\n*B. Phương án 2 đúng\nC. Phương án 3\nD. Phương án 4";
       } else if (part === 'part2') {
-        snippet = "\n\nPHẦN II\nCâu " + qNum + ". Cho hàm số... Xét tính đúng sai của các mệnh đề:\n*a) Mệnh đề đúng 1\n-b) Mệnh đề sai 2\n*c) Mệnh đề đúng 3\n-d) Mệnh đề sai 4";
+        snippet = "\n\nPHẦN II\nCâu " + qNum + ". Cho hàm số... Xét tính đúng sai của các khẳng định sau:\n*a) Khẳng định 1 đúng\n-b) Khẳng định 2 sai\n*c) Khẳng định 3 đúng\n-d) Khẳng định 4 sai";
       } else if (part === 'part3') {
         snippet = "\n\nPHẦN III\nCâu " + qNum + ". Giá trị biểu thức...\nĐáp án: 10";
       }
@@ -584,7 +602,7 @@
       parseExamText();
     };
 
-    // BỘ PHÂN TÍCH CHUẨN XÁC: TÁCH RIÊNG 3 PHẦN VÀ NHẬN DIỆN ĐÚNG/SAI
+    // BỘ PHÂN TÍCH CÚ PHÁP CHUẨN XÁC 100%
     window.parseExamText = () => {
       const ta = document.getElementById('rawExamTextarea');
       if (!ta) return;
@@ -599,10 +617,8 @@
         let rawLine = lines[i].trim();
         if (!rawLine) continue;
 
-        // Chuẩn hóa chuỗi để nhận diện tiêu đề Phần
         const cleanUpper = rawLine.toUpperCase().replace(/\s+/g, ' ');
 
-        // 1. Nhận diện chuyển phần
         if (/^PH[ẦA]N\s*(I|1)\b/i.test(cleanUpper)) {
           currentPart = 'part1';
           currentQuestion = null;
@@ -617,12 +633,10 @@
           continue;
         }
 
-        // Bỏ qua dòng chỉ dẫn của đề thi
         if (rawLine.startsWith('Thí sinh') || rawLine.startsWith('Trong mỗi ý')) {
           continue;
         }
 
-        // 2. Nhận diện dòng bắt đầu Câu hỏi (VD: "Câu 1.", "Câu 1:", "1.", "1:")
         const questionMatch = rawLine.match(/^(?:Câu\s*\d+[\.:]|\d+[\.:])\s*(.*)/i);
         if (questionMatch) {
           currentQuestion = {
@@ -640,7 +654,7 @@
 
         if (!currentQuestion) continue;
 
-        // 3. Nhận diện Lựa chọn Phần I (A, B, C, D)
+        // Phương án Phần I (A, B, C, D)
         const optMatch = rawLine.match(/^(\*?|\+?)\s*([A-D])[\.:]\s*(.*)/i);
         if (optMatch && currentPart === 'part1') {
           const isCorrect = (optMatch[1] === '*' || optMatch[1] === '+');
@@ -651,12 +665,10 @@
           continue;
         }
 
-        // 4. Nhận diện các ý Phần II: a), b), c), d)
-        // Chấp nhận các ký hiệu: *, +, -, hoặc gạch ngang Word: –, —
+        // Khẳng định Phần II: a), b), c), d)
         const itemMatch = rawLine.match(/^(\*|\+|\-|\–|\—)?\s*([a-d])[\)\.]\s*(.*)/i);
         if (itemMatch && currentPart === 'part2') {
           const mark = itemMatch[1] || '';
-          // Nếu có dấu * hoặc + là ĐÚNG; dấu -, gạch ngang hoặc không dấu là SAI
           const isCorrect = (mark === '*' || mark === '+');
           currentQuestion.items.push({
             letter: itemMatch[2].toLowerCase(),
@@ -666,20 +678,18 @@
           continue;
         }
 
-        // 5. Nhận diện Đáp án Phần III (Trả lời ngắn)
+        // Đáp án Phần III
         const ansMatch = rawLine.match(/^(?:Đáp án|Đáp số|ĐA|DA)[\.:]\s*(.*)/i);
         if (ansMatch && currentPart === 'part3') {
           currentQuestion.correctAnswer = ansMatch[1].trim();
           continue;
         }
 
-        // 6. Nhận diện ảnh
         if (rawLine.startsWith('http://') || rawLine.startsWith('https://')) {
           currentQuestion.imageUrl = rawLine;
           continue;
         }
 
-        // 7. Nối các dòng văn bản mô tả thêm của đề bài
         if (currentPart === 'part1' && currentQuestion.options.length === 0) {
           currentQuestion.question += ' ' + rawLine;
         } else if (currentPart === 'part2' && currentQuestion.items.length === 0) {
@@ -692,7 +702,6 @@
       renderLivePreview();
     };
 
-    // RENDER GIAO DIỆN XEM TRƯỚC: PHÂN TÁCH PHẦN I, PHẦN II, PHẦN III ĐÚNG CHUẨN
     function renderLivePreview() {
       const container = document.getElementById('examLivePreviewContainer');
       const badge = document.getElementById('previewStatsBadge');
@@ -714,7 +723,7 @@
 
       var qIndexCounter = 1;
 
-      // ==================== KHUNG PHẦN I: TRẮC NGHIỆM 4 PHƯƠNG ÁN ====================
+      // PHẦN I
       if (parsedExamData.part1.length > 0) {
         var sec1 = document.createElement('div');
         sec1.className = "space-y-4";
@@ -754,7 +763,7 @@
         container.appendChild(sec1);
       }
 
-      // ==================== KHUNG PHẦN II: TRẮC NGHIỆM ĐÚNG / SAI 4 HÀNG ====================
+      // PHẦN II
       if (parsedExamData.part2.length > 0) {
         var sec2 = document.createElement('div');
         sec2.className = "space-y-4 pt-2";
@@ -805,7 +814,7 @@
         container.appendChild(sec2);
       }
 
-      // ==================== KHUNG PHẦN III: TRẢ LỜI NGẮN ====================
+      // PHẦN III
       if (parsedExamData.part3.length > 0) {
         var sec3 = document.createElement('div');
         sec3.className = "space-y-4 pt-2";
@@ -844,7 +853,7 @@
       }
     }
 
-    // XUẤT BẢN ĐỀ THI LÊN GOOGLE SHEET
+    // XUẤT BẢN ĐỀ THI
     window.publishExam = async () => {
       const title = document.getElementById('azotaExamTitle').value.trim();
       const duration = parseInt(document.getElementById('azotaExamDuration').value) || 50;
@@ -920,7 +929,7 @@
       };
     }
 
-    // TẢI KHO BÀI ĐÃ ĐĂNG
+    // TẢI KHO BÀI ĐÃ ĐĂNG: ĐÃ BỔ SUNG NÚT XEM ĐỀ CHI TIẾT
     window.loadPublishedAssignments = async () => {
       const container = document.getElementById('publishedListContainer');
       const select = document.getElementById('gradeTaskSelect');
@@ -959,8 +968,11 @@
               '</div>' +
               '<p class="text-[11px] text-slate-400 mt-1">Đăng ngày: ' + (item.createdAt || 'Mới') + '</p>' +
             '</div>' +
-            '<div>' +
-              '<button onclick="deletePublishedAssignment(\'' + item.id + '\', \'' + item.title.replace(/'/g, "\\'") + '\')" class="px-2.5 py-1.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs rounded-lg shadow-sm">' +
+            '<div class="flex items-center gap-2">' +
+              '<button onclick="viewAssignmentDetails(\'' + item.id + '\')" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-lg border border-indigo-200 transition shadow-xs">' +
+                '👁️ Xem đề' +
+              '</button>' +
+              '<button onclick="deletePublishedAssignment(\'' + item.id + '\', \'' + item.title.replace(/'/g, "\\'") + '\')" class="px-2.5 py-1.5 bg-white hover:bg-rose-50 border border-rose-300 text-rose-600 font-bold text-xs rounded-lg shadow-xs">' +
                 '🗑️ Xóa bài' +
               '</button>' +
             '</div>';
@@ -969,6 +981,107 @@
       } catch (err) {
         container.innerHTML = '<p class="text-center py-6 text-rose-500 text-sm">Lỗi: ' + err.message + '</p>';
       }
+    };
+
+    // HÀM MỞ POPUP XEM CHI TIẾT ĐỀ THI ĐÃ ĐĂNG
+    window.viewAssignmentDetails = (taskId) => {
+      const task = currentAssignments.find(t => t.id === taskId);
+      if (!task) return;
+
+      document.getElementById('viewModalTitle').innerText = task.title + ' (' + (task.duration || 50) + ' phút)';
+      const body = document.getElementById('viewModalBody');
+      body.innerHTML = '';
+
+      if (task.assignmentType === 'new_format') {
+        let examData = task.examData;
+        if (typeof examData === 'string') {
+          try { examData = JSON.parse(examData); } catch(e) { examData = {}; }
+        }
+
+        let qIndex = 1;
+
+        // PHẦN I
+        if (examData.part1 && examData.part1.length > 0) {
+          const sec = document.createElement('div');
+          sec.className = "space-y-3";
+          sec.innerHTML = '<div class="p-2.5 bg-indigo-50 border border-indigo-200 rounded-lg font-bold text-xs text-indigo-900">PHẦN I. Câu trắc nghiệm 4 lựa chọn</div>';
+          examData.part1.forEach(q => {
+            const card = document.createElement('div');
+            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs";
+            const optHtml = ['A', 'B', 'C', 'D'].map((letter, optI) => {
+              const isAns = (q.correctAnswer === letter);
+              return '<div class="p-2 rounded border ' + (isAns ? 'border-emerald-300 bg-emerald-50 font-bold text-emerald-800' : 'border-slate-100 bg-slate-50') + ' flex items-center justify-between">' +
+                '<span><strong>' + letter + '.</strong> ' + (q.options[optI] || '') + '</span>' +
+                (isAns ? '<span class="text-[10px] text-emerald-600 font-bold">✓ Đáp án</span>' : '') +
+              '</div>';
+            }).join('');
+            card.innerHTML = '<div class="font-bold text-slate-800 text-[13px]"><span class="text-indigo-600">Câu ' + (qIndex++) + '.</span> ' + q.question + '</div>' +
+              '<div class="grid grid-cols-2 gap-2 pt-1">' + optHtml + '</div>';
+            sec.appendChild(card);
+          });
+          body.appendChild(sec);
+        }
+
+        // PHẦN II
+        if (examData.part2 && examData.part2.length > 0) {
+          const sec = document.createElement('div');
+          sec.className = "space-y-3";
+          sec.innerHTML = '<div class="p-2.5 bg-purple-50 border border-purple-200 rounded-lg font-bold text-xs text-purple-900">PHẦN II. Câu trắc nghiệm Đúng / Sai</div>';
+          examData.part2.forEach(q => {
+            const card = document.createElement('div');
+            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs";
+            const itemsHtml = (q.items || []).map(item => {
+              const isTrue = item.isCorrect === true;
+              return '<div class="flex items-center justify-between p-2 rounded border border-slate-100 bg-slate-50">' +
+                '<span><strong>' + item.letter + ')</strong> ' + item.text + '</span>' +
+                '<span class="font-bold text-[11px] px-2 py-0.5 rounded ' + (isTrue ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800') + '">' + (isTrue ? 'ĐÚNG' : 'SAI') + '</span>' +
+              '</div>';
+            }).join('');
+            card.innerHTML = '<div class="font-bold text-slate-800 text-[13px]"><span class="text-purple-600">Câu ' + (qIndex++) + '.</span> ' + q.question + '</div>' +
+              '<div class="space-y-1.5 pt-1">' + itemsHtml + '</div>';
+            sec.appendChild(card);
+          });
+          body.appendChild(sec);
+        }
+
+        // PHẦN III
+        if (examData.part3 && examData.part3.length > 0) {
+          const sec = document.createElement('div');
+          sec.className = "space-y-3";
+          sec.innerHTML = '<div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg font-bold text-xs text-emerald-900">PHẦN III. Trả lời ngắn</div>';
+          examData.part3.forEach(q => {
+            const card = document.createElement('div');
+            card.className = "bg-white p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs";
+            card.innerHTML = '<div class="font-bold text-slate-800 text-[13px]"><span class="text-emerald-600">Câu ' + (qIndex++) + '.</span> ' + q.question + '</div>' +
+              '<div class="p-2 rounded bg-emerald-50 border border-emerald-100 flex items-center justify-between">' +
+                '<span>Đáp án chính xác:</span>' +
+                '<span class="font-mono font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-200">' + (q.correctAnswer || '(Chưa nhập)') + '</span>' +
+              '</div>';
+            sec.appendChild(card);
+          });
+          body.appendChild(sec);
+        }
+      } else {
+        body.innerHTML = '<div class="space-y-3 text-xs">' +
+          (task.fileUrl ? '<p><strong>Tệp đính kèm:</strong> <a href="' + task.fileUrl + '" target="_blank" class="text-indigo-600 underline">Mở liên kết</a></p>' : '') +
+          (task.embedHtml ? '<div class="p-3 bg-slate-50 border rounded-xl">' + task.embedHtml + '</div>' : '') +
+        '</div>';
+      }
+
+      document.getElementById('viewExamModal').classList.remove('hidden');
+
+      if (window.renderMathInElement) {
+        renderMathInElement(body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ]
+        });
+      }
+    };
+
+    window.closeViewModal = () => {
+      document.getElementById('viewExamModal').classList.add('hidden');
     };
 
     window.deletePublishedAssignment = async (taskId, taskTitle) => {
